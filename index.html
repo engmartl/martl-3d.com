@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Martl 3D | Interactive Math Games for Classrooms</title>
+<meta name="description" content="Interactive math games designed for smart boards. Fun racing games that help students master multiplication tables through team competition.">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Cairo:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink:#FF4E8E;--blue:#2196F3;--yellow:#FFD700;--purple:#7C3AED;--green:#00C853;
+    --dark:#080815;--dark2:#0f0f22;--dark3:#13132e;--white:#fff;
+    --card-bg:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08);
+    --font-en:'Plus Jakarta Sans',sans-serif;--font-ar:'Cairo',sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font-en);background:var(--dark);color:var(--white);overflow-x:hidden;line-height:1.6}
+  body.ar{font-family:var(--font-ar);direction:rtl}
+  .en{display:block}.ar-content{display:none}
+  body.ar .en{display:none}body.ar .ar-content{display:block}
+  span.en{display:inline}span.ar-content{display:none}
+  body.ar span.en{display:none}body.ar span.ar-content{display:inline}
+  nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:16px 6%;background:rgba(8,8,21,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+  .logo{font-family:'Fredoka One',cursive;font-size:26px;background:linear-gradient(90deg,var(--pink),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none}
+  .nav-right{display:flex;align-items:center;gap:20px}
+  .nav-links{display:flex;gap:22px;list-style:none;align-items:center}
+  .nav-links a{color:rgba(255,255,255,0.65);text-decoration:none;font-size:15px;font-weight:700;transition:color .2s}
+  .nav-links a:hover{color:var(--yellow)}
+  .nav-btn{background:linear-gradient(135deg,var(--pink),var(--purple));color:white!important;padding:10px 22px;border-radius:50px;font-weight:700!important;transition:transform .2s,box-shadow .2s!important}
+  .nav-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,78,142,.45)!important}
+  #lang-toggle{display:flex;align-items:center;background:rgba(255,255,255,.08);border:1px solid var(--border);border-radius:50px;overflow:hidden;cursor:pointer;flex-shrink:0}
+  .lang-opt{padding:7px 16px;font-size:13px;font-weight:700;color:rgba(255,255,255,.45);transition:all .25s;user-select:none;white-space:nowrap}
+  .lang-opt.active{background:linear-gradient(135deg,var(--pink),var(--purple));color:white;border-radius:50px}
+  #hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:130px 6% 80px;position:relative;overflow:hidden}
+  #hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 100%)}
+  .blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:0.14;animation:blobPulse ease-in-out infinite alternate}
+  .b1{width:700px;height:700px;background:var(--pink);top:-250px;left:-150px;animation-duration:9s}
+  .b2{width:600px;height:600px;background:var(--blue);bottom:-200px;right:-100px;animation-duration:12s}
+  .b3{width:400px;height:400px;background:var(--purple);top:35%;left:35%;animation-duration:7s}
+  @keyframes blobPulse{from{transform:scale(1) translate(0,0)}to{transform:scale(1.1) translate(20px,20px)}}
+  .hero-inner{position:relative;z-index:2;max-width:840px}
+  .badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);color:var(--yellow);padding:8px 20px;border-radius:50px;font-size:13px;font-weight:700;margin-bottom:30px;animation:fadeUp .6s ease both}
+  .badge-dot{width:8px;height:8px;border-radius:50%;background:var(--yellow);animation:blink 1.2s ease infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+  h1{font-family:'Fredoka One',cursive;font-size:clamp(46px,7.5vw,88px);line-height:1.08;margin-bottom:22px;animation:fadeUp .7s ease .1s both}
+  .grad-text{background:linear-gradient(135deg,var(--pink) 0%,var(--yellow) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .hero-sub{font-size:19px;color:rgba(255,255,255,.6);font-weight:600;line-height:1.75;margin-bottom:44px;animation:fadeUp .7s ease .2s both}
+  .hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;animation:fadeUp .7s ease .3s both}
+  .btn-main{font-size:17px;font-weight:700;padding:16px 40px;border-radius:50px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--pink),var(--purple));color:white;text-decoration:none;display:inline-flex;align-items:center;gap:8px;box-shadow:0 8px 30px rgba(255,78,142,.35);transition:transform .2s,box-shadow .2s}
+  .btn-main:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(255,78,142,.5)}
+  .btn-ghost{font-size:17px;font-weight:700;padding:16px 40px;border-radius:50px;background:rgba(255,255,255,.07);color:white;border:1px solid rgba(255,255,255,.15);text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:background .2s,transform .2s}
+  .btn-ghost:hover{background:rgba(255,255,255,.13);transform:translateY(-3px)}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
+  .race-preview{margin-top:56px;position:relative;height:80px;animation:fadeUp .7s ease .5s both}
+  .rp-track{position:absolute;top:50%;left:8%;right:8%;height:32px;background:rgba(255,255,255,.06);border-radius:8px;border-top:3px solid var(--pink);border-bottom:3px solid var(--blue);transform:translateY(-50%);overflow:hidden}
+  .rp-track::after{content:'';position:absolute;top:50%;left:0;right:0;height:2px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.25) 0 28px,transparent 28px 56px);transform:translateY(-50%);animation:rMove .4s linear infinite}
+  @keyframes rMove{to{background-position:56px}}
+  .rp-car{position:absolute;top:50%;transform:translateY(-58%)}
+  .rp-c1{animation:rc1 2.8s ease-in-out infinite alternate}
+  .rp-c2{animation:rc2 3.3s ease-in-out infinite alternate;top:62%}
+  @keyframes rc1{from{left:10%}to{left:72%}}
+  @keyframes rc2{from{left:8%}to{left:68%}}
+  #stats{background:var(--dark2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:44px 6%;display:flex;justify-content:center;gap:72px;flex-wrap:wrap}
+  .stat{text-align:center}
+  .stat-n{font-family:'Fredoka One',cursive;font-size:50px;background:linear-gradient(135deg,var(--yellow),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+  .stat-l{font-size:13px;color:rgba(255,255,255,.45);margin-top:5px;font-weight:700}
+  section{padding:100px 6%;position:relative}
+  .sec-tag{font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--yellow);margin-bottom:12px;display:block}
+  .sec-title{font-family:'Fredoka One',cursive;font-size:clamp(34px,5vw,54px);line-height:1.1;margin-bottom:14px}
+  .sec-sub{font-size:17px;color:rgba(255,255,255,.5);font-weight:600;max-width:540px;line-height:1.75}
+  #features{background:var(--dark3)}
+  .feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px;margin-top:56px}
+  .feat-card{background:var(--card-bg);border:1px solid var(--border);border-radius:24px;padding:34px 28px;transition:transform .3s,box-shadow .3s,border-color .3s;position:relative;overflow:hidden}
+  .feat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:24px 24px 0 0}
+  .fc-p::after{background:linear-gradient(90deg,var(--pink),var(--purple))}
+  .fc-b::after{background:linear-gradient(90deg,var(--blue),#00BCD4)}
+  .fc-y::after{background:linear-gradient(90deg,var(--yellow),#FF6B35)}
+  .fc-g::after{background:linear-gradient(90deg,var(--green),#00BCD4)}
+  .feat-card:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(0,0,0,.35);border-color:rgba(255,255,255,.16)}
+  .feat-icon{font-size:42px;margin-bottom:16px;display:block}
+  .feat-title{font-family:'Fredoka One',cursive;font-size:21px;margin-bottom:10px}
+  .feat-desc{color:rgba(255,255,255,.5);font-size:14px;line-height:1.75;font-weight:600}
+  #games{background:var(--dark)}
+  .games-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:26px;margin-top:56px}
+  .game-card{border-radius:26px;overflow:hidden;border:1px solid var(--border);transition:transform .3s,box-shadow .3s;cursor:pointer;text-decoration:none;color:inherit;display:block}
+  .game-card:hover{transform:translateY(-8px) scale(1.01);box-shadow:0 30px 80px rgba(0,0,0,.5)}
+  .game-thumb{height:190px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+  .gt-1{background:linear-gradient(135deg,#1a0510,#4a0f2e)}
+  .gt-2{background:linear-gradient(135deg,#05101a,#0f2e4a)}
+  .gt-3{background:linear-gradient(135deg,#10051a,#2e0f4a)}
+  .thumb-road{position:absolute;bottom:28px;left:0;right:0;height:26px;background:rgba(255,255,255,.06);border-top:2px solid rgba(255,255,255,.15);border-bottom:2px solid rgba(255,255,255,.15)}
+  .thumb-road::after{content:'';position:absolute;top:50%;left:0;right:0;height:2px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.2) 0 20px,transparent 20px 40px);transform:translateY(-50%)}
+  .thumb-cars{position:relative;z-index:2;display:flex;gap:20px}
+  .thumb-cars svg{width:70px;height:36px}
+  .game-badge{position:absolute;top:14px;right:14px;font-size:11px;font-weight:700;padding:4px 12px;border-radius:50px;letter-spacing:.5px}
+  .gb-new{background:var(--yellow);color:#111}
+  .gb-soon{background:rgba(255,255,255,.12);color:rgba(255,255,255,.7)}
+  .game-info{padding:22px 24px;background:rgba(255,255,255,.03);border-top:1px solid var(--border)}
+  .game-title{font-family:'Fredoka One',cursive;font-size:21px;margin-bottom:6px}
+  .game-desc{font-size:13px;color:rgba(255,255,255,.45);font-weight:600;line-height:1.65;margin-bottom:14px}
+  .game-tags{display:flex;gap:7px;flex-wrap:wrap}
+  .gtag{font-size:11px;font-weight:700;padding:3px 11px;border-radius:50px;border:1px solid}
+  .gtag-p{color:var(--pink);border-color:rgba(255,78,142,.4);background:rgba(255,78,142,.08)}
+  .gtag-b{color:var(--blue);border-color:rgba(33,150,243,.4);background:rgba(33,150,243,.08)}
+  .gtag-y{color:var(--yellow);border-color:rgba(255,215,0,.4);background:rgba(255,215,0,.08)}
+  .gtag-g{color:var(--green);border-color:rgba(0,200,83,.4);background:rgba(0,200,83,.08)}
+  .play-btn{display:inline-flex;align-items:center;gap:7px;font-size:14px;font-weight:700;padding:10px 22px;border-radius:50px;border:none;cursor:pointer;margin-top:14px;text-decoration:none;transition:transform .2s,box-shadow .2s}
+  .pb-pink{background:linear-gradient(135deg,var(--pink),var(--purple));color:white;box-shadow:0 4px 16px rgba(255,78,142,.3)}
+  .pb-gray{background:rgba(255,255,255,.1);color:rgba(255,255,255,.4);cursor:not-allowed}
+  .play-btn:not(.pb-gray):hover{transform:translateY(-2px)}
+  #how{background:var(--dark3)}
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:30px;margin-top:56px;position:relative}
+  .steps::before{content:'';position:absolute;top:44px;left:12%;right:12%;height:2px;background:linear-gradient(90deg,var(--pink),var(--blue));opacity:.25}
+  .step{text-align:center}
+  .step-circle{width:88px;height:88px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:30px;margin:0 auto 18px;position:relative;z-index:2}
+  .sc1{background:linear-gradient(135deg,var(--pink),var(--purple));box-shadow:0 8px 28px rgba(255,78,142,.4)}
+  .sc2{background:linear-gradient(135deg,var(--blue),#00BCD4);box-shadow:0 8px 28px rgba(33,150,243,.4)}
+  .sc3{background:linear-gradient(135deg,var(--yellow),#FF6B35);box-shadow:0 8px 28px rgba(255,215,0,.4)}
+  .sc4{background:linear-gradient(135deg,var(--green),#00BCD4);box-shadow:0 8px 28px rgba(0,200,83,.4)}
+  .step-title{font-family:'Fredoka One',cursive;font-size:19px;margin-bottom:8px}
+  .step-desc{font-size:13px;color:rgba(255,255,255,.45);font-weight:600;line-height:1.7}
+  #testimonials{background:var(--dark)}
+  .testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:22px;margin-top:56px}
+  .testi-card{background:var(--card-bg);border:1px solid var(--border);border-radius:24px;padding:28px}
+  .testi-q{font-family:'Fredoka One',cursive;font-size:44px;color:var(--yellow);line-height:.7;margin-bottom:14px}
+  .testi-txt{font-size:15px;color:rgba(255,255,255,.65);line-height:1.8;font-weight:600;margin-bottom:20px}
+  .testi-author{display:flex;align-items:center;gap:12px}
+  .testi-av{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px}
+  .av1{background:linear-gradient(135deg,var(--pink),var(--purple))}
+  .av2{background:linear-gradient(135deg,var(--blue),#00BCD4)}
+  .av3{background:linear-gradient(135deg,var(--yellow),#FF6B35)}
+  .testi-name{font-weight:700;font-size:14px}
+  .testi-role{font-size:12px;color:rgba(255,255,255,.35);margin-top:2px}
+  #cta{background:var(--dark2);text-align:center}
+  .cta-box{max-width:680px;margin:0 auto;background:linear-gradient(135deg,rgba(255,78,142,.1),rgba(124,58,237,.1));border:1px solid rgba(255,78,142,.2);border-radius:32px;padding:60px 44px;position:relative;overflow:hidden}
+  .cta-box::before{content:'';position:absolute;top:-80px;left:-80px;width:250px;height:250px;background:var(--pink);border-radius:50%;filter:blur(100px);opacity:.1}
+  .cta-box::after{content:'';position:absolute;bottom:-80px;right:-80px;width:250px;height:250px;background:var(--purple);border-radius:50%;filter:blur(100px);opacity:.1}
+  .cta-em{font-size:52px;margin-bottom:14px;display:block}
+  .cta-title{font-family:'Fredoka One',cursive;font-size:42px;margin-bottom:14px;position:relative;z-index:1}
+  .cta-sub{font-size:17px;color:rgba(255,255,255,.55);margin-bottom:34px;font-weight:600;line-height:1.7;position:relative;z-index:1}
+  .cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1}
+  footer{background:#050510;border-top:1px solid var(--border);padding:40px 6%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+  .footer-logo{font-family:'Fredoka One',cursive;font-size:22px;background:linear-gradient(90deg,var(--pink),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none}
+  .footer-copy{font-size:13px;color:rgba(255,255,255,.25);font-weight:600}
+  .footer-links{display:flex;gap:22px}
+  .footer-links a{font-size:13px;color:rgba(255,255,255,.35);text-decoration:none;font-weight:600;transition:color .2s}
+  .footer-links a:hover{color:var(--yellow)}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="#">Martl 3D 🎮</a>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#features"><span class="en">Features</span><span class="ar-content">المميزات</span></a></li>
+      <li><a href="#games"><span class="en">Games</span><span class="ar-content">الألعاب</span></a></li>
+      <li><a href="#how"><span class="en">How it works</span><span class="ar-content">كيف تعمل</span></a></li>
+      <li><a href="#games" class="nav-btn"><span class="en">Play Free 🚀</span><span class="ar-content">جرّب مجاناً 🚀</span></a></li>
+    </ul>
+    <div id="lang-toggle" onclick="toggleLang()">
+      <div class="lang-opt active" id="opt-en">EN</div>
+      <div class="lang-opt" id="opt-ar">عر</div>
+    </div>
+  </div>
+</nav>
+
+<section id="hero">
+  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+  <div class="hero-inner">
+    <div class="badge">
+      <span class="badge-dot"></span>
+      <span class="en">Interactive Math Games for Smart Boards</span>
+      <span class="ar-content">ألعاب رياضيات تفاعلية للسمارت بورد</span>
+    </div>
+    <h1>
+      <span class="en"><span style="display:block">Learn Math Through</span><span class="grad-text">Racing & Competition!</span></span>
+      <span class="ar-content"><span style="display:block">تعلّم الرياضيات</span><span class="grad-text">بالمنافسة والمتعة!</span></span>
+    </h1>
+    <p class="hero-sub">
+      <span class="en">Interactive games designed for classrooms & smart boards.<br>Turn multiplication tables into an exciting team race students love every day ⭐</span>
+      <span class="ar-content">ألعاب تفاعلية مصممة خصيصاً للفصول الدراسية<br>تحوّل جداول الضرب لسباق مشوّق يحب الطلاب اللعبه كل يوم ⭐</span>
+    </p>
+    <div class="hero-btns">
+      <a href="#games" class="btn-main"><span class="en">🎮 Play Now</span><span class="ar-content">🎮 العب دلوقتي</span></a>
+      <a href="#features" class="btn-ghost"><span class="en">✨ Learn More</span><span class="ar-content">✨ اعرف أكتر</span></a>
+    </div>
+    <div class="race-preview">
+      <div class="rp-track"></div>
+      <div class="rp-car rp-c1">
+        <svg viewBox="0 0 100 52" width="72" xmlns="http://www.w3.org/2000/svg">
+          <rect x="5" y="22" width="88" height="22" rx="6" fill="#FF4E8E"/>
+          <path d="M28 22 Q34 8 52 8 Q68 8 74 22 Z" fill="#FF80AB"/>
+          <path d="M33 21 Q37 11 52 11 Q64 11 68 21 Z" fill="#B3E5FC" opacity="0.85"/>
+          <rect x="88" y="28" width="8" height="10" rx="3" fill="#C2185B"/>
+          <circle cx="22" cy="44" r="8" fill="#222"/><circle cx="22" cy="44" r="4" fill="#888"/>
+          <circle cx="75" cy="44" r="8" fill="#222"/><circle cx="75" cy="44" r="4" fill="#888"/>
+          <ellipse cx="91" cy="27" rx="4" ry="3" fill="#FFF9C4" opacity="0.9"/>
+        </svg>
+      </div>
+      <div class="rp-car rp-c2">
+        <svg viewBox="0 0 100 52" width="72" xmlns="http://www.w3.org/2000/svg">
+          <rect x="5" y="22" width="88" height="22" rx="6" fill="#2196F3"/>
+          <path d="M28 22 Q34 8 52 8 Q68 8 74 22 Z" fill="#64B5F6"/>
+          <path d="M33 21 Q37 11 52 11 Q64 11 68 21 Z" fill="#B3E5FC" opacity="0.85"/>
+          <rect x="88" y="28" width="8" height="10" rx="3" fill="#0D47A1"/>
+          <circle cx="22" cy="44" r="8" fill="#222"/><circle cx="22" cy="44" r="4" fill="#888"/>
+          <circle cx="75" cy="44" r="8" fill="#222"/><circle cx="75" cy="44" r="4" fill="#888"/>
+          <ellipse cx="91" cy="27" rx="4" ry="3" fill="#FFF9C4" opacity="0.9"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="stats">
+  <div class="stat"><div class="stat-n">10+</div><div class="stat-l"><span class="en">Games Coming Soon</span><span class="ar-content">ألعاب قريباً</span></div></div>
+  <div class="stat"><div class="stat-n">100%</div><div class="stat-l"><span class="en">Free for Teachers</span><span class="ar-content">مجاني للمعلمين</span></div></div>
+  <div class="stat"><div class="stat-n">×2</div><div class="stat-l"><span class="en">Multiplication Tables</span><span class="ar-content">جداول الضرب</span></div></div>
+  <div class="stat"><div class="stat-n">🏫</div><div class="stat-l"><span class="en">Built for Classrooms</span><span class="ar-content">مصمم للفصول</span></div></div>
+</div>
+
+<section id="features">
+  <span class="sec-tag"><span class="en">⭐ WHY MARTL 3D?</span><span class="ar-content">⭐ ليه Martl 3D؟</span></span>
+  <h2 class="sec-title">
+    <span class="en">Designed to make students <span class="grad-text">love math</span></span>
+    <span class="ar-content">مصمم عشان الطلاب <span class="grad-text">يحبوا الرياضيات</span></span>
+  </h2>
+  <p class="sec-sub">
+    <span class="en">Not just games — a complete learning experience that turns your classroom into a race track</span>
+    <span class="ar-content">مش مجرد ألعاب — دي تجربة تعليمية كاملة بتحوّل الفصل لملعب</span>
+  </p>
+  <div class="feat-grid">
+    <div class="feat-card fc-p">
+      <span class="feat-icon">🏎️</span>
+      <div class="feat-title"><span class="en">Real Competition</span><span class="ar-content">منافسة حقيقية</span></div>
+      <div class="feat-desc"><span class="en">Two teams race simultaneously on the same screen — every correct answer brings them closer to victory!</span><span class="ar-content">فريقين بيتسابقوا في نفس الوقت على نفس الشاشة — كل إجابة صح بتقرّبهم من الفوز!</span></div>
+    </div>
+    <div class="feat-card fc-b">
+      <span class="feat-icon">📺</span>
+      <div class="feat-title"><span class="en">Smart Board Ready</span><span class="ar-content">مثالي للسمارت بورد</span></div>
+      <div class="feat-desc"><span class="en">Large buttons, vibrant colors, and a layout designed for big classroom screens. Just press F11 and go!</span><span class="ar-content">أزرار كبيرة وواضحة، ألوان زاهية، وتصميم يناسب الشاشات الكبيرة في الفصل.</span></div>
+    </div>
+    <div class="feat-card fc-y">
+      <span class="feat-icon">🎯</span>
+      <div class="feat-title"><span class="en">Learning Without Boredom</span><span class="ar-content">تعلم بدون ملل</span></div>
+      <div class="feat-desc"><span class="en">Students learn multiplication while focused on winning — learning happens without them even noticing!</span><span class="ar-content">الطلاب بيتعلموا جداول الضرب وهم مركزين على الفوز — التعلم بيحصل من غير ما يحسوا.</span></div>
+    </div>
+    <div class="feat-card fc-g">
+      <span class="feat-icon">⚡</span>
+      <div class="feat-title"><span class="en">Ready in Seconds</span><span class="ar-content">جاهز فوراً</span></div>
+      <div class="feat-desc"><span class="en">No downloads, no sign-ups — open your browser, press F11, and the game is ready instantly!</span><span class="ar-content">مفيش تحميل أو تسجيل — افتح المتصفح واضغط F11 والعبة جاهزة في ثانية!</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="games">
+  <span class="sec-tag"><span class="en">🎮 GAMES</span><span class="ar-content">🎮 الألعاب</span></span>
+  <h2 class="sec-title"><span class="en">Pick your <span class="grad-text">game</span></span><span class="ar-content">اختار اللعبة <span class="grad-text">المناسبة</span></span></h2>
+  <p class="sec-sub"><span class="en">Play now or watch for new games added regularly</span><span class="ar-content">العب دلوقتي أو انتظر ألعاب جديدة بتتضاف كل فترة</span></p>
+  <div class="games-grid">
+    <a class="game-card" href="games/multiplication-x2-teams.html" target="_blank">
+      <div class="game-thumb gt-1">
+        <div class="thumb-road"></div>
+        <div class="thumb-cars">
+          <svg viewBox="0 0 100 52" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="22" width="88" height="22" rx="6" fill="#FF4E8E"/><path d="M28 22 Q34 8 52 8 Q68 8 74 22 Z" fill="#FF80AB"/><path d="M33 21 Q37 11 52 11 Q64 11 68 21 Z" fill="#B3E5FC" opacity="0.85"/><circle cx="22" cy="44" r="8" fill="#222"/><circle cx="22" cy="44" r="4" fill="#888"/><circle cx="75" cy="44" r="8" fill="#222"/><circle cx="75" cy="44" r="4" fill="#888"/><ellipse cx="91" cy="27" rx="4" ry="3" fill="#FFF9C4" opacity="0.9"/></svg>
+          <svg viewBox="0 0 100 52" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="22" width="88" height="22" rx="6" fill="#2196F3"/><path d="M28 22 Q34 8 52 8 Q68 8 74 22 Z" fill="#64B5F6"/><path d="M33 21 Q37 11 52 11 Q64 11 68 21 Z" fill="#B3E5FC" opacity="0.85"/><circle cx="22" cy="44" r="8" fill="#222"/><circle cx="22" cy="44" r="4" fill="#888"/><circle cx="75" cy="44" r="8" fill="#222"/><circle cx="75" cy="44" r="4" fill="#888"/><ellipse cx="91" cy="27" rx="4" ry="3" fill="#FFF9C4" opacity="0.9"/></svg>
+        </div>
+        <div class="game-badge gb-new">✨ New</div>
+      </div>
+      <div class="game-info">
+        <div class="game-title"><span class="en">×2 Multiplication Race</span><span class="ar-content">سباق جدول الضرب ×2</span></div>
+        <div class="game-desc"><span class="en">Two teams race to answer ×2 questions. First team to finish 10 questions wins!</span><span class="ar-content">فريقين بيتسابقوا على إجابة جدول الضرب ×2. أول فريق يخلص الـ10 أسئلة يكسب!</span></div>
+        <div class="game-tags">
+          <span class="gtag gtag-p"><span class="en">2 Teams</span><span class="ar-content">فريقين</span></span>
+          <span class="gtag gtag-b"><span class="en">Smart Board</span><span class="ar-content">سمارت بورد</span></span>
+          <span class="gtag gtag-y">×2</span>
+          <span class="gtag gtag-g"><span class="en">Grade 2–3</span><span class="ar-content">الصف 2-3</span></span>
+        </div>
+        <div class="play-btn pb-pink">🚀 <span class="en">Play Now</span><span class="ar-content">العب دلوقتي</span></div>
+      </div>
+    </a>
+    <div class="game-card" style="cursor:default">
+      <div class="game-thumb gt-2">
+        <div class="thumb-road"></div>
+        <div style="font-size:56px;position:relative;z-index:2;">🔒</div>
+        <div class="game-badge gb-soon"><span class="en">Coming Soon</span><span class="ar-content">قريباً</span></div>
+      </div>
+      <div class="game-info">
+        <div class="game-title"><span class="en">×3 Multiplication Race</span><span class="ar-content">سباق جدول الضرب ×3</span></div>
+        <div class="game-desc"><span class="en">Same excitement, new table! Two teams compete on the 3× table.</span><span class="ar-content">نفس الإثارة، جدول ضرب جديد! فريقين يتنافسوا على جدول الـ3.</span></div>
+        <div class="game-tags">
+          <span class="gtag gtag-p"><span class="en">2 Teams</span><span class="ar-content">فريقين</span></span>
+          <span class="gtag gtag-b"><span class="en">Smart Board</span><span class="ar-content">سمارت بورد</span></span>
+          <span class="gtag gtag-y">×3</span>
+        </div>
+        <div class="play-btn pb-gray">🔒 <span class="en">Coming Soon</span><span class="ar-content">قريباً</span></div>
+      </div>
+    </div>
+    <div class="game-card" style="cursor:default">
+      <div class="game-thumb gt-3">
+        <div class="thumb-road"></div>
+        <div style="font-size:56px;position:relative;z-index:2;">🔒</div>
+        <div class="game-badge gb-soon"><span class="en">Coming Soon</span><span class="ar-content">قريباً</span></div>
+      </div>
+      <div class="game-info">
+        <div class="game-title"><span class="en">Multiplication Championship</span><span class="ar-content">بطولة جداول الضرب</span></div>
+        <div class="game-desc"><span class="en">Choose any table and challenge a teammate! From ×1 to ×10 in one game.</span><span class="ar-content">اختار أي جدول ضرب وتحدى زميلك! من ×1 لـ×10 في لعبة واحدة.</span></div>
+        <div class="game-tags">
+          <span class="gtag gtag-p"><span class="en">2 Teams</span><span class="ar-content">فريقين</span></span>
+          <span class="gtag gtag-b"><span class="en">Smart Board</span><span class="ar-content">سمارت بورد</span></span>
+          <span class="gtag gtag-y">×1 → ×10</span>
+        </div>
+        <div class="play-btn pb-gray">🔒 <span class="en">Coming Soon</span><span class="ar-content">قريباً</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <span class="sec-tag"><span class="en">📋 HOW IT WORKS</span><span class="ar-content">📋 إزاي تستخدمها؟</span></span>
+  <h2 class="sec-title"><span class="en">Just <span class="grad-text">4 steps</span>!</span><span class="ar-content">في <span class="grad-text">4 خطوات</span> بس!</span></h2>
+  <p class="sec-sub"><span class="en">No complexity — everything runs directly in your browser</span><span class="ar-content">مفيش تعقيد — كل حاجة في المتصفح مباشرةً</span></p>
+  <div class="steps">
+    <div class="step"><div class="step-circle sc1">1</div><div class="step-title"><span class="en">Open the site</span><span class="ar-content">افتح الموقع</span></div><div class="step-desc"><span class="en">Go to martl-3d.com from any browser on your computer or smart board</span><span class="ar-content">ادخل على martl-3d.com من أي متصفح على الكمبيوتر أو السمارت بورد</span></div></div>
+    <div class="step"><div class="step-circle sc2">2</div><div class="step-title"><span class="en">Pick a game</span><span class="ar-content">اختار اللعبة</span></div><div class="step-desc"><span class="en">Choose the multiplication table you're working on with your students</span><span class="ar-content">اختار جدول الضرب اللي شغال عليه مع طلابك وافتح اللعبة</span></div></div>
+    <div class="step"><div class="step-circle sc3">3</div><div class="step-title"><span class="en">Split the class</span><span class="ar-content">قسّم الفصل</span></div><div class="step-desc"><span class="en">Divide students into two teams — each team stands on one side of the smart board</span><span class="ar-content">قسّم الطلاب لفريقين — كل فريق يقف على جانب السمارت بورد</span></div></div>
+    <div class="step"><div class="step-circle sc4">4</div><div class="step-title"><span class="en">Play & Learn!</span><span class="ar-content">العبوا وتعلموا!</span></div><div class="step-desc"><span class="en">Press Start and let the race begin — students will love every math class!</span><span class="ar-content">اضغط "ابدأ" وخلي السباق يبدأ — الطلاب هيحبوا كل حصة رياضيات!</span></div></div>
+  </div>
+</section>
+
+<section id="testimonials">
+  <span class="sec-tag"><span class="en">💬 TEACHER REVIEWS</span><span class="ar-content">💬 آراء المعلمين</span></span>
+  <h2 class="sec-title"><span class="en">Students <span class="grad-text">genuinely love it</span></span><span class="ar-content">الطلاب <span class="grad-text">بيحبوها فعلاً</span></span></h2>
+  <div class="testi-grid">
+    <div class="testi-card"><div class="testi-q">"</div><div class="testi-txt"><span class="en">Students walked in and started asking for the game before I even opened the book! The ×2 table was memorized in a week.</span><span class="ar-content">الطلاب دخلوا الفصل وبدأوا يطالبوا باللعبة قبل ما أفتح الكتاب! جدول الـ2 اتحفظ في أسبوع.</span></div><div class="testi-author"><div class="testi-av av1">👩‍🏫</div><div><div class="testi-name"><span class="en">Ms. Sarah Al-Rashidi</span><span class="ar-content">أ. سارة الرشيدي</span></div><div class="testi-role"><span class="en">Math Teacher — Grade 2</span><span class="ar-content">معلمة رياضيات — الصف الثاني</span></div></div></div></div>
+    <div class="testi-card"><div class="testi-q">"</div><div class="testi-txt"><span class="en">The team competition got even the weakest students participating enthusiastically. Best tool I've used.</span><span class="ar-content">المنافسة بين الفريقين خلّت حتى الطلاب الضعفاء يشاركوا بحماس. أفضل أداة استخدمتها.</span></div><div class="testi-author"><div class="testi-av av2">👨‍🏫</div><div><div class="testi-name"><span class="en">Mr. Khalid Al-Omari</span><span class="ar-content">أ. خالد العمري</span></div><div class="testi-role"><span class="en">Math Teacher — Grade 3</span><span class="ar-content">معلم رياضيات — الصف الثالث</span></div></div></div></div>
+    <div class="testi-card"><div class="testi-q">"</div><div class="testi-txt"><span class="en">Simple, fast, zero complexity. Open it on the smart board and done — the students take it from there!</span><span class="ar-content">بسيطة، سريعة، ومفيش تعقيد. افتحها على السمارت بورد وخلاص — الطلاب يكملوا الباقي!</span></div><div class="testi-author"><div class="testi-av av3">👩‍🏫</div><div><div class="testi-name"><span class="en">Ms. Mona Al-Sayed</span><span class="ar-content">أ. منى السيد</span></div><div class="testi-role"><span class="en">Math Teacher — Grade 2</span><span class="ar-content">معلمة رياضيات — الصف الثاني</span></div></div></div></div>
+  </div>
+</section>
+
+<section id="cta">
+  <div class="cta-box">
+    <span class="cta-em">🏆</span>
+    <h2 class="cta-title"><span class="en">Ready to start?</span><span class="ar-content">جاهز تبدأ؟</span></h2>
+    <p class="cta-sub"><span class="en">Try the game free with your students right now<br>No sign-up, no download — just fun and learning!</span><span class="ar-content">جرب اللعبة دلوقتي مجاناً مع طلابك<br>مفيش تسجيل، مفيش تحميل — مجرد متعة وتعلم!</span></p>
+    <div class="cta-btns">
+      <a href="#games" class="btn-main">🎮 <span class="en">Play Free</span><span class="ar-content">العب مجاناً</span></a>
+      <a href="#how" class="btn-ghost">📋 <span class="en">How it works</span><span class="ar-content">إزاي تستخدمها؟</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <a class="footer-logo" href="#">Martl 3D 🎮</a>
+  <div class="footer-copy">© 2025 Martl 3D — <span class="en">Interactive Math Games</span><span class="ar-content">ألعاب رياضيات تعليمية</span></div>
+  <div class="footer-links">
+    <a href="#games"><span class="en">Games</span><span class="ar-content">الألعاب</span></a>
+    <a href="#features"><span class="en">Features</span><span class="ar-content">المميزات</span></a>
+    <a href="#how"><span class="en">How it works</span><span class="ar-content">كيف تعمل</span></a>
+  </div>
+</footer>
+
+<script>
+function toggleLang() {
+  const body = document.body;
+  const isAr = body.classList.contains('ar');
+  body.classList.toggle('ar', !isAr);
+  document.documentElement.lang = isAr ? 'en' : 'ar';
+  document.documentElement.dir  = isAr ? 'ltr' : 'rtl';
+  document.getElementById('opt-en').classList.toggle('active',  isAr);
+  document.getElementById('opt-ar').classList.toggle('active', !isAr);
+}
+</script>
+</body>
+</html>

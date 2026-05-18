@@ -284,13 +284,13 @@ let score = 0;
 let answered = false;
 
 // ════════════════════════════════════
-// AUTO START FROM URL
+// AUTO START FROM URL — runs last
 // ════════════════════════════════════
-window.addEventListener('load', () => {
+(function(){
   const p = new URLSearchParams(window.location.search);
   const g = parseInt(p.get('grade'));
   if(g===4||g===5) startQuiz(g);
-});
+})();
 
 // ════════════════════════════════════
 // GRADE SCREEN
@@ -469,6 +469,11 @@ function launchConfetti(){
     c.appendChild(p);
   }
 }
+
+// Auto-start from URL — after all functions
+const _p = new URLSearchParams(window.location.search);
+const _g = parseInt(_p.get('grade'));
+if(_g===4||_g===5) startQuiz(_g);
 </script>
 </body>
 </html>

@@ -297,7 +297,9 @@ window.addEventListener('load', () => {
 // ════════════════════════════════════
 function showGradeScreen(){
   document.getElementById('grade-screen').style.display='flex';
-  document.getElementById('quiz-screen').classList.remove('active');
+  const qs=document.getElementById('quiz-screen');
+  qs.style.display='none';
+  qs.classList.remove('active');
   document.getElementById('result-screen').classList.remove('show');
 }
 
@@ -311,6 +313,7 @@ function startQuiz(g){
 
   document.getElementById('grade-screen').style.display='none';
   const qs = document.getElementById('quiz-screen');
+  qs.style.display='flex';
   qs.classList.add('active');
 
   const badge = document.getElementById('grade-badge');

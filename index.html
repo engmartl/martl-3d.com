@@ -27,6 +27,8 @@
   .nav-links{display:flex;gap:22px;list-style:none;align-items:center}
   .nav-links a{color:rgba(255,255,255,0.65);text-decoration:none;font-size:15px;font-weight:700;transition:color .2s}
   .nav-links a:hover{color:var(--yellow)}
+  .nav-btn{background:linear-gradient(135deg,var(--pink),var(--purple));color:white!important;padding:10px 22px;border-radius:50px;font-weight:700!important;transition:transform .2s,box-shadow .2s!important}
+  .nav-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,78,142,.45)!important}
   #lang-toggle{display:flex;align-items:center;background:rgba(255,255,255,.08);border:1px solid var(--border);border-radius:50px;overflow:hidden;cursor:pointer;flex-shrink:0}
   .lang-opt{padding:7px 16px;font-size:13px;font-weight:700;color:rgba(255,255,255,.45);transition:all .25s;user-select:none;white-space:nowrap}
   .lang-opt.active{background:linear-gradient(135deg,var(--pink),var(--purple));color:white;border-radius:50px}
@@ -112,6 +114,21 @@
   .cs-badge{font-family:'Fredoka One',cursive;font-size:22px;color:var(--yellow);background:rgba(255,215,0,.12);border:2px solid rgba(255,215,0,.3);padding:10px 28px;border-radius:50px}
   .cs-sub{font-size:14px;color:rgba(255,255,255,.5);font-weight:600}
 
+  /* HOW IT WORKS */
+  #how{padding:80px 6%;background:var(--dark3)}
+  .how-title{font-family:'Fredoka One',cursive;font-size:clamp(32px,5vw,50px);margin-bottom:12px}
+  .how-sub{font-size:17px;color:rgba(255,255,255,.5);font-weight:600;max-width:500px;line-height:1.7;margin-bottom:56px}
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:32px;position:relative}
+  .steps::before{content:'';position:absolute;top:44px;left:12%;right:12%;height:2px;background:linear-gradient(90deg,var(--pink),var(--purple));opacity:.2}
+  .step{text-align:center}
+  .step-circle{width:88px;height:88px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:30px;margin:0 auto 18px;position:relative;z-index:2}
+  .sc1{background:linear-gradient(135deg,var(--pink),var(--purple));box-shadow:0 8px 28px rgba(255,78,142,.4)}
+  .sc2{background:linear-gradient(135deg,#9C27B0,var(--purple));box-shadow:0 8px 28px rgba(156,39,176,.4)}
+  .sc3{background:linear-gradient(135deg,var(--yellow),#FF6B35);box-shadow:0 8px 28px rgba(255,215,0,.4)}
+  .sc4{background:linear-gradient(135deg,var(--green),#00BCD4);box-shadow:0 8px 28px rgba(0,200,83,.4)}
+  .step-title{font-family:'Fredoka One',cursive;font-size:19px;margin-bottom:8px}
+  .step-desc{font-size:13px;color:rgba(255,255,255,.45);font-weight:600;line-height:1.7}
+
   /* STATS */
   #stats{background:rgba(255,255,255,.03);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:40px 6%;display:flex;justify-content:center;gap:64px;flex-wrap:wrap}
   .stat{text-align:center}
@@ -129,6 +146,11 @@
 <nav>
   <a class="logo" href="#">Martl 3D 🎮</a>
   <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#subjects"><span class="en">Subjects</span><span class="arc">الأقسام</span></a></li>
+      <li><a href="#how"><span class="en">How it works</span><span class="arc">كيف تعمل</span></a></li>
+      <li><a href="math/index.html" class="nav-btn">🎮 <span class="en">Play Now</span><span class="arc">العب دلوقتي</span></a></li>
+    </ul>
     <div id="lang-toggle" onclick="toggleLang()">
       <div class="lang-opt active" id="opt-en">EN</div>
       <div class="lang-opt" id="opt-ar">عر</div>
@@ -207,6 +229,36 @@
       </div>
     </div>
 
+  </div>
+</section>
+
+<section id="how">
+  <span style="font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--yellow);margin-bottom:12px;display:block">
+    <span class="en">📋 HOW IT WORKS</span><span class="arc">📋 كيف تعمل</span>
+  </span>
+  <h2 class="how-title"><span class="en">Ready in <span style="background:linear-gradient(135deg,var(--pink),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">4 steps!</span></span><span class="arc">جاهز في <span style="background:linear-gradient(135deg,var(--pink),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">4 خطوات!</span></span></h2>
+  <p class="how-sub"><span class="en">No downloads, no sign-ups — open your browser and play instantly</span><span class="arc">مفيش تحميل أو تسجيل — افتح المتصفح والعب فوراً</span></p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-circle sc1">1</div>
+      <div class="step-title"><span class="en">Open the site</span><span class="arc">افتح الموقع</span></div>
+      <div class="step-desc"><span class="en">Go to martl-3d.com from any browser on your smart board</span><span class="arc">ادخل على martl-3d.com من أي متصفح على السمارت بورد</span></div>
+    </div>
+    <div class="step">
+      <div class="step-circle sc2">2</div>
+      <div class="step-title"><span class="en">Pick a subject</span><span class="arc">اختار المادة</span></div>
+      <div class="step-desc"><span class="en">Choose Math, Quran, or Science and enter the subject page</span><span class="arc">اختار الرياضيات أو القرآن أو العلوم وادخل الصفحة</span></div>
+    </div>
+    <div class="step">
+      <div class="step-circle sc3">3</div>
+      <div class="step-title"><span class="en">Split the class</span><span class="arc">قسّم الفصل</span></div>
+      <div class="step-desc"><span class="en">Divide students into 2 teams — each team on one side of the board</span><span class="arc">قسّم الطلاب لفريقين — كل فريق على جانب البورد</span></div>
+    </div>
+    <div class="step">
+      <div class="step-circle sc4">4</div>
+      <div class="step-title"><span class="en">Play & Learn!</span><span class="arc">العبوا وتعلموا!</span></div>
+      <div class="step-desc"><span class="en">Press Start — students will love every single class!</span><span class="arc">اضغط ابدأ — الطلاب هيحبوا كل حصة!</span></div>
+    </div>
   </div>
 </section>
 

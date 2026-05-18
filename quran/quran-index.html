@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Martl 3D | Quran</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--gold:#D4AF37;--gold2:#F5E27A;--green:#00C853;--dark:#04080f;--dark2:#070f1a;--border:rgba(212,175,55,0.2);--white:#fff}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--dark);color:var(--white);min-height:100vh;overflow-x:hidden}
+  body.ar{font-family:'Cairo',sans-serif;direction:rtl}
+  .en{display:inline}.arc{display:none}
+  body.ar .en{display:none}body.ar .arc{display:inline}
+
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(0,100,50,0.12) 0%,transparent 60%);pointer-events:none;z-index:0}
+  #stars-bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+  .star{position:absolute;background:white;border-radius:50%;animation:twinkle ease-in-out infinite alternate}
+  @keyframes twinkle{from{opacity:.04}to{opacity:.5}}
+
+  nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:14px 6%;background:rgba(4,8,15,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+  .logo{font-family:'Cairo',sans-serif;font-size:22px;font-weight:900;background:linear-gradient(90deg,#FF4E8E,#FFD700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none}
+  .nav-right{display:flex;align-items:center;gap:14px}
+  .back-link{color:rgba(255,255,255,.5);text-decoration:none;font-size:14px;font-weight:700;transition:color .2s}
+  .back-link:hover{color:var(--gold)}
+  #lang-toggle{display:flex;align-items:center;background:rgba(255,255,255,.08);border:1px solid var(--border);border-radius:50px;overflow:hidden;cursor:pointer}
+  .lang-opt{padding:7px 14px;font-size:12px;font-weight:700;color:rgba(255,255,255,.4);user-select:none;transition:all .2s}
+  .lang-opt.active{background:linear-gradient(135deg,#00C853,#00897B);color:white;border-radius:50px}
+
+  main{position:relative;z-index:1;padding:100px 6% 80px;max-width:900px;margin:0 auto}
+
+  /* Hero */
+  .hero{text-align:center;margin-bottom:60px}
+  .hero-icon{font-size:64px;display:block;margin-bottom:14px;filter:drop-shadow(0 4px 20px rgba(212,175,55,.4));animation:float 3s ease-in-out infinite alternate}
+  @keyframes float{from{transform:translateY(0)}to{transform:translateY(-12px)}}
+  .breadcrumb{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,.35);font-weight:600;margin-bottom:18px}
+  .breadcrumb a{color:rgba(255,255,255,.35);text-decoration:none;transition:color .2s}
+  .breadcrumb a:hover{color:var(--gold)}
+  h1{font-family:'Amiri',serif;font-size:clamp(38px,6vw,64px);color:var(--gold);margin-bottom:12px;text-shadow:0 2px 20px rgba(212,175,55,.25)}
+  .hero-sub{font-size:16px;color:rgba(255,255,255,.5);font-weight:600;line-height:1.7}
+
+  /* Section label */
+  .sec-label{font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:22px;display:flex;align-items:center;gap:10px}
+  .sec-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+  /* Surah cards */
+  .surahs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;margin-bottom:48px}
+
+  .surah-card{border-radius:22px;overflow:hidden;border:1px solid var(--border);text-decoration:none;color:inherit;display:block;background:rgba(255,255,255,.03);transition:transform .3s,box-shadow .3s,border-color .3s;position:relative}
+  .surah-card:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(0,0,0,.5);border-color:rgba(212,175,55,.4)}
+  .surah-card.locked{cursor:default;opacity:.6}
+  .surah-card.locked:hover{transform:none;box-shadow:none}
+
+  .surah-cover{height:120px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:linear-gradient(135deg,#040c08,#071a0f)}
+  .surah-cover-glow{position:absolute;width:150px;height:150px;border-radius:50%;filter:blur(40px);opacity:0.25;background:var(--green)}
+  .surah-num{position:absolute;top:12px;right:14px;width:32px;height:32px;border-radius:50%;background:rgba(212,175,55,.15);border:1px solid rgba(212,175,55,.3);display:flex;align-items:center;justify-content:center;font-family:'Amiri',serif;font-size:15px;color:var(--gold)}
+  .surah-arabic{font-family:'Amiri',serif;font-size:32px;color:var(--gold2);position:relative;z-index:2;text-shadow:0 2px 10px rgba(212,175,55,.3)}
+  .surah-info{padding:16px 18px}
+  .surah-title{font-family:'Amiri',serif;font-size:20px;color:var(--gold);margin-bottom:4px}
+  .surah-title-en{font-size:13px;color:rgba(255,255,255,.4);font-weight:600;margin-bottom:10px}
+  .surah-meta{display:flex;gap:8px;flex-wrap:wrap}
+  .meta-tag{font-size:11px;font-weight:700;padding:3px 10px;border-radius:50px;background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.2);color:rgba(212,175,55,.8)}
+  .play-tag{background:linear-gradient(135deg,var(--green),#00897B);color:white;border:none;margin-top:10px;display:inline-flex;align-items:center;gap:5px;padding:8px 18px;border-radius:50px;font-size:13px;font-weight:700}
+  .lock-tag{background:rgba(255,255,255,.06);color:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.1);margin-top:10px;display:inline-flex;align-items:center;gap:5px;padding:8px 18px;border-radius:50px;font-size:13px;font-weight:700}
+
+  footer{position:relative;z-index:1;background:rgba(4,8,15,.8);border-top:1px solid var(--border);padding:28px 6%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+  .footer-logo{font-family:'Cairo',sans-serif;font-size:18px;font-weight:900;background:linear-gradient(90deg,#FF4E8E,#FFD700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none}
+  .footer-copy{font-size:12px;color:rgba(255,255,255,.2);font-weight:600}
+</style>
+</head>
+<body>
+<div id="stars-bg"></div>
+
+<nav>
+  <a class="logo" href="../index.html">Martl 3D 🎮</a>
+  <div class="nav-right">
+    <a class="back-link" href="../index.html">← <span class="en">All Subjects</span><span class="arc">كل المواد</span></a>
+    <div id="lang-toggle" onclick="toggleLang()">
+      <div class="lang-opt active" id="opt-en">EN</div>
+      <div class="lang-opt" id="opt-ar">عر</div>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="hero">
+    <div class="breadcrumb">
+      <a href="../index.html">Martl 3D</a> › <span><span class="en">Holy Quran</span><span class="arc">القرآن الكريم</span></span>
+    </div>
+    <span class="hero-icon">📖</span>
+    <h1><span class="en">Holy Quran</span><span class="arc">القرآن الكريم</span></h1>
+    <p class="hero-sub"><span class="en">Interactive memorization games — word by word, ayah by ayah</span><span class="arc">ألعاب حفظ تفاعلية — كلمة كلمة، آية آية</span></p>
+  </div>
+
+  <div class="sec-label">📖 <span class="en">Surahs</span><span class="arc">السور</span></div>
+
+  <div class="surahs-grid">
+
+    <!-- Al-Fatiha ✅ -->
+    <a class="surah-card" href="al-fatiha.html">
+      <div class="surah-cover">
+        <div class="surah-cover-glow"></div>
+        <div class="surah-num">١</div>
+        <div class="surah-arabic">الفاتحة</div>
+      </div>
+      <div class="surah-info">
+        <div class="surah-title">سورة الفاتحة</div>
+        <div class="surah-title-en"><span class="en">Al-Fatiha • The Opening</span><span class="arc">الفاتحة • أم الكتاب</span></div>
+        <div class="surah-meta">
+          <span class="meta-tag"><span class="en">7 Ayahs</span><span class="arc">٧ آيات</span></span>
+          <span class="meta-tag"><span class="en">Meccan</span><span class="arc">مكية</span></span>
+          <span class="meta-tag">✅ <span class="en">Available</span><span class="arc">متاحة</span></span>
+        </div>
+        <div class="play-tag">▶ <span class="en">Start Memorizing</span><span class="arc">ابدأ الحفظ</span></div>
+      </div>
+    </a>
+
+    <!-- Al-Ikhlas 🔒 -->
+    <div class="surah-card locked">
+      <div class="surah-cover" style="background:linear-gradient(135deg,#080c14,#0f1a28)">
+        <div class="surah-cover-glow" style="background:#2196F3"></div>
+        <div class="surah-num">١١٢</div>
+        <div class="surah-arabic" style="color:#90CAF9">الإخلاص</div>
+      </div>
+      <div class="surah-info">
+        <div class="surah-title" style="color:#90CAF9">سورة الإخلاص</div>
+        <div class="surah-title-en"><span class="en">Al-Ikhlas • Sincerity</span><span class="arc">الإخلاص • التوحيد</span></div>
+        <div class="surah-meta">
+          <span class="meta-tag"><span class="en">4 Ayahs</span><span class="arc">٤ آيات</span></span>
+          <span class="meta-tag"><span class="en">Meccan</span><span class="arc">مكية</span></span>
+        </div>
+        <div class="lock-tag">🔒 <span class="en">Coming Soon</span><span class="arc">قريباً</span></div>
+      </div>
+    </div>
+
+    <!-- Al-Falaq 🔒 -->
+    <div class="surah-card locked">
+      <div class="surah-cover" style="background:linear-gradient(135deg,#0c0814,#1a0f28)">
+        <div class="surah-cover-glow" style="background:#9C27B0"></div>
+        <div class="surah-num">١١٣</div>
+        <div class="surah-arabic" style="color:#CE93D8">الفلق</div>
+      </div>
+      <div class="surah-info">
+        <div class="surah-title" style="color:#CE93D8">سورة الفلق</div>
+        <div class="surah-title-en"><span class="en">Al-Falaq • The Daybreak</span><span class="arc">الفلق • قل أعوذ برب الفلق</span></div>
+        <div class="surah-meta">
+          <span class="meta-tag"><span class="en">5 Ayahs</span><span class="arc">٥ آيات</span></span>
+          <span class="meta-tag"><span class="en">Meccan</span><span class="arc">مكية</span></span>
+        </div>
+        <div class="lock-tag">🔒 <span class="en">Coming Soon</span><span class="arc">قريباً</span></div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <a class="footer-logo" href="../index.html">Martl 3D 🎮</a>
+  <div class="footer-copy">© 2025 Martl 3D</div>
+</footer>
+
+<script>
+// Stars
+(function(){
+  const c=document.getElementById('stars-bg');
+  for(let i=0;i<50;i++){
+    const s=document.createElement('div');s.className='star';
+    const sz=Math.random()*2+0.5;
+    s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;animation-duration:${1.5+Math.random()*3}s;animation-delay:${Math.random()*3}s`;
+    c.appendChild(s);
+  }
+})();
+
+function toggleLang(){
+  const b=document.body,isAr=b.classList.contains('ar');
+  b.classList.toggle('ar',!isAr);
+  document.documentElement.lang=isAr?'en':'ar';
+  document.documentElement.dir=isAr?'ltr':'rtl';
+  document.getElementById('opt-en').classList.toggle('active',isAr);
+  document.getElementById('opt-ar').classList.toggle('active',!isAr);
+}
+</script>
+</body>
+</html>

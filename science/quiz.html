@@ -61,8 +61,10 @@
   .gc5 .gc-btn{background:linear-gradient(135deg,var(--purple),#9C27B0);color:white;box-shadow:0 4px 16px rgba(124,58,237,.3)}
 
   /* QUIZ SCREEN */
-  #quiz-screen{display:none;position:relative;z-index:1;min-height:100vh;padding:80px 5% 40px;align-items:flex-start;justify-content:center}
-  #quiz-screen.active{display:flex;flex-direction:column;align-items:center}
+  #grade-screen{display:flex}
+  #grade-screen.hidden{display:none!important}
+  #quiz-screen{display:none;position:relative;z-index:1;min-height:100vh;padding:80px 5% 40px;flex-direction:column;align-items:center;justify-content:flex-start}
+  #quiz-screen.active{display:flex!important}
 
   /* Top bar */
   .quiz-topbar{width:100%;max-width:700px;display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
@@ -296,25 +298,21 @@ let answered = false;
 // GRADE SCREEN
 // ════════════════════════════════════
 function showGradeScreen(){
-  document.getElementById('grade-screen').style.display='flex';
+  document.getElementById('grade-screen').classList.remove('hidden');
   const qs=document.getElementById('quiz-screen');
-  qs.style.display='none';
   qs.classList.remove('active');
   document.getElementById('result-screen').classList.remove('show');
 }
 
 function startQuiz(g){
   grade = g;
-  // Shuffle and pick 10
   const pool = [...QUESTIONS[g]];
   for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}
   questions = pool.slice(0,10);
   current = 0; score = 0;
 
-  document.getElementById('grade-screen').style.display='none';
-  const qs = document.getElementById('quiz-screen');
-  qs.style.display='flex';
-  qs.classList.add('active');
+  document.getElementById('grade-screen').classList.add('hidden');
+  document.getElementById('quiz-screen').classList.add('active');
 
   const badge = document.getElementById('grade-badge');
   badge.textContent = `Grade ${g}`;

@@ -180,7 +180,7 @@
   <h1 class="gs-title"><span class="grad-text">Science</span> Quiz</h1>
   <p class="gs-sub">Cambridge International Science<br>Choose your grade to start!</p>
   <div class="grade-cards">
-    <div class="grade-card" onclick="startQuiz(4)">
+    <div class="grade-card">
       <div class="gc-cover gc4">
         <div class="gc-glow"></div>
         <div class="gc-grade">4</div>
@@ -189,10 +189,10 @@
       <div class="gc-info">
         <div class="gc-title">Grade 4</div>
         <div class="gc-topics">Living things • Materials • Forces & Motion<br>Light & Sound • Earth & Space</div>
-        <button class="gc-btn">🚀 Start Quiz</button>
+        <button class="gc-btn" onclick="startQuiz(4)">🚀 Start Quiz</button>
       </div>
     </div>
-    <div class="grade-card" onclick="startQuiz(5)">
+    <div class="grade-card">
       <div class="gc-cover gc5">
         <div class="gc-glow"></div>
         <div class="gc-grade">5</div>
@@ -201,7 +201,7 @@
       <div class="gc-info">
         <div class="gc-title">Grade 5</div>
         <div class="gc-topics">Life Processes • States of Matter<br>Electricity • Earth Sciences • Ecosystems</div>
-        <button class="gc-btn">🚀 Start Quiz</button>
+        <button class="gc-btn" onclick="startQuiz(5)">🚀 Start Quiz</button>
       </div>
     </div>
   </div>
@@ -269,7 +269,7 @@ const QUESTIONS = {
     // T/F
     {type:'tf',topic:'Ecosystems',icon:'🌿',q:'Producers in a food chain are always plants.',ans:true},
     {type:'tf',topic:'Electricity',icon:'🔋',q:'A circuit must be complete (closed) for electricity to flow.',ans:true},
-    {type:'tf',topic:'Earth Sciences',icon:'🌍',q:'The Earth's core is made of ice.',ans:false},
+    {type:'tf',topic:'Earth Sciences',icon:'🌍',q:"The Earth's core is made of ice.",ans:false},
     {type:'tf',topic:'Life Processes',icon:'🧬',q:'All living things need energy to survive.',ans:true},
     {type:'tf',topic:'States of Matter',icon:'💨',q:'Gas particles are closer together than liquid particles.',ans:false},
     {type:'tf',topic:'Ecosystems',icon:'🐺',q:'A carnivore is an animal that eats only plants.',ans:false},

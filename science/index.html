@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Martl 3D | Science</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Cairo:wght@400;700;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Plus Jakarta Sans',sans-serif;background:#080815;color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;overflow:hidden}
+  body.ar{font-family:'Cairo',sans-serif;direction:rtl}
+  .en{display:inline}.arc{display:none}
+  body.ar .en{display:none}body.ar .arc{display:inline}
+
+  .bg-glow{position:fixed;width:600px;height:600px;border-radius:50%;filter:blur(120px);opacity:0.12;background:#2196F3;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+  .grid-bg{position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+
+  nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:16px 6%;background:rgba(8,8,21,0.9);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.08);z-index:10}
+  .logo{font-family:'Fredoka One',cursive;font-size:24px;background:linear-gradient(90deg,#FF4E8E,#FFD700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none}
+  .nav-right{display:flex;align-items:center;gap:14px}
+  .back-link{color:rgba(255,255,255,.5);text-decoration:none;font-size:14px;font-weight:700;transition:color .2s}
+  .back-link:hover{color:#FFD700}
+  #lang-toggle{display:flex;align-items:center;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);border-radius:50px;overflow:hidden;cursor:pointer}
+  .lang-opt{padding:7px 14px;font-size:12px;font-weight:700;color:rgba(255,255,255,.4);user-select:none;white-space:nowrap;transition:all .2s}
+  .lang-opt.active{background:linear-gradient(135deg,#2196F3,#00BCD4);color:white;border-radius:50px}
+
+  .content{position:relative;z-index:2;max-width:600px}
+  .icon{font-size:90px;margin-bottom:20px;display:block;filter:drop-shadow(0 4px 30px rgba(33,150,243,.4));animation:float 3s ease-in-out infinite alternate}
+  @keyframes float{from{transform:translateY(0)}to{transform:translateY(-14px)}}
+  h1{font-family:'Fredoka One',cursive;font-size:clamp(40px,7vw,72px);line-height:1.1;margin-bottom:16px}
+  .grad{background:linear-gradient(135deg,#90CAF9,#2196F3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  p{font-size:18px;color:rgba(255,255,255,.55);font-weight:600;line-height:1.75;margin-bottom:36px}
+
+  .badge{display:inline-flex;align-items:center;gap:10px;background:rgba(33,150,243,.1);border:1px solid rgba(33,150,243,.3);color:#90CAF9;padding:12px 28px;border-radius:50px;font-size:15px;font-weight:700;margin-bottom:32px}
+  .badge-dot{width:10px;height:10px;border-radius:50%;background:#2196F3;animation:blink 1.2s ease infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+  .back-btn{display:inline-flex;align-items:center;gap:8px;padding:16px 40px;border-radius:50px;background:linear-gradient(135deg,#2196F3,#00BCD4);color:white;text-decoration:none;font-size:17px;font-weight:700;box-shadow:0 8px 28px rgba(33,150,243,.3);transition:transform .2s,box-shadow .2s}
+  .back-btn:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(33,150,243,.45)}
+
+  .star{position:fixed;background:white;border-radius:50%;animation:twinkle ease-in-out infinite alternate;pointer-events:none}
+  @keyframes twinkle{from{opacity:.05}to{opacity:.5}}
+</style>
+</head>
+<body>
+<div class="bg-glow"></div>
+<div class="grid-bg"></div>
+
+<script>
+for(let i=0;i<30;i++){
+  const s=document.createElement('div');
+  s.className='star';
+  const sz=Math.random()*3+1;
+  s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}vh;left:${Math.random()*100}vw;animation-duration:${1.5+Math.random()*3}s;animation-delay:${Math.random()*2}s`;
+  document.body.appendChild(s);
+}
+</script>
+
+<nav>
+  <a class="logo" href="../index.html">Martl 3D 🎮</a>
+  <div class="nav-right">
+    <a class="back-link" href="../index.html">← <span class="en">All Subjects</span><span class="arc">كل المواد</span></a>
+    <div id="lang-toggle" onclick="toggleLang()">
+      <div class="lang-opt active" id="opt-en">EN</div>
+      <div class="lang-opt" id="opt-ar">عر</div>
+    </div>
+  </div>
+</nav>
+
+<div class="content">
+  <span class="icon">🔬</span>
+  <div class="badge"><span class="badge-dot"></span> <span class="en">Under Development</span><span class="arc">قيد التطوير</span></div>
+  <h1><span class="en"><span class="grad">Science</span> Games</span><span class="arc">ألعاب <span class="grad">العلوم</span></span></h1>
+  <p><span class="en">Interactive Science quiz games are coming soon!<br>Biology, Physics & Chemistry — all as exciting team races.</span><span class="arc">ألعاب مسابقات العلوم التفاعلية قريباً!<br>أحياء وفيزياء وكيمياء — كلها سباقات فريقين مثيرة.</span></p>
+  <a class="back-btn" href="../index.html">← <span class="en">Back to Subjects</span><span class="arc">رجوع للمواد</span></a>
+</div>
+
+<script>
+function toggleLang(){
+  const b=document.body,isAr=b.classList.contains('ar');
+  b.classList.toggle('ar',!isAr);
+  document.documentElement.lang=isAr?'en':'ar';
+  document.documentElement.dir=isAr?'ltr':'rtl';
+  document.getElementById('opt-en').classList.toggle('active',isAr);
+  document.getElementById('opt-ar').classList.toggle('active',!isAr);
+}
+</script>
+</body>
+</html>

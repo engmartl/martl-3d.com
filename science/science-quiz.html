@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Science Quiz | Martl 3D</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue:#2196F3;--cyan:#00BCD4;--green:#00C853;--yellow:#FFD700;--pink:#FF4E8E;--purple:#7C3AED;--orange:#FF6B35;
+    --dark:#080815;--dark2:#0d1020;--dark3:#111525;--border:rgba(255,255,255,0.08);--white:#fff;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--dark);color:var(--white);min-height:100vh;overflow-x:hidden}
+  body.ar{font-family:'Cairo',sans-serif;direction:rtl}
+  .en{display:inline}.arc{display:none}
+  body.ar .en{display:none}body.ar .arc{display:inline}
+
+  /* BG */
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(33,150,243,0.1) 0%,transparent 60%);pointer-events:none;z-index:0}
+  #grid-bg{position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:50px 50px;pointer-events:none;z-index:0}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:14px 5%;background:rgba(8,8,21,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+  .logo{font-family:'Fredoka One',cursive;font-size:22px;background:linear-gradient(90deg,var(--pink),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none}
+  .back-link{color:rgba(255,255,255,.5);text-decoration:none;font-size:14px;font-weight:700;transition:color .2s}
+  .back-link:hover{color:var(--yellow)}
+  .nav-center{font-size:14px;font-weight:700;color:rgba(255,255,255,.6)}
+
+  /* GRADE SELECTOR */
+  #grade-screen{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 5% 40px;text-align:center}
+  .gs-icon{font-size:72px;margin-bottom:16px;filter:drop-shadow(0 4px 20px rgba(33,150,243,.4));animation:float 3s ease-in-out infinite alternate}
+  @keyframes float{from{transform:translateY(0)}to{transform:translateY(-12px)}}
+  .gs-title{font-family:'Fredoka One',cursive;font-size:clamp(38px,6vw,64px);margin-bottom:12px}
+  .grad-text{background:linear-gradient(135deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .gs-sub{font-size:17px;color:rgba(255,255,255,.5);font-weight:600;margin-bottom:48px;line-height:1.7}
+  .grade-cards{display:flex;gap:24px;flex-wrap:wrap;justify-content:center}
+  .grade-card{
+    width:260px;border-radius:28px;overflow:hidden;border:1px solid var(--border);
+    cursor:pointer;transition:transform .3s,box-shadow .3s,border-color .3s;
+    text-align:center;
+  }
+  .grade-card:hover{transform:translateY(-8px) scale(1.02);box-shadow:0 24px 60px rgba(0,0,0,.5)}
+  .gc-cover{height:160px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden}
+  .gc4{background:linear-gradient(135deg,#050d1a,#0a1e36)}
+  .gc5{background:linear-gradient(135deg,#0a0515,#150a2e)}
+  .gc-glow{position:absolute;width:160px;height:160px;border-radius:50%;filter:blur(50px);opacity:.3}
+  .gc4 .gc-glow{background:var(--blue)}
+  .gc5 .gc-glow{background:var(--purple)}
+  .gc-grade{font-family:'Fredoka One',cursive;font-size:48px;position:relative;z-index:2}
+  .gc4 .gc-grade{color:#90CAF9}
+  .gc5 .gc-grade{color:#CE93D8}
+  .gc-label{font-size:13px;color:rgba(255,255,255,.5);font-weight:700;position:relative;z-index:2}
+  .gc-info{padding:20px;background:rgba(255,255,255,.03);border-top:1px solid var(--border)}
+  .gc-title{font-family:'Fredoka One',cursive;font-size:20px;margin-bottom:6px}
+  .gc4 .gc-title{color:#90CAF9} .gc5 .gc-title{color:#CE93D8}
+  .gc-topics{font-size:12px;color:rgba(255,255,255,.4);font-weight:600;line-height:1.6;margin-bottom:14px}
+  .gc-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 24px;border-radius:50px;font-size:14px;font-weight:700;border:none;cursor:pointer}
+  .gc4 .gc-btn{background:linear-gradient(135deg,var(--blue),var(--cyan));color:white;box-shadow:0 4px 16px rgba(33,150,243,.3)}
+  .gc5 .gc-btn{background:linear-gradient(135deg,var(--purple),#9C27B0);color:white;box-shadow:0 4px 16px rgba(124,58,237,.3)}
+
+  /* QUIZ SCREEN */
+  #quiz-screen{display:none;position:relative;z-index:1;min-height:100vh;padding:80px 5% 40px;align-items:flex-start;justify-content:center}
+  #quiz-screen.active{display:flex;flex-direction:column;align-items:center}
+
+  /* Top bar */
+  .quiz-topbar{width:100%;max-width:700px;display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+  .quiz-grade-badge{font-family:'Fredoka One',cursive;font-size:14px;padding:6px 16px;border-radius:50px}
+  .qgb4{background:rgba(33,150,243,.15);border:1px solid rgba(33,150,243,.3);color:#90CAF9}
+  .qgb5{background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.3);color:#CE93D8}
+  .quiz-score-box{font-family:'Fredoka One',cursive;font-size:15px;color:var(--yellow);background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.25);padding:6px 16px;border-radius:50px}
+
+  /* Progress */
+  .quiz-progress{width:100%;max-width:700px;margin-bottom:24px}
+  .qp-info{display:flex;justify-content:space-between;margin-bottom:8px}
+  .qp-label{font-size:13px;color:rgba(255,255,255,.4);font-weight:700}
+  .qp-num{font-size:13px;color:var(--blue);font-weight:700}
+  .qp-bar{height:6px;background:rgba(255,255,255,.07);border-radius:6px;overflow:hidden}
+  .qp-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:6px;transition:width .5s ease}
+
+  /* Question card */
+  .q-card{width:100%;max-width:700px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:28px;overflow:hidden;box-shadow:0 16px 50px rgba(0,0,0,.35)}
+  .q-header{padding:20px 28px 0;display:flex;align-items:center;gap:12px}
+  .q-type-badge{font-size:11px;font-weight:700;padding:4px 12px;border-radius:50px;letter-spacing:.5px;text-transform:uppercase}
+  .qtb-mc{background:rgba(33,150,243,.15);border:1px solid rgba(33,150,243,.3);color:#90CAF9}
+  .qtb-tf{background:rgba(0,200,83,.12);border:1px solid rgba(0,200,83,.3);color:#A5D6A7}
+  .q-topic{font-size:12px;color:rgba(255,255,255,.35);font-weight:700}
+  .q-body{padding:24px 28px 20px}
+  .q-icon{font-size:36px;margin-bottom:12px;display:block}
+  .q-text{font-size:clamp(17px,2.5vw,21px);font-weight:700;line-height:1.5;color:var(--white)}
+
+  /* Options */
+  .options{display:grid;gap:11px;margin-top:20px;padding:0 28px 24px}
+  .opt-btn{
+    width:100%;padding:14px 20px;border-radius:16px;border:1px solid rgba(255,255,255,.1);
+    background:rgba(255,255,255,.04);color:var(--white);font-size:16px;font-weight:700;
+    cursor:pointer;text-align:right;display:flex;align-items:center;gap:12px;
+    transition:all .2s;font-family:'Plus Jakarta Sans',sans-serif;
+  }
+  body.ar .opt-btn{text-align:right}
+  .opt-btn:hover:not(:disabled){background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.2);transform:translateX(-3px)}
+  body.ar .opt-btn:hover:not(:disabled){transform:translateX(3px)}
+  .opt-letter{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0;transition:all .2s}
+  .opt-btn.correct{background:rgba(0,200,83,.15)!important;border-color:rgba(0,200,83,.5)!important;color:var(--green)!important}
+  .opt-btn.correct .opt-letter{background:var(--green);color:#fff}
+  .opt-btn.wrong{background:rgba(255,78,142,.12)!important;border-color:rgba(255,78,142,.4)!important;color:var(--pink)!important}
+  .opt-btn.wrong .opt-letter{background:var(--pink);color:#fff}
+  .opt-btn.reveal{background:rgba(0,200,83,.08)!important;border-color:rgba(0,200,83,.25)!important}
+
+  /* True/False */
+  .tf-options{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:0 28px 24px}
+  .tf-btn{
+    padding:22px;border-radius:20px;border:1px solid rgba(255,255,255,.1);
+    background:rgba(255,255,255,.04);cursor:pointer;
+    font-family:'Fredoka One',cursive;font-size:26px;text-align:center;
+    transition:all .2s;
+  }
+  .tf-btn:hover:not(:disabled){transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+  .tf-true{color:#A5D6A7} .tf-false{color:#EF9A9A}
+  .tf-btn.correct{background:rgba(0,200,83,.15)!important;border-color:rgba(0,200,83,.5)!important}
+  .tf-btn.wrong{background:rgba(255,78,142,.12)!important;border-color:rgba(255,78,142,.4)!important}
+  .tf-btn.reveal{background:rgba(0,200,83,.08)!important;border-color:rgba(0,200,83,.25)!important}
+
+  /* Feedback */
+  .feedback-bar{margin:0 28px 20px;padding:12px 18px;border-radius:14px;font-size:15px;font-weight:700;display:none;align-items:center;gap:10px}
+  .fb-correct{background:rgba(0,200,83,.12);border:1px solid rgba(0,200,83,.3);color:var(--green);display:flex}
+  .fb-wrong{background:rgba(255,78,142,.1);border:1px solid rgba(255,78,142,.3);color:var(--pink);display:flex}
+
+  /* Next btn */
+  .next-wrap{padding:0 28px 28px;display:flex;justify-content:center}
+  .next-btn{font-family:'Fredoka One',cursive;font-size:18px;padding:14px 48px;border-radius:50px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--blue),var(--cyan));color:white;box-shadow:0 6px 20px rgba(33,150,243,.3);transition:transform .2s,box-shadow .2s;display:none}
+  .next-btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(33,150,243,.45)}
+  .next-btn.finish{background:linear-gradient(135deg,var(--yellow),var(--orange));box-shadow:0 6px 20px rgba(255,215,0,.3)}
+
+  /* RESULT SCREEN */
+  #result-screen{display:none;position:fixed;inset:0;z-index:300;background:rgba(8,8,21,.96);flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px;padding:20px}
+  #result-screen.show{display:flex}
+  .rs-icon{font-size:80px;animation:bounceIn .5s ease}
+  @keyframes bounceIn{0%{transform:scale(0)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
+  .rs-title{font-family:'Fredoka One',cursive;font-size:52px}
+  .rs-score{font-family:'Fredoka One',cursive;font-size:32px;color:var(--yellow)}
+  .rs-msg{font-size:17px;color:rgba(255,255,255,.55);font-weight:600;line-height:1.7}
+  .rs-btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+  .rs-btn{font-family:'Fredoka One',cursive;font-size:17px;padding:14px 36px;border-radius:50px;border:none;cursor:pointer}
+  .rsb-retry{background:linear-gradient(135deg,var(--blue),var(--cyan));color:white;box-shadow:0 6px 20px rgba(33,150,243,.3)}
+  .rsb-change{background:rgba(255,255,255,.08);color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.15)}
+  #confetti-r{position:fixed;inset:0;pointer-events:none;z-index:301}
+  .cp{position:absolute;border-radius:2px;animation:cpFall linear forwards}
+  @keyframes cpFall{from{transform:translateY(-10px) rotate(0);opacity:1}to{transform:translateY(105vh) rotate(540deg);opacity:0}}
+</style>
+</head>
+<body>
+<div id="grid-bg"></div>
+
+<!-- Result screen -->
+<div id="result-screen">
+  <div id="confetti-r"></div>
+  <div class="rs-icon" id="rs-icon">🎉</div>
+  <div class="rs-title" id="rs-title">Well Done!</div>
+  <div class="rs-score" id="rs-score">8 / 10</div>
+  <div class="rs-msg" id="rs-msg">Great job! Keep it up.</div>
+  <div class="rs-btns">
+    <button class="rs-btn rsb-retry" onclick="retryQuiz()">🔄 Try Again</button>
+    <button class="rs-btn rsb-change" onclick="showGradeScreen()">← Change Grade</button>
+  </div>
+</div>
+
+<nav>
+  <a class="back-link" href="index.html">← Science</a>
+  <div class="nav-center" id="nav-center">🔬 Science Quiz</div>
+  <a class="logo" href="../index.html">Martl 3D</a>
+</nav>
+
+<!-- GRADE SELECTOR -->
+<div id="grade-screen">
+  <span class="gs-icon">🔬</span>
+  <h1 class="gs-title"><span class="grad-text">Science</span> Quiz</h1>
+  <p class="gs-sub">Cambridge International Science<br>Choose your grade to start!</p>
+  <div class="grade-cards">
+    <div class="grade-card" onclick="startQuiz(4)">
+      <div class="gc-cover gc4">
+        <div class="gc-glow"></div>
+        <div class="gc-grade">4</div>
+        <div class="gc-label">Grade Four</div>
+      </div>
+      <div class="gc-info">
+        <div class="gc-title">Grade 4</div>
+        <div class="gc-topics">Living things • Materials • Forces & Motion<br>Light & Sound • Earth & Space</div>
+        <button class="gc-btn">🚀 Start Quiz</button>
+      </div>
+    </div>
+    <div class="grade-card" onclick="startQuiz(5)">
+      <div class="gc-cover gc5">
+        <div class="gc-glow"></div>
+        <div class="gc-grade">5</div>
+        <div class="gc-label">Grade Five</div>
+      </div>
+      <div class="gc-info">
+        <div class="gc-title">Grade 5</div>
+        <div class="gc-topics">Life Processes • States of Matter<br>Electricity • Earth Sciences • Ecosystems</div>
+        <button class="gc-btn">🚀 Start Quiz</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz-screen">
+  <div class="quiz-topbar">
+    <div class="quiz-grade-badge" id="grade-badge">Grade 4</div>
+    <div class="quiz-score-box">⭐ Score: <span id="score-display">0</span></div>
+  </div>
+  <div class="quiz-progress">
+    <div class="qp-info">
+      <span class="qp-label">Progress</span>
+      <span class="qp-num" id="q-counter">Q 1 / 10</span>
+    </div>
+    <div class="qp-bar"><div class="qp-fill" id="qp-fill" style="width:10%"></div></div>
+  </div>
+  <div class="q-card" id="q-card">
+    <div class="q-header">
+      <span class="q-type-badge" id="q-type-badge">MCQ</span>
+      <span class="q-topic" id="q-topic">Topic</span>
+    </div>
+    <div class="q-body">
+      <span class="q-icon" id="q-icon">🌱</span>
+      <div class="q-text" id="q-text">Question here</div>
+    </div>
+    <div id="options-wrap"></div>
+    <div class="feedback-bar" id="feedback-bar"></div>
+    <div class="next-wrap"><button class="next-btn" id="next-btn" onclick="nextQuestion()">Next →</button></div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════
+// QUESTION BANKS
+// ════════════════════════════════════
+const QUESTIONS = {
+  4: [
+    // MCQ
+    {type:'mc',topic:'Living Things',icon:'🌱',q:'Which part of a plant makes food using sunlight?',opts:['Root','Stem','Leaf','Flower'],ans:2},
+    {type:'mc',topic:'Living Things',icon:'🦋',q:'Which of these is an example of an insect?',opts:['Spider','Butterfly','Crab','Snail'],ans:1},
+    {type:'mc',topic:'Materials',icon:'🧲',q:'Which material is attracted to a magnet?',opts:['Plastic','Wood','Iron','Glass'],ans:2},
+    {type:'mc',topic:'Forces',icon:'⚡',q:'What force pulls objects toward the Earth?',opts:['Magnetism','Friction','Gravity','Push'],ans:2},
+    {type:'mc',topic:'Light',icon:'🌈',q:'What happens when light passes through a prism?',opts:['It disappears','It splits into colors','It becomes faster','It turns to heat'],ans:1},
+    {type:'mc',topic:'Earth & Space',icon:'🌍',q:'How long does it take the Earth to orbit the Sun once?',opts:['1 day','1 month','1 year','10 years'],ans:2},
+    {type:'mc',topic:'Sound',icon:'🔊',q:'Sound travels as:',opts:['Light waves','Vibrations','Electrical signals','Heat waves'],ans:1},
+    // T/F
+    {type:'tf',topic:'Living Things',icon:'🌿',q:'Plants need sunlight, water, and air to grow.',ans:true},
+    {type:'tf',topic:'Materials',icon:'💧',q:'Water is a solid at room temperature.',ans:false},
+    {type:'tf',topic:'Forces',icon:'🏀',q:'Friction always slows moving objects down.',ans:true},
+    {type:'tf',topic:'Earth & Space',icon:'🌙',q:'The Moon produces its own light.',ans:false},
+    {type:'tf',topic:'Light',icon:'🪞',q:'Light travels faster than sound.',ans:true},
+    {type:'tf',topic:'Living Things',icon:'🐟',q:'Fish breathe oxygen from the air like humans.',ans:false},
+  ],
+  5: [
+    // MCQ
+    {type:'mc',topic:'Life Processes',icon:'❤️',q:'Which organ pumps blood around the body?',opts:['Lungs','Stomach','Heart','Brain'],ans:2},
+    {type:'mc',topic:'States of Matter',icon:'🧊',q:'What is the process called when a liquid turns into a gas?',opts:['Freezing','Melting','Evaporation','Condensation'],ans:2},
+    {type:'mc',topic:'Electricity',icon:'💡',q:'Which of these is a good conductor of electricity?',opts:['Rubber','Wood','Copper','Plastic'],ans:2},
+    {type:'mc',topic:'Ecosystems',icon:'🌊',q:'What do we call animals that eat only plants?',opts:['Carnivores','Herbivores','Omnivores','Predators'],ans:1},
+    {type:'mc',topic:'Earth Sciences',icon:'🌋',q:'What type of rock is formed from cooled lava?',opts:['Sedimentary','Metamorphic','Igneous','Limestone'],ans:2},
+    {type:'mc',topic:'Life Processes',icon:'🫁',q:'What gas do humans breathe in to survive?',opts:['Carbon dioxide','Nitrogen','Oxygen','Hydrogen'],ans:2},
+    {type:'mc',topic:'States of Matter',icon:'🌡️',q:'At what temperature does water freeze?',opts:['100°C','50°C','0°C','-10°C'],ans:2},
+    // T/F
+    {type:'tf',topic:'Ecosystems',icon:'🌿',q:'Producers in a food chain are always plants.',ans:true},
+    {type:'tf',topic:'Electricity',icon:'🔋',q:'A circuit must be complete (closed) for electricity to flow.',ans:true},
+    {type:'tf',topic:'Earth Sciences',icon:'🌍',q:'The Earth's core is made of ice.',ans:false},
+    {type:'tf',topic:'Life Processes',icon:'🧬',q:'All living things need energy to survive.',ans:true},
+    {type:'tf',topic:'States of Matter',icon:'💨',q:'Gas particles are closer together than liquid particles.',ans:false},
+    {type:'tf',topic:'Ecosystems',icon:'🐺',q:'A carnivore is an animal that eats only plants.',ans:false},
+  ]
+};
+
+// ════════════════════════════════════
+// STATE
+// ════════════════════════════════════
+let grade = 4;
+let questions = [];
+let current = 0;
+let score = 0;
+let answered = false;
+
+// ════════════════════════════════════
+// AUTO START FROM URL
+// ════════════════════════════════════
+window.addEventListener('load', () => {
+  const p = new URLSearchParams(window.location.search);
+  const g = parseInt(p.get('grade'));
+  if(g===4||g===5) startQuiz(g);
+});
+
+// ════════════════════════════════════
+// GRADE SCREEN
+// ════════════════════════════════════
+function showGradeScreen(){
+  document.getElementById('grade-screen').style.display='flex';
+  document.getElementById('quiz-screen').classList.remove('active');
+  document.getElementById('result-screen').classList.remove('show');
+}
+
+function startQuiz(g){
+  grade = g;
+  // Shuffle and pick 10
+  const pool = [...QUESTIONS[g]];
+  for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}
+  questions = pool.slice(0,10);
+  current = 0; score = 0;
+
+  document.getElementById('grade-screen').style.display='none';
+  const qs = document.getElementById('quiz-screen');
+  qs.classList.add('active');
+
+  const badge = document.getElementById('grade-badge');
+  badge.textContent = `Grade ${g}`;
+  badge.className = 'quiz-grade-badge ' + (g===4?'qgb4':'qgb5');
+
+  document.getElementById('nav-center').textContent = `🔬 Science Quiz — Grade ${g}`;
+  renderQuestion();
+}
+
+// ════════════════════════════════════
+// RENDER QUESTION
+// ════════════════════════════════════
+function renderQuestion(){
+  answered = false;
+  const q = questions[current];
+  const total = questions.length;
+
+  document.getElementById('q-counter').textContent = `Q ${current+1} / ${total}`;
+  document.getElementById('qp-fill').style.width = ((current+1)/total*100)+'%';
+  document.getElementById('score-display').textContent = score;
+  document.getElementById('q-icon').textContent = q.icon;
+  document.getElementById('q-text').textContent = q.q;
+  document.getElementById('q-topic').textContent = q.topic;
+
+  const typeBadge = document.getElementById('q-type-badge');
+  typeBadge.textContent = q.type==='mc' ? 'Multiple Choice' : 'True / False';
+  typeBadge.className = 'q-type-badge ' + (q.type==='mc'?'qtb-mc':'qtb-tf');
+
+  const wrap = document.getElementById('options-wrap');
+  wrap.innerHTML='';
+
+  if(q.type==='mc'){
+    const div=document.createElement('div');div.className='options';
+    const letters=['A','B','C','D'];
+    q.opts.forEach((opt,i)=>{
+      const btn=document.createElement('button');
+      btn.className='opt-btn';
+      btn.innerHTML=`<span class="opt-letter">${letters[i]}</span>${opt}`;
+      btn.onclick=()=>answerMC(i,btn);
+      div.appendChild(btn);
+    });
+    wrap.appendChild(div);
+  } else {
+    const div=document.createElement('div');div.className='tf-options';
+    ['✅ True','❌ False'].forEach((label,i)=>{
+      const btn=document.createElement('button');
+      btn.className='tf-btn '+(i===0?'tf-true':'tf-false');
+      btn.innerHTML=label;
+      btn.onclick=()=>answerTF(i===0,btn);
+      div.appendChild(btn);
+    });
+    wrap.appendChild(div);
+  }
+
+  // Hide feedback and next
+  const fb=document.getElementById('feedback-bar');
+  fb.style.display='none'; fb.className='feedback-bar';
+  const nb=document.getElementById('next-btn');
+  nb.style.display='none';
+  nb.className='next-btn'+(current===questions.length-1?' finish':'');
+  nb.textContent = current===questions.length-1 ? '🏆 See Results' : 'Next →';
+}
+
+// ════════════════════════════════════
+// ANSWER HANDLERS
+// ════════════════════════════════════
+function answerMC(idx, btn){
+  if(answered) return; answered=true;
+  const q=questions[current];
+  const allBtns=document.querySelectorAll('.opt-btn');
+  allBtns.forEach(b=>b.disabled=true);
+
+  if(idx===q.ans){
+    btn.classList.add('correct');
+    score++;
+    showFeedback(true, '⭐ Correct!');
+  } else {
+    btn.classList.add('wrong');
+    allBtns[q.ans].classList.add('reveal');
+    showFeedback(false, `❌ The correct answer is: ${q.opts[q.ans]}`);
+  }
+  showNext();
+}
+
+function answerTF(val, btn){
+  if(answered) return; answered=true;
+  const q=questions[current];
+  const allBtns=document.querySelectorAll('.tf-btn');
+  allBtns.forEach(b=>b.disabled=true);
+
+  if(val===q.ans){
+    btn.classList.add('correct');
+    score++;
+    showFeedback(true,'⭐ Correct!');
+  } else {
+    btn.classList.add('wrong');
+    allBtns[val?0:1].classList.add('wrong');
+    allBtns[q.ans?0:1].classList.add('reveal');
+    showFeedback(false,`❌ The correct answer is: ${q.ans?'True':'False'}`);
+  }
+  showNext();
+}
+
+function showFeedback(correct, msg){
+  const fb=document.getElementById('feedback-bar');
+  fb.textContent=msg;
+  fb.className='feedback-bar '+(correct?'fb-correct':'fb-wrong');
+  fb.style.display='flex';
+}
+
+function showNext(){
+  document.getElementById('next-btn').style.display='block';
+}
+
+function nextQuestion(){
+  current++;
+  if(current>=questions.length){
+    showResult();
+  } else {
+    renderQuestion();
+  }
+}
+
+// ════════════════════════════════════
+// RESULT
+// ════════════════════════════════════
+function showResult(){
+  const pct = score/questions.length;
+  let icon,title,msg;
+  if(pct===1){icon='🏆';title='Perfect Score!';msg='Outstanding! You answered everything correctly!'}
+  else if(pct>=0.8){icon='🌟';title='Excellent!';msg='Amazing work! You really know your Science!'}
+  else if(pct>=0.6){icon='👍';title='Good Job!';msg='Well done! A little more practice and you\'ll ace it!'}
+  else if(pct>=0.4){icon='💪';title='Keep Going!';msg='Good effort! Review the topics and try again!'}
+  else{icon='📚';title='Keep Studying!';msg='No worries — review the material and give it another shot!'}
+
+  document.getElementById('rs-icon').textContent=icon;
+  document.getElementById('rs-title').textContent=title;
+  document.getElementById('rs-score').textContent=`${score} / ${questions.length}`;
+  document.getElementById('rs-msg').textContent=msg;
+  document.getElementById('result-screen').classList.add('show');
+  if(pct>=0.6) launchConfetti();
+}
+
+function retryQuiz(){ startQuiz(grade); }
+
+function launchConfetti(){
+  const c=document.getElementById('confetti-r'); c.innerHTML='';
+  const cols=['#FFD700','#2196F3','#00C853','#FF4E8E','#fff','#7C3AED'];
+  for(let i=0;i<80;i++){
+    const p=document.createElement('div'); p.className='cp';
+    p.style.cssText=`left:${Math.random()*100}vw;top:-10px;background:${cols[Math.floor(Math.random()*cols.length)]};width:${7+Math.random()*8}px;height:${7+Math.random()*8}px;animation-duration:${2+Math.random()*2}s;animation-delay:${Math.random()*1.5}s`;
+    c.appendChild(p);
+  }
+}
+</script>
+</body>
+</html>

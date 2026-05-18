@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Martl 3D | Science</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Cairo:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--blue:#2196F3;--cyan:#00BCD4;--green:#00C853;--yellow:#FFD700;--pink:#FF4E8E;--purple:#7C3AED;--dark:#080815;--dark2:#0f0f22;--border:rgba(255,255,255,0.08);--white:#fff}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--dark);color:var(--white);min-height:100vh;overflow-x:hidden}
+  body.ar{font-family:'Cairo',sans-serif;direction:rtl}
+  .en{display:inline}.arc{display:none}
+  body.ar .en{display:none}body.ar .arc{display:inline}
+
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(33,150,243,0.1) 0%,transparent 60%);pointer-events:none;z-index:0}
+  #grid-bg{position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:50px 50px;pointer-events:none;z-index:0}
+
+  nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:14px 6%;background:rgba(8,8,21,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+  .logo{font-family:'Fredoka One',cursive;font-size:22px;background:linear-gradient(90deg,var(--pink),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none}
+  .nav-right{display:flex;align-items:center;gap:14px}
+  .back-link{color:rgba(255,255,255,.5);text-decoration:none;font-size:14px;font-weight:700;transition:color .2s}
+  .back-link:hover{color:var(--yellow)}
+  #lang-toggle{display:flex;align-items:center;background:rgba(255,255,255,.08);border:1px solid var(--border);border-radius:50px;overflow:hidden;cursor:pointer}
+  .lang-opt{padding:7px 14px;font-size:12px;font-weight:700;color:rgba(255,255,255,.4);user-select:none;transition:all .2s}
+  .lang-opt.active{background:linear-gradient(135deg,var(--blue),var(--cyan));color:white;border-radius:50px}
+
+  main{position:relative;z-index:1;padding:100px 6% 80px;max-width:1000px;margin:0 auto}
+
+  .hero{text-align:center;margin-bottom:56px}
+  .hero-icon{font-size:64px;display:block;margin-bottom:14px;filter:drop-shadow(0 4px 20px rgba(33,150,243,.4));animation:float 3s ease-in-out infinite alternate}
+  @keyframes float{from{transform:translateY(0)}to{transform:translateY(-12px)}}
+  .breadcrumb{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,.35);font-weight:600;margin-bottom:18px}
+  .breadcrumb a{color:rgba(255,255,255,.35);text-decoration:none;transition:color .2s}
+  .breadcrumb a:hover{color:var(--yellow)}
+  h1{font-family:'Fredoka One',cursive;font-size:clamp(38px,6vw,66px);margin-bottom:12px}
+  .grad-text{background:linear-gradient(135deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .hero-sub{font-size:16px;color:rgba(255,255,255,.5);font-weight:600;line-height:1.7}
+
+  .sec-label{font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--blue);margin-bottom:22px;display:flex;align-items:center;gap:10px}
+  .sec-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+  .games-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:22px}
+
+  .game-card{border-radius:26px;overflow:hidden;border:1px solid var(--border);text-decoration:none;color:inherit;display:block;background:rgba(255,255,255,.03);transition:transform .3s,box-shadow .3s,border-color .3s}
+  .game-card:hover{transform:translateY(-7px);box-shadow:0 24px 60px rgba(0,0,0,.45);border-color:rgba(33,150,243,.3)}
+
+  .gc-thumb{height:160px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden}
+  .gc4{background:linear-gradient(135deg,#050d1a,#0a1e36)}
+  .gc5{background:linear-gradient(135deg,#0a0515,#150a2e)}
+  .gc-glow{position:absolute;width:160px;height:160px;border-radius:50%;filter:blur(50px);opacity:.3}
+  .gc4 .gc-glow{background:var(--blue)} .gc5 .gc-glow{background:var(--purple)}
+  .gc-icon{font-size:44px;position:relative;z-index:2}
+  .gc-grade{font-family:'Fredoka One',cursive;font-size:16px;position:relative;z-index:2}
+  .gc4 .gc-grade{color:#90CAF9} .gc5 .gc-grade{color:#CE93D8}
+  .new-badge{position:absolute;top:12px;right:12px;font-size:11px;font-weight:700;padding:4px 12px;border-radius:50px;background:var(--yellow);color:#111}
+
+  .gc-info{padding:20px 22px}
+  .gc-title{font-family:'Fredoka One',cursive;font-size:21px;margin-bottom:6px}
+  .gc4 .gc-title{color:#90CAF9} .gc5 .gc-title{color:#CE93D8}
+  .gc-desc{font-size:13px;color:rgba(255,255,255,.4);font-weight:600;line-height:1.65;margin-bottom:14px}
+  .gc-tags{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+  .gtag{font-size:11px;font-weight:700;padding:3px 10px;border-radius:50px;border:1px solid}
+  .gtag-b{color:var(--blue);border-color:rgba(33,150,243,.3);background:rgba(33,150,243,.07)}
+  .gtag-p{color:#CE93D8;border-color:rgba(156,39,176,.3);background:rgba(156,39,176,.07)}
+  .gtag-y{color:var(--yellow);border-color:rgba(255,215,0,.3);background:rgba(255,215,0,.07)}
+  .play-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 22px;border-radius:50px;font-size:14px;font-weight:700;color:white}
+  .pb4{background:linear-gradient(135deg,var(--blue),var(--cyan));box-shadow:0 4px 16px rgba(33,150,243,.25)}
+  .pb5{background:linear-gradient(135deg,var(--purple),#9C27B0);box-shadow:0 4px 16px rgba(124,58,237,.25)}
+
+  footer{position:relative;z-index:1;background:rgba(8,8,21,.8);border-top:1px solid var(--border);padding:28px 6%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-top:60px}
+  .footer-logo{font-family:'Fredoka One',cursive;font-size:18px;background:linear-gradient(90deg,var(--pink),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none}
+  .footer-copy{font-size:12px;color:rgba(255,255,255,.2);font-weight:600}
+</style>
+</head>
+<body>
+<div id="grid-bg"></div>
+
+<nav>
+  <a class="logo" href="../index.html">Martl 3D 🎮</a>
+  <div class="nav-right">
+    <a class="back-link" href="../index.html">← <span class="en">All Subjects</span><span class="arc">كل المواد</span></a>
+    <div id="lang-toggle" onclick="toggleLang()">
+      <div class="lang-opt active" id="opt-en">EN</div>
+      <div class="lang-opt" id="opt-ar">عر</div>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="hero">
+    <div class="breadcrumb"><a href="../index.html">Martl 3D</a> › <span>Science</span></div>
+    <span class="hero-icon">🔬</span>
+    <h1><span class="grad-text">Science</span> Games</h1>
+    <p class="hero-sub">Cambridge International Science — Interactive quizzes for every grade</p>
+  </div>
+
+  <div class="sec-label">🔬 Available Quizzes</div>
+
+  <div class="games-grid">
+
+    <!-- Grade 4 -->
+    <a class="game-card" href="quiz.html?grade=4">
+      <div class="gc-thumb gc4">
+        <div class="gc-glow"></div>
+        <div class="gc-icon">🧪</div>
+        <div class="gc-grade">Grade 4 — Cambridge Science</div>
+        <div class="new-badge">✨ New</div>
+      </div>
+      <div class="gc-info">
+        <div class="gc-title">Grade 4 Science</div>
+        <div class="gc-desc">Living things, Materials, Forces, Light & Sound, Earth & Space</div>
+        <div class="gc-tags">
+          <span class="gtag gtag-b">Cambridge</span>
+          <span class="gtag gtag-y">MCQ + True/False</span>
+          <span class="gtag gtag-b">10 Questions</span>
+        </div>
+        <div class="play-btn pb4">🚀 Start Quiz</div>
+      </div>
+    </a>
+
+    <!-- Grade 5 -->
+    <a class="game-card" href="quiz.html?grade=5">
+      <div class="gc-thumb gc5">
+        <div class="gc-glow"></div>
+        <div class="gc-icon">⚗️</div>
+        <div class="gc-grade">Grade 5 — Cambridge Science</div>
+        <div class="new-badge">✨ New</div>
+      </div>
+      <div class="gc-info">
+        <div class="gc-title">Grade 5 Science</div>
+        <div class="gc-desc">Life Processes, States of Matter, Electricity, Ecosystems, Earth Sciences</div>
+        <div class="gc-tags">
+          <span class="gtag gtag-p">Cambridge</span>
+          <span class="gtag gtag-y">MCQ + True/False</span>
+          <span class="gtag gtag-p">10 Questions</span>
+        </div>
+        <div class="play-btn pb5">🚀 Start Quiz</div>
+      </div>
+    </a>
+
+  </div>
+</main>
+
+<footer>
+  <a class="footer-logo" href="../index.html">Martl 3D 🎮</a>
+  <div class="footer-copy">© 2025 Martl 3D</div>
+</footer>
+
+<script>
+function toggleLang(){
+  const b=document.body,isAr=b.classList.contains('ar');
+  b.classList.toggle('ar',!isAr);
+  document.documentElement.lang=isAr?'en':'ar';
+  document.documentElement.dir=isAr?'ltr':'rtl';
+  document.getElementById('opt-en').classList.toggle('active',isAr);
+  document.getElementById('opt-ar').classList.toggle('active',!isAr);
+}
+// Support URL param: quiz.html?grade=4
+</script>
+</body>
+</html>

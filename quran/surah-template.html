@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>سورة | Martl 3D</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{--gold:#D4AF37;--green:#00C853;--dark:#04080f;--border:rgba(212,175,55,0.2);--white:#fff}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Cairo',sans-serif;background:var(--dark);color:var(--white);min-height:100vh;overflow-x:hidden;direction:rtl}
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,80,40,0.12) 0%,transparent 60%);pointer-events:none;z-index:0}
+  #stars{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+  .star{position:absolute;background:white;border-radius:50%;animation:twinkle ease-in-out infinite alternate}
+  @keyframes twinkle{from{opacity:.04}to{opacity:.55}}
+  nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:13px 5%;background:rgba(4,8,15,0.93);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+  .logo{font-family:'Cairo',sans-serif;font-size:20px;font-weight:900;background:linear-gradient(90deg,#FF4E8E,#FFD700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none}
+  .back-link{color:rgba(255,255,255,.5);text-decoration:none;font-size:14px;font-weight:700;transition:color .2s}
+  .back-link:hover{color:var(--gold)}
+  main{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:85px 4% 50px}
+  .surah-header{text-align:center;margin-bottom:24px;max-width:660px;width:100%}
+  .surah-icon{font-size:52px;display:block;margin-bottom:10px;filter:drop-shadow(0 2px 12px rgba(212,175,55,.4));animation:float 3s ease-in-out infinite alternate}
+  @keyframes float{from{transform:translateY(0)}to{transform:translateY(-10px)}}
+  .surah-name{font-family:'Amiri',serif;font-size:40px;color:var(--gold);margin-bottom:4px}
+  .surah-meta{font-size:13px;color:rgba(255,255,255,.4);font-weight:600;margin-bottom:14px}
+  .basmalah{font-family:'Amiri Quran','Amiri',serif;font-size:24px;color:rgba(212,175,55,.7);padding:10px 28px;background:rgba(212,175,55,.06);border:1px solid var(--border);border-radius:50px;display:inline-block}
+  .mode-tabs{display:flex;gap:6px;margin-bottom:28px;background:rgba(255,255,255,.05);padding:5px;border-radius:18px;border:1px solid var(--border);max-width:540px;width:100%}
+  .tab{flex:1;padding:10px 8px;border-radius:13px;border:none;cursor:pointer;font-family:'Cairo',sans-serif;font-size:13px;font-weight:700;color:rgba(255,255,255,.45);background:transparent;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:5px}
+  .tab.active{background:linear-gradient(135deg,var(--gold),#8a6500);color:#fff;box-shadow:0 3px 12px rgba(212,175,55,.3)}
+  .tab:hover:not(.active){color:rgba(255,255,255,.75);background:rgba(255,255,255,.06)}
+  .content-area{width:100%;max-width:720px}
+  .ayah-full{font-family:'Amiri Quran','Amiri',serif;font-size:clamp(22px,3.5vw,32px);line-height:2.6;text-align:center;color:var(--white);background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:24px;padding:28px 24px;direction:rtl}
+  .ayah-row{padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+  .ayah-row:last-child{border-bottom:none}
+  .ayah-num-inline{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:rgba(212,175,55,.15);border:1px solid rgba(212,175,55,.3);font-size:12px;color:var(--gold);font-family:'Cairo',sans-serif;font-weight:700;margin-left:8px;vertical-align:middle}
+  .global-ctrl{display:flex;gap:10px;justify-content:center;margin-bottom:18px;flex-wrap:wrap}
+  .gcb{font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;padding:11px 26px;border-radius:50px;border:none;cursor:pointer;transition:transform .2s}
+  .gcb:hover{transform:translateY(-2px)}
+  .gcb-show{background:linear-gradient(135deg,var(--green),#00897B);color:white;box-shadow:0 4px 16px rgba(0,200,83,.25)}
+  .gcb-hide{background:rgba(255,255,255,.08);color:rgba(255,255,255,.65);border:1px solid rgba(255,255,255,.12)}
+  .recall-progress{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:18px;font-size:13px;color:rgba(255,255,255,.4);font-weight:700}
+  .rp-bar{flex:1;max-width:220px;height:5px;background:rgba(255,255,255,.07);border-radius:5px;overflow:hidden}
+  .rp-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--gold));border-radius:5px;transition:width .4s ease}
+  .recall-ayah-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:24px;overflow:hidden;margin-bottom:16px}
+  .recall-ayah-header{display:flex;align-items:center;justify-content:center;gap:10px;padding:13px 20px;background:rgba(212,175,55,.07);border-bottom:1px solid var(--border)}
+  .recall-num-badge{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#8a6500);display:flex;align-items:center;justify-content:center;font-family:'Amiri',serif;font-size:14px;color:#fff;font-weight:700;flex-shrink:0}
+  .recall-ayah-label{font-size:13px;color:rgba(255,255,255,.5);font-weight:700}
+  .recall-words{padding:22px 18px 14px;display:flex;flex-wrap:wrap;justify-content:center;gap:10px 6px;direction:rtl;min-height:80px}
+  .word-tile{font-family:'Amiri Quran','Amiri',serif;font-size:clamp(22px,3.5vw,32px);color:var(--white);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:8px 16px;cursor:pointer;transition:all .25s;line-height:1.8;position:relative;user-select:none}
+  .word-tile:hover{background:rgba(212,175,55,.15);border-color:rgba(212,175,55,.4);transform:translateY(-2px)}
+  .word-tile.hidden{color:transparent!important;background:rgba(212,175,55,.1);border-color:rgba(212,175,55,.25);min-width:52px}
+  .word-tile.hidden::after{content:'؟';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:16px;color:rgba(212,175,55,.55);font-family:'Cairo',sans-serif}
+  .word-tile.pop{animation:wordPop .3s ease}
+  @keyframes wordPop{0%{transform:scale(0.8)}60%{transform:scale(1.1)}100%{transform:scale(1)}}
+  .recall-controls{padding:10px 18px 16px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+  .ctrl-btn{font-family:'Cairo',sans-serif;font-size:13px;font-weight:700;padding:9px 20px;border-radius:50px;border:none;cursor:pointer;transition:transform .2s;display:inline-flex;align-items:center;gap:5px}
+  .ctrl-btn:hover{transform:translateY(-2px)}
+  .cb-show{background:linear-gradient(135deg,var(--green),#00897B);color:white}
+  .cb-hide{background:rgba(255,255,255,.08);color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.1)}
+  .complete-badge{display:none;text-align:center;padding:18px;background:rgba(0,200,83,.1);border:1px solid rgba(0,200,83,.3);border-radius:18px;margin-top:14px}
+  .complete-badge.show{display:block}
+  .complete-badge .cb-title{font-family:'Amiri',serif;font-size:26px;color:var(--green);margin-bottom:4px}
+  .complete-badge p{font-size:13px;color:rgba(255,255,255,.5);font-weight:600}
+  .gaps-ayah{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:22px;padding:24px;text-align:center;margin-bottom:16px}
+  .gaps-ayah-num{font-family:'Amiri',serif;font-size:13px;color:var(--gold);margin-bottom:12px}
+  .gaps-text{font-family:'Amiri Quran','Amiri',serif;font-size:clamp(22px,3.5vw,30px);line-height:2.4;direction:rtl;display:flex;flex-wrap:wrap;justify-content:center;gap:6px 4px;align-items:center}
+  .order-ayah{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:22px;padding:22px;margin-bottom:16px;text-align:center}
+  .order-ayah-num{font-family:'Amiri',serif;font-size:13px;color:var(--gold);margin-bottom:12px}
+  .order-words{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;direction:rtl;margin-bottom:8px}
+  .drag-word{font-family:'Amiri Quran','Amiri',serif;font-size:clamp(20px,3vw,28px);padding:7px 14px;border-radius:12px;background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.25);color:var(--white);cursor:grab;user-select:none;transition:all .2s;line-height:1.8}
+  .drag-word:hover{background:rgba(212,175,55,.2);transform:translateY(-2px)}
+  .drag-word.dragging{opacity:.4;cursor:grabbing}
+  .drag-word.correct{background:rgba(0,200,83,.15);border-color:rgba(0,200,83,.4);color:var(--green);cursor:default}
+  .drag-word.wrong{background:rgba(255,78,142,.12);border-color:rgba(255,78,142,.4);animation:shake .3s ease}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+  .order-drop-zone{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;min-height:56px;padding:10px;border:2px dashed rgba(212,175,55,.2);border-radius:14px;margin-top:10px;transition:border-color .2s}
+  .order-drop-zone.drag-over{border-color:rgba(212,175,55,.6);background:rgba(212,175,55,.05)}
+  .drop-placeholder{font-size:13px;color:rgba(255,255,255,.2);font-weight:600;align-self:center}
+  .check-order-btn{margin-top:12px;font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;padding:10px 26px;border-radius:50px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold),#8a6500);color:white;transition:transform .2s}
+  .check-order-btn:hover{transform:translateY(-2px)}
+  footer{position:relative;z-index:1;background:rgba(4,8,15,.8);border-top:1px solid var(--border);padding:22px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:40px}
+  .footer-logo{font-family:'Cairo',sans-serif;font-size:18px;font-weight:900;background:linear-gradient(90deg,#FF4E8E,#FFD700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none}
+  .footer-copy{font-size:12px;color:rgba(255,255,255,.2);font-weight:600}
+</style>
+</head>
+<body>
+<div id="stars"></div>
+<nav>
+  <a class="back-link" href="juz-amma.html">← جزء عمّ</a>
+  <div style="font-family:'Cairo',sans-serif;font-size:15px;font-weight:700;color:rgba(255,255,255,.7)" id="nav-title">📖 سورة</div>
+  <a class="logo" href="../index.html">Martl 3D</a>
+</nav>
+<main>
+  <div class="surah-header">
+    <span class="surah-icon">🕌</span>
+    <div class="surah-name" id="surah-name">سورة</div>
+    <div class="surah-meta" id="surah-meta">مكية</div>
+    <div class="basmalah">﴿ بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ﴾</div>
+  </div>
+  <div class="mode-tabs">
+    <button class="tab" onclick="setMode('complete')">👁️ كاملة</button>
+    <button class="tab" onclick="setMode('order')">🔀 ترتيب</button>
+    <button class="tab" onclick="setMode('gaps')">✏️ فراغات</button>
+    <button class="tab active" onclick="setMode('recall')">📚 مقاطع</button>
+  </div>
+  <div class="content-area">
+    <div id="mode-complete" style="display:none"><div class="ayah-full" id="complete-text"></div></div>
+    <div id="mode-order" style="display:none"><div id="order-wrap"></div></div>
+    <div id="mode-gaps" style="display:none"><div id="gaps-wrap"></div></div>
+    <div id="mode-recall">
+      <div class="global-ctrl">
+        <button class="gcb gcb-show" onclick="showAll()">👁️ اظهر الكل</button>
+        <button class="gcb gcb-hide" onclick="hideAll()">🙈 اخفي الكل</button>
+      </div>
+      <div class="recall-progress">
+        <span id="rp-text">٠ كلمة ظاهرة</span>
+        <div class="rp-bar"><div class="rp-fill" id="rp-fill" style="width:0%"></div></div>
+      </div>
+      <div id="recall-wrap"></div>
+      <div class="complete-badge" id="complete-badge">
+        <div class="cb-title">ما شاء الله! 🌙</div>
+        <p id="complete-msg">أظهرت كل كلمات السورة — بارك الله فيك</p>
+      </div>
+    </div>
+  </div>
+</main>
+<footer>
+  <a class="footer-logo" href="../index.html">Martl 3D 🎮</a>
+  <div class="footer-copy">© 2025 Martl 3D</div>
+</footer>
+
+<script>
+// Load surah data from URL param: surah-template.html?s=al-asr
+const SURAH_KEY = new URLSearchParams(window.location.search).get('s');
+
+// ══ INLINE DATA ══
+const JUZAMMA_SURAHS = {};
+const JUZAMMA_SURAHS = {
+
+'al-asr': {
+  num:103, ar:'العصر', en:'Al-Asr', ayahs_count:3,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['وَالْعَصْرِ']},
+    {num:'٢', label:'الآية الثانية',   words:['إِنَّ','الْإِنسَانَ','لَفِي','خُسْرٍ']},
+    {num:'٣', label:'الآية الثالثة',   words:['إِلَّا','الَّذِينَ','آمَنُوا','وَعَمِلُوا','الصَّالِحَاتِ','وَتَوَاصَوْا','بِالْحَقِّ','وَتَوَاصَوْا','بِالصَّبْرِ']},
+  ]
+},
+
+'al-kawthar': {
+  num:108, ar:'الكوثر', en:'Al-Kawthar', ayahs_count:3,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['إِنَّا','أَعْطَيْنَاكَ','الْكَوْثَرَ']},
+    {num:'٢', label:'الآية الثانية',   words:['فَصَلِّ','لِرَبِّكَ','وَانْحَرْ']},
+    {num:'٣', label:'الآية الثالثة',   words:['إِنَّ','شَانِئَكَ','هُوَ','الْأَبْتَرُ']},
+  ]
+},
+
+'an-nasr': {
+  num:110, ar:'النصر', en:'An-Nasr', ayahs_count:3,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['إِذَا','جَاءَ','نَصْرُ','اللَّهِ','وَالْفَتْحُ']},
+    {num:'٢', label:'الآية الثانية',   words:['وَرَأَيْتَ','النَّاسَ','يَدْخُلُونَ','فِي','دِينِ','اللَّهِ','أَفْوَاجًا']},
+    {num:'٣', label:'الآية الثالثة',   words:['فَسَبِّحْ','بِحَمْدِ','رَبِّكَ','وَاسْتَغْفِرْهُ','إِنَّهُ','كَانَ','تَوَّابًا']},
+  ]
+},
+
+'al-qadr': {
+  num:97, ar:'القدر', en:'Al-Qadr', ayahs_count:5,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['إِنَّا','أَنزَلْنَاهُ','فِي','لَيْلَةِ','الْقَدْرِ']},
+    {num:'٢', label:'الآية الثانية',   words:['وَمَا','أَدْرَاكَ','مَا','لَيْلَةُ','الْقَدْرِ']},
+    {num:'٣', label:'الآية الثالثة',   words:['لَيْلَةُ','الْقَدْرِ','خَيْرٌ','مِّنْ','أَلْفِ','شَهْرٍ']},
+    {num:'٤', label:'الآية الرابعة',   words:['تَنَزَّلُ','الْمَلَائِكَةُ','وَالرُّوحُ','فِيهَا','بِإِذْنِ','رَبِّهِم','مِّن','كُلِّ','أَمْرٍ']},
+    {num:'٥', label:'الآية الخامسة',   words:['سَلَامٌ','هِيَ','حَتَّىٰ','مَطْلَعِ','الْفَجْرِ']},
+  ]
+},
+
+'al-fil': {
+  num:105, ar:'الفيل', en:'Al-Fil', ayahs_count:5,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['أَلَمْ','تَرَ','كَيْفَ','فَعَلَ','رَبُّكَ','بِأَصْحَابِ','الْفِيلِ']},
+    {num:'٢', label:'الآية الثانية',   words:['أَلَمْ','يَجْعَلْ','كَيْدَهُمْ','فِي','تَضْلِيلٍ']},
+    {num:'٣', label:'الآية الثالثة',   words:['وَأَرْسَلَ','عَلَيْهِمْ','طَيْرًا','أَبَابِيلَ']},
+    {num:'٤', label:'الآية الرابعة',   words:['تَرْمِيهِم','بِحِجَارَةٍ','مِّن','سِجِّيلٍ']},
+    {num:'٥', label:'الآية الخامسة',   words:['فَجَعَلَهُمْ','كَعَصْفٍ','مَّأْكُولٍ']},
+  ]
+},
+
+'al-masad': {
+  num:111, ar:'المسد', en:'Al-Masad', ayahs_count:5,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['تَبَّتْ','يَدَا','أَبِي','لَهَبٍ','وَتَبَّ']},
+    {num:'٢', label:'الآية الثانية',   words:['مَا','أَغْنَىٰ','عَنْهُ','مَالُهُ','وَمَا','كَسَبَ']},
+    {num:'٣', label:'الآية الثالثة',   words:['سَيَصْلَىٰ','نَارًا','ذَاتَ','لَهَبٍ']},
+    {num:'٤', label:'الآية الرابعة',   words:['وَامْرَأَتُهُ','حَمَّالَةَ','الْحَطَبِ']},
+    {num:'٥', label:'الآية الخامسة',   words:['فِي','جِيدِهَا','حَبْلٌ','مِّن','مَّسَدٍ']},
+  ]
+},
+
+'quraysh': {
+  num:106, ar:'قريش', en:'Quraysh', ayahs_count:4,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['لِإِيلَافِ','قُرَيْشٍ']},
+    {num:'٢', label:'الآية الثانية',   words:['إِيلَافِهِمْ','رِحْلَةَ','الشِّتَاءِ','وَالصَّيْفِ']},
+    {num:'٣', label:'الآية الثالثة',   words:['فَلْيَعْبُدُوا','رَبَّ','هَٰذَا','الْبَيْتِ']},
+    {num:'٤', label:'الآية الرابعة',   words:['الَّذِي','أَطْعَمَهُم','مِّن','جُوعٍ','وَآمَنَهُم','مِّنْ','خَوْفٍ']},
+  ]
+},
+
+'al-kafirun': {
+  num:109, ar:'الكافرون', en:'Al-Kafirun', ayahs_count:6,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['قُلْ','يَا','أَيُّهَا','الْكَافِرُونَ']},
+    {num:'٢', label:'الآية الثانية',   words:['لَا','أَعْبُدُ','مَا','تَعْبُدُونَ']},
+    {num:'٣', label:'الآية الثالثة',   words:['وَلَا','أَنتُمْ','عَابِدُونَ','مَا','أَعْبُدُ']},
+    {num:'٤', label:'الآية الرابعة',   words:['وَلَا','أَنَا','عَابِدٌ','مَّا','عَبَدتُّمْ']},
+    {num:'٥', label:'الآية الخامسة',   words:['وَلَا','أَنتُمْ','عَابِدُونَ','مَا','أَعْبُدُ']},
+    {num:'٦', label:'الآية السادسة',   words:['لَكُمْ','دِينُكُمْ','وَلِيَ','دِينِ']},
+  ]
+},
+
+'al-maun': {
+  num:107, ar:'الماعون', en:'Al-Maun', ayahs_count:7,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['أَرَأَيْتَ','الَّذِي','يُكَذِّبُ','بِالدِّينِ']},
+    {num:'٢', label:'الآية الثانية',   words:['فَذَٰلِكَ','الَّذِي','يَدُعُّ','الْيَتِيمَ']},
+    {num:'٣', label:'الآية الثالثة',   words:['وَلَا','يَحُضُّ','عَلَىٰ','طَعَامِ','الْمِسْكِينِ']},
+    {num:'٤', label:'الآية الرابعة',   words:['فَوَيْلٌ','لِّلْمُصَلِّينَ']},
+    {num:'٥', label:'الآية الخامسة',   words:['الَّذِينَ','هُمْ','عَن','صَلَاتِهِمْ','سَاهُونَ']},
+    {num:'٦', label:'الآية السادسة',   words:['الَّذِينَ','هُمْ','يُرَاءُونَ']},
+    {num:'٧', label:'الآية السابعة',   words:['وَيَمْنَعُونَ','الْمَاعُونَ']},
+  ]
+},
+
+'ad-duha': {
+  num:93, ar:'الضحى', en:'Ad-Duha', ayahs_count:11,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['وَالضُّحَىٰ']},
+    {num:'٢', label:'الآية الثانية',   words:['وَاللَّيْلِ','إِذَا','سَجَىٰ']},
+    {num:'٣', label:'الآية الثالثة',   words:['مَا','وَدَّعَكَ','رَبُّكَ','وَمَا','قَلَىٰ']},
+    {num:'٤', label:'الآية الرابعة',   words:['وَلَلْآخِرَةُ','خَيْرٌ','لَّكَ','مِنَ','الْأُولَىٰ']},
+    {num:'٥', label:'الآية الخامسة',   words:['وَلَسَوْفَ','يُعْطِيكَ','رَبُّكَ','فَتَرْضَىٰ']},
+    {num:'٦', label:'الآية السادسة',   words:['أَلَمْ','يَجِدْكَ','يَتِيمًا','فَآوَىٰ']},
+    {num:'٧', label:'الآية السابعة',   words:['وَوَجَدَكَ','ضَالًّا','فَهَدَىٰ']},
+    {num:'٨', label:'الآية الثامنة',   words:['وَوَجَدَكَ','عَائِلًا','فَأَغْنَىٰ']},
+    {num:'٩', label:'الآية التاسعة',   words:['فَأَمَّا','الْيَتِيمَ','فَلَا','تَقْهَرْ']},
+    {num:'١٠',label:'الآية العاشرة',   words:['وَأَمَّا','السَّائِلَ','فَلَا','تَنْهَرْ']},
+    {num:'١١',label:'الآية الحادية عشرة',words:['وَأَمَّا','بِنِعْمَةِ','رَبِّكَ','فَحَدِّثْ']},
+  ]
+},
+
+'ash-sharh': {
+  num:94, ar:'الشرح', en:'Ash-Sharh', ayahs_count:8,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['أَلَمْ','نَشْرَحْ','لَكَ','صَدْرَكَ']},
+    {num:'٢', label:'الآية الثانية',   words:['وَوَضَعْنَا','عَنكَ','وِزْرَكَ']},
+    {num:'٣', label:'الآية الثالثة',   words:['الَّذِي','أَنقَضَ','ظَهْرَكَ']},
+    {num:'٤', label:'الآية الرابعة',   words:['وَرَفَعْنَا','لَكَ','ذِكْرَكَ']},
+    {num:'٥', label:'الآية الخامسة',   words:['فَإِنَّ','مَعَ','الْعُسْرِ','يُسْرًا']},
+    {num:'٦', label:'الآية السادسة',   words:['إِنَّ','مَعَ','الْعُسْرِ','يُسْرًا']},
+    {num:'٧', label:'الآية السابعة',   words:['فَإِذَا','فَرَغْتَ','فَانصَبْ']},
+    {num:'٨', label:'الآية الثامنة',   words:['وَإِلَىٰ','رَبِّكَ','فَارْغَب']},
+  ]
+},
+
+'at-tin': {
+  num:95, ar:'التين', en:'At-Tin', ayahs_count:8,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['وَالتِّينِ','وَالزَّيْتُونِ']},
+    {num:'٢', label:'الآية الثانية',   words:['وَطُورِ','سِينِينَ']},
+    {num:'٣', label:'الآية الثالثة',   words:['وَهَٰذَا','الْبَلَدِ','الْأَمِينِ']},
+    {num:'٤', label:'الآية الرابعة',   words:['لَقَدْ','خَلَقْنَا','الْإِنسَانَ','فِي','أَحْسَنِ','تَقْوِيمٍ']},
+    {num:'٥', label:'الآية الخامسة',   words:['ثُمَّ','رَدَدْنَاهُ','أَسْفَلَ','سَافِلِينَ']},
+    {num:'٦', label:'الآية السادسة',   words:['إِلَّا','الَّذِينَ','آمَنُوا','وَعَمِلُوا','الصَّالِحَاتِ','فَلَهُمْ','أَجْرٌ','غَيْرُ','مَمْنُونٍ']},
+    {num:'٧', label:'الآية السابعة',   words:['فَمَا','يُكَذِّبُكَ','بَعْدُ','بِالدِّينِ']},
+    {num:'٨', label:'الآية الثامنة',   words:['أَلَيْسَ','اللَّهُ','بِأَحْكَمِ','الْحَاكِمِينَ']},
+  ]
+},
+
+'al-alaq': {
+  num:96, ar:'العلق', en:'Al-Alaq', ayahs_count:19,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['اقْرَأْ','بِاسْمِ','رَبِّكَ','الَّذِي','خَلَقَ']},
+    {num:'٢', label:'الآية الثانية',   words:['خَلَقَ','الْإِنسَانَ','مِنْ','عَلَقٍ']},
+    {num:'٣', label:'الآية الثالثة',   words:['اقْرَأْ','وَرَبُّكَ','الْأَكْرَمُ']},
+    {num:'٤', label:'الآية الرابعة',   words:['الَّذِي','عَلَّمَ','بِالْقَلَمِ']},
+    {num:'٥', label:'الآية الخامسة',   words:['عَلَّمَ','الْإِنسَانَ','مَا','لَمْ','يَعْلَمْ']},
+    {num:'٦', label:'الآية السادسة',   words:['كَلَّا','إِنَّ','الْإِنسَانَ','لَيَطْغَىٰ']},
+    {num:'٧', label:'الآية السابعة',   words:['أَن','رَّآهُ','اسْتَغْنَىٰ']},
+    {num:'٨', label:'الآية الثامنة',   words:['إِنَّ','إِلَىٰ','رَبِّكَ','الرُّجْعَىٰ']},
+    {num:'٩', label:'الآية التاسعة',   words:['أَرَأَيْتَ','الَّذِي','يَنْهَىٰ']},
+    {num:'١٠',label:'الآية العاشرة',   words:['عَبْدًا','إِذَا','صَلَّىٰ']},
+    {num:'١١',label:'الآية الحادية عشرة',words:['أَرَأَيْتَ','إِن','كَانَ','عَلَى','الْهُدَىٰ']},
+    {num:'١٢',label:'الآية الثانية عشرة',words:['أَوْ','أَمَرَ','بِالتَّقْوَىٰ']},
+    {num:'١٣',label:'الآية الثالثة عشرة',words:['أَرَأَيْتَ','إِن','كَذَّبَ','وَتَوَلَّىٰ']},
+    {num:'١٤',label:'الآية الرابعة عشرة',words:['أَلَمْ','يَعْلَم','بِأَنَّ','اللَّهَ','يَرَىٰ']},
+    {num:'١٥',label:'الآية الخامسة عشرة',words:['كَلَّا','لَئِن','لَّمْ','يَنتَهِ','لَنَسْفَعًا','بِالنَّاصِيَةِ']},
+    {num:'١٦',label:'الآية السادسة عشرة',words:['نَاصِيَةٍ','كَاذِبَةٍ','خَاطِئَةٍ']},
+    {num:'١٧',label:'الآية السابعة عشرة',words:['فَلْيَدْعُ','نَادِيَهُ']},
+    {num:'١٨',label:'الآية الثامنة عشرة',words:['سَنَدْعُ','الزَّبَانِيَةَ']},
+    {num:'١٩',label:'الآية التاسعة عشرة',words:['كَلَّا','لَا','تُطِعْهُ','وَاسْجُدْ','وَاقْتَرِب']},
+  ]
+},
+
+'az-zalzalah': {
+  num:99, ar:'الزلزلة', en:'Az-Zalzalah', ayahs_count:8,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['إِذَا','زُلْزِلَتِ','الْأَرْضُ','زِلْزَالَهَا']},
+    {num:'٢', label:'الآية الثانية',   words:['وَأَخْرَجَتِ','الْأَرْضُ','أَثْقَالَهَا']},
+    {num:'٣', label:'الآية الثالثة',   words:['وَقَالَ','الْإِنسَانُ','مَا','لَهَا']},
+    {num:'٤', label:'الآية الرابعة',   words:['يَوْمَئِذٍ','تُحَدِّثُ','أَخْبَارَهَا']},
+    {num:'٥', label:'الآية الخامسة',   words:['بِأَنَّ','رَبَّكَ','أَوْحَىٰ','لَهَا']},
+    {num:'٦', label:'الآية السادسة',   words:['يَوْمَئِذٍ','يَصْدُرُ','النَّاسُ','أَشْتَاتًا','لِّيُرَوْا','أَعْمَالَهُمْ']},
+    {num:'٧', label:'الآية السابعة',   words:['فَمَن','يَعْمَلْ','مِثْقَالَ','ذَرَّةٍ','خَيْرًا','يَرَهُ']},
+    {num:'٨', label:'الآية الثامنة',   words:['وَمَن','يَعْمَلْ','مِثْقَالَ','ذَرَّةٍ','شَرًّا','يَرَهُ']},
+  ]
+},
+
+'at-takathur': {
+  num:102, ar:'التكاثر', en:'At-Takathur', ayahs_count:8,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['أَلْهَاكُمُ','التَّكَاثُرُ']},
+    {num:'٢', label:'الآية الثانية',   words:['حَتَّىٰ','زُرْتُمُ','الْمَقَابِرَ']},
+    {num:'٣', label:'الآية الثالثة',   words:['كَلَّا','سَوْفَ','تَعْلَمُونَ']},
+    {num:'٤', label:'الآية الرابعة',   words:['ثُمَّ','كَلَّا','سَوْفَ','تَعْلَمُونَ']},
+    {num:'٥', label:'الآية الخامسة',   words:['كَلَّا','لَوْ','تَعْلَمُونَ','عِلْمَ','الْيَقِينِ']},
+    {num:'٦', label:'الآية السادسة',   words:['لَتَرَوُنَّ','الْجَحِيمَ']},
+    {num:'٧', label:'الآية السابعة',   words:['ثُمَّ','لَتَرَوُنَّهَا','عَيْنَ','الْيَقِينِ']},
+    {num:'٨', label:'الآية الثامنة',   words:['ثُمَّ','لَتُسْأَلُنَّ','يَوْمَئِذٍ','عَنِ','النَّعِيمِ']},
+  ]
+},
+
+'al-humazah': {
+  num:104, ar:'الهمزة', en:'Al-Humazah', ayahs_count:9,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['وَيْلٌ','لِّكُلِّ','هُمَزَةٍ','لُّمَزَةٍ']},
+    {num:'٢', label:'الآية الثانية',   words:['الَّذِي','جَمَعَ','مَالًا','وَعَدَّدَهُ']},
+    {num:'٣', label:'الآية الثالثة',   words:['يَحْسَبُ','أَنَّ','مَالَهُ','أَخْلَدَهُ']},
+    {num:'٤', label:'الآية الرابعة',   words:['كَلَّا','لَيُنبَذَنَّ','فِي','الْحُطَمَةِ']},
+    {num:'٥', label:'الآية الخامسة',   words:['وَمَا','أَدْرَاكَ','مَا','الْحُطَمَةُ']},
+    {num:'٦', label:'الآية السادسة',   words:['نَارُ','اللَّهِ','الْمُوقَدَةُ']},
+    {num:'٧', label:'الآية السابعة',   words:['الَّتِي','تَطَّلِعُ','عَلَى','الْأَفْئِدَةِ']},
+    {num:'٨', label:'الآية الثامنة',   words:['إِنَّهَا','عَلَيْهِم','مُّؤْصَدَةٌ']},
+    {num:'٩', label:'الآية التاسعة',   words:['فِي','عَمَدٍ','مُّمَدَّدَةٍ']},
+  ]
+},
+
+'al-bayyinah': {
+  num:98, ar:'البينة', en:'Al-Bayyinah', ayahs_count:8,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['لَمْ','يَكُنِ','الَّذِينَ','كَفَرُوا','مِنْ','أَهْلِ','الْكِتَابِ','وَالْمُشْرِكِينَ','مُنفَكِّينَ','حَتَّىٰ','تَأْتِيَهُمُ','الْبَيِّنَةُ']},
+    {num:'٢', label:'الآية الثانية',   words:['رَسُولٌ','مِّنَ','اللَّهِ','يَتْلُو','صُحُفًا','مُّطَهَّرَةً']},
+    {num:'٣', label:'الآية الثالثة',   words:['فِيهَا','كُتُبٌ','قَيِّمَةٌ']},
+    {num:'٤', label:'الآية الرابعة',   words:['وَمَا','تَفَرَّقَ','الَّذِينَ','أُوتُوا','الْكِتَابَ','إِلَّا','مِن','بَعْدِ','مَا','جَاءَتْهُمُ','الْبَيِّنَةُ']},
+    {num:'٥', label:'الآية الخامسة',   words:['وَمَا','أُمِرُوا','إِلَّا','لِيَعْبُدُوا','اللَّهَ','مُخْلِصِينَ','لَهُ','الدِّينَ','حُنَفَاءَ','وَيُقِيمُوا','الصَّلَاةَ','وَيُؤْتُوا','الزَّكَاةَ','وَذَٰلِكَ','دِينُ','الْقَيِّمَةِ']},
+    {num:'٦', label:'الآية السادسة',   words:['إِنَّ','الَّذِينَ','كَفَرُوا','مِنْ','أَهْلِ','الْكِتَابِ','وَالْمُشْرِكِينَ','فِي','نَارِ','جَهَنَّمَ','خَالِدِينَ','فِيهَا','أُولَٰئِكَ','هُمْ','شَرُّ','الْبَرِيَّةِ']},
+    {num:'٧', label:'الآية السابعة',   words:['إِنَّ','الَّذِينَ','آمَنُوا','وَعَمِلُوا','الصَّالِحَاتِ','أُولَٰئِكَ','هُمْ','خَيْرُ','الْبَرِيَّةِ']},
+    {num:'٨', label:'الآية الثامنة',   words:['جَزَاؤُهُمْ','عِندَ','رَبِّهِمْ','جَنَّاتُ','عَدْنٍ','تَجْرِي','مِن','تَحْتِهَا','الْأَنْهَارُ','خَالِدِينَ','فِيهَا','أَبَدًا','رَّضِيَ','اللَّهُ','عَنْهُمْ','وَرَضُوا','عَنْهُ','ذَٰلِكَ','لِمَنْ','خَشِيَ','رَبَّهُ']},
+  ]
+},
+
+};
+
+// ══ الدفعة الثانية ══
+
+JUZAMMA_SURAHS['al-adiyat'] = {
+  num:100, ar:'العاديات', en:'Al-Adiyat', ayahs_count:11,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['وَالْعَادِيَاتِ','ضَبْحًا']},
+    {num:'٢', label:'الآية الثانية',   words:['فَالْمُورِيَاتِ','قَدْحًا']},
+    {num:'٣', label:'الآية الثالثة',   words:['فَالْمُغِيرَاتِ','صُبْحًا']},
+    {num:'٤', label:'الآية الرابعة',   words:['فَأَثَرْنَ','بِهِ','نَقْعًا']},
+    {num:'٥', label:'الآية الخامسة',   words:['فَوَسَطْنَ','بِهِ','جَمْعًا']},
+    {num:'٦', label:'الآية السادسة',   words:['إِنَّ','الْإِنسَانَ','لِرَبِّهِ','لَكَنُودٌ']},
+    {num:'٧', label:'الآية السابعة',   words:['وَإِنَّهُ','عَلَىٰ','ذَٰلِكَ','لَشَهِيدٌ']},
+    {num:'٨', label:'الآية الثامنة',   words:['وَإِنَّهُ','لِحُبِّ','الْخَيْرِ','لَشَدِيدٌ']},
+    {num:'٩', label:'الآية التاسعة',   words:['أَفَلَا','يَعْلَمُ','إِذَا','بُعْثِرَ','مَا','فِي','الْقُبُورِ']},
+    {num:'١٠',label:'الآية العاشرة',   words:['وَحُصِّلَ','مَا','فِي','الصُّدُورِ']},
+    {num:'١١',label:'الآية الحادية عشرة',words:['إِنَّ','رَبَّهُم','بِهِمْ','يَوْمَئِذٍ','لَّخَبِيرٌ']},
+  ]
+};
+
+JUZAMMA_SURAHS['al-qariah'] = {
+  num:101, ar:'القارعة', en:'Al-Qariah', ayahs_count:11,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['الْقَارِعَةُ']},
+    {num:'٢', label:'الآية الثانية',   words:['مَا','الْقَارِعَةُ']},
+    {num:'٣', label:'الآية الثالثة',   words:['وَمَا','أَدْرَاكَ','مَا','الْقَارِعَةُ']},
+    {num:'٤', label:'الآية الرابعة',   words:['يَوْمَ','يَكُونُ','النَّاسُ','كَالْفَرَاشِ','الْمَبْثُوثِ']},
+    {num:'٥', label:'الآية الخامسة',   words:['وَتَكُونُ','الْجِبَالُ','كَالْعِهْنِ','الْمَنفُوشِ']},
+    {num:'٦', label:'الآية السادسة',   words:['فَأَمَّا','مَن','ثَقُلَتْ','مَوَازِينُهُ']},
+    {num:'٧', label:'الآية السابعة',   words:['فَهُوَ','فِي','عِيشَةٍ','رَّاضِيَةٍ']},
+    {num:'٨', label:'الآية الثامنة',   words:['وَأَمَّا','مَنْ','خَفَّتْ','مَوَازِينُهُ']},
+    {num:'٩', label:'الآية التاسعة',   words:['فَأُمُّهُ','هَاوِيَةٌ']},
+    {num:'١٠',label:'الآية العاشرة',   words:['وَمَا','أَدْرَاكَ','مَا','هِيَهْ']},
+    {num:'١١',label:'الآية الحادية عشرة',words:['نَارٌ','حَامِيَةٌ']},
+  ]
+};
+
+JUZAMMA_SURAHS['al-falaq'] = {
+  num:113, ar:'الفلق', en:'Al-Falaq', ayahs_count:5,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['قُلْ','أَعُوذُ','بِرَبِّ','الْفَلَقِ']},
+    {num:'٢', label:'الآية الثانية',   words:['مِن','شَرِّ','مَا','خَلَقَ']},
+    {num:'٣', label:'الآية الثالثة',   words:['وَمِن','شَرِّ','غَاسِقٍ','إِذَا','وَقَبَ']},
+    {num:'٤', label:'الآية الرابعة',   words:['وَمِن','شَرِّ','النَّفَّاثَاتِ','فِي','الْعُقَدِ']},
+    {num:'٥', label:'الآية الخامسة',   words:['وَمِن','شَرِّ','حَاسِدٍ','إِذَا','حَسَدَ']},
+  ]
+};
+
+JUZAMMA_SURAHS['an-nas'] = {
+  num:114, ar:'الناس', en:'An-Nas', ayahs_count:6,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['قُلْ','أَعُوذُ','بِرَبِّ','النَّاسِ']},
+    {num:'٢', label:'الآية الثانية',   words:['مَلِكِ','النَّاسِ']},
+    {num:'٣', label:'الآية الثالثة',   words:['إِلَٰهِ','النَّاسِ']},
+    {num:'٤', label:'الآية الرابعة',   words:['مِن','شَرِّ','الْوَسْوَاسِ','الْخَنَّاسِ']},
+    {num:'٥', label:'الآية الخامسة',   words:['الَّذِي','يُوَسْوِسُ','فِي','صُدُورِ','النَّاسِ']},
+    {num:'٦', label:'الآية السادسة',   words:['مِنَ','الْجِنَّةِ','وَالنَّاسِ']},
+  ]
+};
+
+JUZAMMA_SURAHS['al-layl'] = {
+  num:92, ar:'الليل', en:'Al-Layl', ayahs_count:21,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['وَاللَّيْلِ','إِذَا','يَغْشَىٰ']},
+    {num:'٢', label:'الآية الثانية',   words:['وَالنَّهَارِ','إِذَا','تَجَلَّىٰ']},
+    {num:'٣', label:'الآية الثالثة',   words:['وَمَا','خَلَقَ','الذَّكَرَ','وَالْأُنثَىٰ']},
+    {num:'٤', label:'الآية الرابعة',   words:['إِنَّ','سَعْيَكُمْ','لَشَتَّىٰ']},
+    {num:'٥', label:'الآية الخامسة',   words:['فَأَمَّا','مَنْ','أَعْطَىٰ','وَاتَّقَىٰ']},
+    {num:'٦', label:'الآية السادسة',   words:['وَصَدَّقَ','بِالْحُسْنَىٰ']},
+    {num:'٧', label:'الآية السابعة',   words:['فَسَنُيَسِّرُهُ','لِلْيُسْرَىٰ']},
+    {num:'٨', label:'الآية الثامنة',   words:['وَأَمَّا','مَن','بَخِلَ','وَاسْتَغْنَىٰ']},
+    {num:'٩', label:'الآية التاسعة',   words:['وَكَذَّبَ','بِالْحُسْنَىٰ']},
+    {num:'١٠',label:'الآية العاشرة',   words:['فَسَنُيَسِّرُهُ','لِلْعُسْرَىٰ']},
+    {num:'١١',label:'الآية الحادية عشرة',words:['وَمَا','يُغْنِي','عَنْهُ','مَالُهُ','إِذَا','تَرَدَّىٰ']},
+    {num:'١٢',label:'الآية الثانية عشرة',words:['إِنَّ','عَلَيْنَا','لَلْهُدَىٰ']},
+    {num:'١٣',label:'الآية الثالثة عشرة',words:['وَإِنَّ','لَنَا','لَلْآخِرَةَ','وَالْأُولَىٰ']},
+    {num:'١٤',label:'الآية الرابعة عشرة',words:['فَأَنذَرْتُكُمْ','نَارًا','تَلَظَّىٰ']},
+    {num:'١٥',label:'الآية الخامسة عشرة',words:['لَا','يَصْلَاهَا','إِلَّا','الْأَشْقَى']},
+    {num:'١٦',label:'الآية السادسة عشرة',words:['الَّذِي','كَذَّبَ','وَتَوَلَّىٰ']},
+    {num:'١٧',label:'الآية السابعة عشرة',words:['وَسَيُجَنَّبُهَا','الْأَتْقَى']},
+    {num:'١٨',label:'الآية الثامنة عشرة',words:['الَّذِي','يُؤْتِي','مَالَهُ','يَتَزَكَّىٰ']},
+    {num:'١٩',label:'الآية التاسعة عشرة',words:['وَمَا','لِأَحَدٍ','عِندَهُ','مِن','نِّعْمَةٍ','تُجْزَىٰ']},
+    {num:'٢٠',label:'الآية العشرون',    words:['إِلَّا','ابْتِغَاءَ','وَجْهِ','رَبِّهِ','الْأَعْلَىٰ']},
+    {num:'٢١',label:'الآية الحادية والعشرون',words:['وَلَسَوْفَ','يَرْضَىٰ']},
+  ]
+};
+
+JUZAMMA_SURAHS['ash-shams'] = {
+  num:91, ar:'الشمس', en:'Ash-Shams', ayahs_count:15,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['وَالشَّمْسِ','وَضُحَاهَا']},
+    {num:'٢', label:'الآية الثانية',   words:['وَالْقَمَرِ','إِذَا','تَلَاهَا']},
+    {num:'٣', label:'الآية الثالثة',   words:['وَالنَّهَارِ','إِذَا','جَلَّاهَا']},
+    {num:'٤', label:'الآية الرابعة',   words:['وَاللَّيْلِ','إِذَا','يَغْشَاهَا']},
+    {num:'٥', label:'الآية الخامسة',   words:['وَالسَّمَاءِ','وَمَا','بَنَاهَا']},
+    {num:'٦', label:'الآية السادسة',   words:['وَالْأَرْضِ','وَمَا','طَحَاهَا']},
+    {num:'٧', label:'الآية السابعة',   words:['وَنَفْسٍ','وَمَا','سَوَّاهَا']},
+    {num:'٨', label:'الآية الثامنة',   words:['فَأَلْهَمَهَا','فُجُورَهَا','وَتَقْوَاهَا']},
+    {num:'٩', label:'الآية التاسعة',   words:['قَدْ','أَفْلَحَ','مَن','زَكَّاهَا']},
+    {num:'١٠',label:'الآية العاشرة',   words:['وَقَدْ','خَابَ','مَن','دَسَّاهَا']},
+    {num:'١١',label:'الآية الحادية عشرة',words:['كَذَّبَتْ','ثَمُودُ','بِطَغْوَاهَا']},
+    {num:'١٢',label:'الآية الثانية عشرة',words:['إِذِ','انبَعَثَ','أَشْقَاهَا']},
+    {num:'١٣',label:'الآية الثالثة عشرة',words:['فَقَالَ','لَهُمْ','رَسُولُ','اللَّهِ','نَاقَةَ','اللَّهِ','وَسُقْيَاهَا']},
+    {num:'١٤',label:'الآية الرابعة عشرة',words:['فَكَذَّبُوهُ','فَعَقَرُوهَا','فَدَمْدَمَ','عَلَيْهِمْ','رَبُّهُم','بِذَنبِهِمْ','فَسَوَّاهَا']},
+    {num:'١٥',label:'الآية الخامسة عشرة',words:['وَلَا','يَخَافُ','عُقْبَاهَا']},
+  ]
+};
+
+JUZAMMA_SURAHS['al-balad'] = {
+  num:90, ar:'البلد', en:'Al-Balad', ayahs_count:20,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['لَا','أُقْسِمُ','بِهَٰذَا','الْبَلَدِ']},
+    {num:'٢', label:'الآية الثانية',   words:['وَأَنتَ','حِلٌّ','بِهَٰذَا','الْبَلَدِ']},
+    {num:'٣', label:'الآية الثالثة',   words:['وَوَالِدٍ','وَمَا','وَلَدَ']},
+    {num:'٤', label:'الآية الرابعة',   words:['لَقَدْ','خَلَقْنَا','الْإِنسَانَ','فِي','كَبَدٍ']},
+    {num:'٥', label:'الآية الخامسة',   words:['أَيَحْسَبُ','أَن','لَّن','يَقْدِرَ','عَلَيْهِ','أَحَدٌ']},
+    {num:'٦', label:'الآية السادسة',   words:['يَقُولُ','أَهْلَكْتُ','مَالًا','لُّبَدًا']},
+    {num:'٧', label:'الآية السابعة',   words:['أَيَحْسَبُ','أَن','لَّمْ','يَرَهُ','أَحَدٌ']},
+    {num:'٨', label:'الآية الثامنة',   words:['أَلَمْ','نَجْعَل','لَّهُ','عَيْنَيْنِ']},
+    {num:'٩', label:'الآية التاسعة',   words:['وَلِسَانًا','وَشَفَتَيْنِ']},
+    {num:'١٠',label:'الآية العاشرة',   words:['وَهَدَيْنَاهُ','النَّجْدَيْنِ']},
+    {num:'١١',label:'الآية الحادية عشرة',words:['فَلَا','اقْتَحَمَ','الْعَقَبَةَ']},
+    {num:'١٢',label:'الآية الثانية عشرة',words:['وَمَا','أَدْرَاكَ','مَا','الْعَقَبَةُ']},
+    {num:'١٣',label:'الآية الثالثة عشرة',words:['فَكُّ','رَقَبَةٍ']},
+    {num:'١٤',label:'الآية الرابعة عشرة',words:['أَوْ','إِطْعَامٌ','فِي','يَوْمٍ','ذِي','مَسْغَبَةٍ']},
+    {num:'١٥',label:'الآية الخامسة عشرة',words:['يَتِيمًا','ذَا','مَقْرَبَةٍ']},
+    {num:'١٦',label:'الآية السادسة عشرة',words:['أَوْ','مِسْكِينًا','ذَا','مَتْرَبَةٍ']},
+    {num:'١٧',label:'الآية السابعة عشرة',words:['ثُمَّ','كَانَ','مِنَ','الَّذِينَ','آمَنُوا','وَتَوَاصَوْا','بِالصَّبْرِ','وَتَوَاصَوْا','بِالْمَرْحَمَةِ']},
+    {num:'١٨',label:'الآية الثامنة عشرة',words:['أُولَٰئِكَ','أَصْحَابُ','الْمَيْمَنَةِ']},
+    {num:'١٩',label:'الآية التاسعة عشرة',words:['وَالَّذِينَ','كَفَرُوا','بِآيَاتِنَا','هُمْ','أَصْحَابُ','الْمَشْأَمَةِ']},
+    {num:'٢٠',label:'الآية العشرون',    words:['عَلَيْهِمْ','نَارٌ','مُّؤْصَدَةٌ']},
+  ]
+};
+
+JUZAMMA_SURAHS['al-fajr'] = {
+  num:89, ar:'الفجر', en:'Al-Fajr', ayahs_count:30,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['وَالْفَجْرِ']},
+    {num:'٢', label:'الآية الثانية',   words:['وَلَيَالٍ','عَشْرٍ']},
+    {num:'٣', label:'الآية الثالثة',   words:['وَالشَّفْعِ','وَالْوَتْرِ']},
+    {num:'٤', label:'الآية الرابعة',   words:['وَاللَّيْلِ','إِذَا','يَسْرِ']},
+    {num:'٥', label:'الآية الخامسة',   words:['هَلْ','فِي','ذَٰلِكَ','قَسَمٌ','لِّذِي','حِجْرٍ']},
+    {num:'٦', label:'الآية السادسة',   words:['أَلَمْ','تَرَ','كَيْفَ','فَعَلَ','رَبُّكَ','بِعَادٍ']},
+    {num:'٧', label:'الآية السابعة',   words:['إِرَمَ','ذَاتِ','الْعِمَادِ']},
+    {num:'٨', label:'الآية الثامنة',   words:['الَّتِي','لَمْ','يُخْلَقْ','مِثْلُهَا','فِي','الْبِلَادِ']},
+    {num:'٩', label:'الآية التاسعة',   words:['وَثَمُودَ','الَّذِينَ','جَابُوا','الصَّخْرَ','بِالْوَادِ']},
+    {num:'١٠',label:'الآية العاشرة',   words:['وَفِرْعَوْنَ','ذِي','الْأَوْتَادِ']},
+    {num:'١١',label:'الآية الحادية عشرة',words:['الَّذِينَ','طَغَوْا','فِي','الْبِلَادِ']},
+    {num:'١٢',label:'الآية الثانية عشرة',words:['فَأَكْثَرُوا','فِيهَا','الْفَسَادَ']},
+    {num:'١٣',label:'الآية الثالثة عشرة',words:['فَصَبَّ','عَلَيْهِمْ','رَبُّكَ','سَوْطَ','عَذَابٍ']},
+    {num:'١٤',label:'الآية الرابعة عشرة',words:['إِنَّ','رَبَّكَ','لَبِالْمِرْصَادِ']},
+    {num:'١٥',label:'الآية الخامسة عشرة',words:['فَأَمَّا','الْإِنسَانُ','إِذَا','مَا','ابْتَلَاهُ','رَبُّهُ','فَأَكْرَمَهُ','وَنَعَّمَهُ','فَيَقُولُ','رَبِّي','أَكْرَمَنِ']},
+    {num:'١٦',label:'الآية السادسة عشرة',words:['وَأَمَّا','إِذَا','مَا','ابْتَلَاهُ','فَقَدَرَ','عَلَيْهِ','رِزْقَهُ','فَيَقُولُ','رَبِّي','أَهَانَنِ']},
+    {num:'١٧',label:'الآية السابعة عشرة',words:['كَلَّا','بَل','لَّا','تُكْرِمُونَ','الْيَتِيمَ']},
+    {num:'١٨',label:'الآية الثامنة عشرة',words:['وَلَا','تَحَاضُّونَ','عَلَىٰ','طَعَامِ','الْمِسْكِينِ']},
+    {num:'١٩',label:'الآية التاسعة عشرة',words:['وَتَأْكُلُونَ','التُّرَاثَ','أَكْلًا','لَّمًّا']},
+    {num:'٢٠',label:'الآية العشرون',    words:['وَتُحِبُّونَ','الْمَالَ','حُبًّا','جَمًّا']},
+    {num:'٢١',label:'الآية الحادية والعشرون',words:['كَلَّا','إِذَا','دُكَّتِ','الْأَرْضُ','دَكًّا','دَكًّا']},
+    {num:'٢٢',label:'الآية الثانية والعشرون',words:['وَجَاءَ','رَبُّكَ','وَالْمَلَكُ','صَفًّا','صَفًّا']},
+    {num:'٢٣',label:'الآية الثالثة والعشرون',words:['وَجِيءَ','يَوْمَئِذٍ','بِجَهَنَّمَ','يَوْمَئِذٍ','يَتَذَكَّرُ','الْإِنسَانُ','وَأَنَّىٰ','لَهُ','الذِّكْرَىٰ']},
+    {num:'٢٤',label:'الآية الرابعة والعشرون',words:['يَقُولُ','يَا','لَيْتَنِي','قَدَّمْتُ','لِحَيَاتِي']},
+    {num:'٢٥',label:'الآية الخامسة والعشرون',words:['فَيَوْمَئِذٍ','لَّا','يُعَذِّبُ','عَذَابَهُ','أَحَدٌ']},
+    {num:'٢٦',label:'الآية السادسة والعشرون',words:['وَلَا','يُوثِقُ','وَثَاقَهُ','أَحَدٌ']},
+    {num:'٢٧',label:'الآية السابعة والعشرون',words:['يَا','أَيَّتُهَا','النَّفْسُ','الْمُطْمَئِنَّةُ']},
+    {num:'٢٨',label:'الآية الثامنة والعشرون',words:['ارْجِعِي','إِلَىٰ','رَبِّكِ','رَاضِيَةً','مَّرْضِيَّةً']},
+    {num:'٢٩',label:'الآية التاسعة والعشرون',words:['فَادْخُلِي','فِي','عِبَادِي']},
+    {num:'٣٠',label:'الآية الثلاثون',    words:['وَادْخُلِي','جَنَّتِي']},
+  ]
+};
+
+JUZAMMA_SURAHS['al-ghashiyah'] = {
+  num:88, ar:'الغاشية', en:'Al-Ghashiyah', ayahs_count:26,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['هَلْ','أَتَاكَ','حَدِيثُ','الْغَاشِيَةِ']},
+    {num:'٢', label:'الآية الثانية',   words:['وُجُوهٌ','يَوْمَئِذٍ','خَاشِعَةٌ']},
+    {num:'٣', label:'الآية الثالثة',   words:['عَامِلَةٌ','نَّاصِبَةٌ']},
+    {num:'٤', label:'الآية الرابعة',   words:['تَصْلَىٰ','نَارًا','حَامِيَةً']},
+    {num:'٥', label:'الآية الخامسة',   words:['تُسْقَىٰ','مِنْ','عَيْنٍ','آنِيَةٍ']},
+    {num:'٦', label:'الآية السادسة',   words:['لَّيْسَ','لَهُمْ','طَعَامٌ','إِلَّا','مِن','ضَرِيعٍ']},
+    {num:'٧', label:'الآية السابعة',   words:['لَّا','يُسْمِنُ','وَلَا','يُغْنِي','مِن','جُوعٍ']},
+    {num:'٨', label:'الآية الثامنة',   words:['وُجُوهٌ','يَوْمَئِذٍ','نَّاعِمَةٌ']},
+    {num:'٩', label:'الآية التاسعة',   words:['لِّسَعْيِهَا','رَاضِيَةٌ']},
+    {num:'١٠',label:'الآية العاشرة',   words:['فِي','جَنَّةٍ','عَالِيَةٍ']},
+    {num:'١١',label:'الآية الحادية عشرة',words:['لَّا','تَسْمَعُ','فِيهَا','لَاغِيَةً']},
+    {num:'١٢',label:'الآية الثانية عشرة',words:['فِيهَا','عَيْنٌ','جَارِيَةٌ']},
+    {num:'١٣',label:'الآية الثالثة عشرة',words:['فِيهَا','سُرُرٌ','مَّرْفُوعَةٌ']},
+    {num:'١٤',label:'الآية الرابعة عشرة',words:['وَأَكْوَابٌ','مَّوْضُوعَةٌ']},
+    {num:'١٥',label:'الآية الخامسة عشرة',words:['وَنَمَارِقُ','مَصْفُوفَةٌ']},
+    {num:'١٦',label:'الآية السادسة عشرة',words:['وَزَرَابِيُّ','مَبْثُوثَةٌ']},
+    {num:'١٧',label:'الآية السابعة عشرة',words:['أَفَلَا','يَنظُرُونَ','إِلَى','الْإِبِلِ','كَيْفَ','خُلِقَتْ']},
+    {num:'١٨',label:'الآية الثامنة عشرة',words:['وَإِلَى','السَّمَاءِ','كَيْفَ','رُفِعَتْ']},
+    {num:'١٩',label:'الآية التاسعة عشرة',words:['وَإِلَى','الْجِبَالِ','كَيْفَ','نُصِبَتْ']},
+    {num:'٢٠',label:'الآية العشرون',    words:['وَإِلَى','الْأَرْضِ','كَيْفَ','سُطِحَتْ']},
+    {num:'٢١',label:'الآية الحادية والعشرون',words:['فَذَكِّرْ','إِنَّمَا','أَنتَ','مُذَكِّرٌ']},
+    {num:'٢٢',label:'الآية الثانية والعشرون',words:['لَّسْتَ','عَلَيْهِم','بِمُصَيْطِرٍ']},
+    {num:'٢٣',label:'الآية الثالثة والعشرون',words:['إِلَّا','مَن','تَوَلَّىٰ','وَكَفَرَ']},
+    {num:'٢٤',label:'الآية الرابعة والعشرون',words:['فَيُعَذِّبُهُ','اللَّهُ','الْعَذَابَ','الْأَكْبَرَ']},
+    {num:'٢٥',label:'الآية الخامسة والعشرون',words:['إِنَّ','إِلَيْنَا','إِيَابَهُمْ']},
+    {num:'٢٦',label:'الآية السادسة والعشرون',words:['ثُمَّ','إِنَّ','عَلَيْنَا','حِسَابَهُمْ']},
+  ]
+};
+
+JUZAMMA_SURAHS['al-ala'] = {
+  num:87, ar:'الأعلى', en:'Al-Ala', ayahs_count:19,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['سَبِّحِ','اسْمَ','رَبِّكَ','الْأَعْلَى']},
+    {num:'٢', label:'الآية الثانية',   words:['الَّذِي','خَلَقَ','فَسَوَّىٰ']},
+    {num:'٣', label:'الآية الثالثة',   words:['وَالَّذِي','قَدَّرَ','فَهَدَىٰ']},
+    {num:'٤', label:'الآية الرابعة',   words:['وَالَّذِي','أَخْرَجَ','الْمَرْعَىٰ']},
+    {num:'٥', label:'الآية الخامسة',   words:['فَجَعَلَهُ','غُثَاءً','أَحْوَىٰ']},
+    {num:'٦', label:'الآية السادسة',   words:['سَنُقْرِئُكَ','فَلَا','تَنسَىٰ']},
+    {num:'٧', label:'الآية السابعة',   words:['إِلَّا','مَا','شَاءَ','اللَّهُ','إِنَّهُ','يَعْلَمُ','الْجَهْرَ','وَمَا','يَخْفَىٰ']},
+    {num:'٨', label:'الآية الثامنة',   words:['وَنُيَسِّرُكَ','لِلْيُسْرَىٰ']},
+    {num:'٩', label:'الآية التاسعة',   words:['فَذَكِّرْ','إِن','نَّفَعَتِ','الذِّكْرَىٰ']},
+    {num:'١٠',label:'الآية العاشرة',   words:['سَيَذَّكَّرُ','مَن','يَخْشَىٰ']},
+    {num:'١١',label:'الآية الحادية عشرة',words:['وَيَتَجَنَّبُهَا','الْأَشْقَى']},
+    {num:'١٢',label:'الآية الثانية عشرة',words:['الَّذِي','يَصْلَى','النَّارَ','الْكُبْرَىٰ']},
+    {num:'١٣',label:'الآية الثالثة عشرة',words:['ثُمَّ','لَا','يَمُوتُ','فِيهَا','وَلَا','يَحْيَىٰ']},
+    {num:'١٤',label:'الآية الرابعة عشرة',words:['قَدْ','أَفْلَحَ','مَن','تَزَكَّىٰ']},
+    {num:'١٥',label:'الآية الخامسة عشرة',words:['وَذَكَرَ','اسْمَ','رَبِّهِ','فَصَلَّىٰ']},
+    {num:'١٦',label:'الآية السادسة عشرة',words:['بَلْ','تُؤْثِرُونَ','الْحَيَاةَ','الدُّنْيَا']},
+    {num:'١٧',label:'الآية السابعة عشرة',words:['وَالْآخِرَةُ','خَيْرٌ','وَأَبْقَىٰ']},
+    {num:'١٨',label:'الآية الثامنة عشرة',words:['إِنَّ','هَٰذَا','لَفِي','الصُّحُفِ','الْأُولَىٰ']},
+    {num:'١٩',label:'الآية التاسعة عشرة',words:['صُحُفِ','إِبْرَاهِيمَ','وَمُوسَىٰ']},
+  ]
+};
+
+JUZAMMA_SURAHS['at-tariq'] = {
+  num:86, ar:'الطارق', en:'At-Tariq', ayahs_count:17,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['وَالسَّمَاءِ','وَالطَّارِقِ']},
+    {num:'٢', label:'الآية الثانية',   words:['وَمَا','أَدْرَاكَ','مَا','الطَّارِقُ']},
+    {num:'٣', label:'الآية الثالثة',   words:['النَّجْمُ','الثَّاقِبُ']},
+    {num:'٤', label:'الآية الرابعة',   words:['إِن','كُلُّ','نَفْسٍ','لَّمَّا','عَلَيْهَا','حَافِظٌ']},
+    {num:'٥', label:'الآية الخامسة',   words:['فَلْيَنظُرِ','الْإِنسَانُ','مِمَّ','خُلِقَ']},
+    {num:'٦', label:'الآية السادسة',   words:['خُلِقَ','مِن','مَّاءٍ','دَافِقٍ']},
+    {num:'٧', label:'الآية السابعة',   words:['يَخْرُجُ','مِن','بَيْنِ','الصُّلْبِ','وَالتَّرَائِبِ']},
+    {num:'٨', label:'الآية الثامنة',   words:['إِنَّهُ','عَلَىٰ','رَجْعِهِ','لَقَادِرٌ']},
+    {num:'٩', label:'الآية التاسعة',   words:['يَوْمَ','تُبْلَى','السَّرَائِرُ']},
+    {num:'١٠',label:'الآية العاشرة',   words:['فَمَا','لَهُ','مِن','قُوَّةٍ','وَلَا','نَاصِرٍ']},
+    {num:'١١',label:'الآية الحادية عشرة',words:['وَالسَّمَاءِ','ذَاتِ','الرَّجْعِ']},
+    {num:'١٢',label:'الآية الثانية عشرة',words:['وَالْأَرْضِ','ذَاتِ','الصَّدْعِ']},
+    {num:'١٣',label:'الآية الثالثة عشرة',words:['إِنَّهُ','لَقَوْلٌ','فَصْلٌ']},
+    {num:'١٤',label:'الآية الرابعة عشرة',words:['وَمَا','هُوَ','بِالْهَزْلِ']},
+    {num:'١٥',label:'الآية الخامسة عشرة',words:['إِنَّهُمْ','يَكِيدُونَ','كَيْدًا']},
+    {num:'١٦',label:'الآية السادسة عشرة',words:['وَأَكِيدُ','كَيْدًا']},
+    {num:'١٧',label:'الآية السابعة عشرة',words:['فَمَهِّلِ','الْكَافِرِينَ','أَمْهِلْهُمْ','رُوَيْدًا']},
+  ]
+};
+
+JUZAMMA_SURAHS['al-buruj'] = {
+  num:85, ar:'البروج', en:'Al-Buruj', ayahs_count:22,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['وَالسَّمَاءِ','ذَاتِ','الْبُرُوجِ']},
+    {num:'٢', label:'الآية الثانية',   words:['وَالْيَوْمِ','الْمَوْعُودِ']},
+    {num:'٣', label:'الآية الثالثة',   words:['وَشَاهِدٍ','وَمَشْهُودٍ']},
+    {num:'٤', label:'الآية الرابعة',   words:['قُتِلَ','أَصْحَابُ','الْأُخْدُودِ']},
+    {num:'٥', label:'الآية الخامسة',   words:['النَّارِ','ذَاتِ','الْوَقُودِ']},
+    {num:'٦', label:'الآية السادسة',   words:['إِذْ','هُمْ','عَلَيْهَا','قُعُودٌ']},
+    {num:'٧', label:'الآية السابعة',   words:['وَهُمْ','عَلَىٰ','مَا','يَفْعَلُونَ','بِالْمُؤْمِنِينَ','شُهُودٌ']},
+    {num:'٨', label:'الآية الثامنة',   words:['وَمَا','نَقَمُوا','مِنْهُمْ','إِلَّا','أَن','يُؤْمِنُوا','بِاللَّهِ','الْعَزِيزِ','الْحَمِيدِ']},
+    {num:'٩', label:'الآية التاسعة',   words:['الَّذِي','لَهُ','مُلْكُ','السَّمَاوَاتِ','وَالْأَرْضِ','وَاللَّهُ','عَلَىٰ','كُلِّ','شَيْءٍ','شَهِيدٌ']},
+    {num:'١٠',label:'الآية العاشرة',   words:['إِنَّ','الَّذِينَ','فَتَنُوا','الْمُؤْمِنِينَ','وَالْمُؤْمِنَاتِ','ثُمَّ','لَمْ','يَتُوبُوا','فَلَهُمْ','عَذَابُ','جَهَنَّمَ','وَلَهُمْ','عَذَابُ','الْحَرِيقِ']},
+    {num:'١١',label:'الآية الحادية عشرة',words:['إِنَّ','الَّذِينَ','آمَنُوا','وَعَمِلُوا','الصَّالِحَاتِ','لَهُمْ','جَنَّاتٌ','تَجْرِي','مِن','تَحْتِهَا','الْأَنْهَارُ','ذَٰلِكَ','الْفَوْزُ','الْكَبِيرُ']},
+    {num:'١٢',label:'الآية الثانية عشرة',words:['إِنَّ','بَطْشَ','رَبِّكَ','لَشَدِيدٌ']},
+    {num:'١٣',label:'الآية الثالثة عشرة',words:['إِنَّهُ','هُوَ','يُبْدِئُ','وَيُعِيدُ']},
+    {num:'١٤',label:'الآية الرابعة عشرة',words:['وَهُوَ','الْغَفُورُ','الْوَدُودُ']},
+    {num:'١٥',label:'الآية الخامسة عشرة',words:['ذُو','الْعَرْشِ','الْمَجِيدُ']},
+    {num:'١٦',label:'الآية السادسة عشرة',words:['فَعَّالٌ','لِّمَا','يُرِيدُ']},
+    {num:'١٧',label:'الآية السابعة عشرة',words:['هَلْ','أَتَاكَ','حَدِيثُ','الْجُنُودِ']},
+    {num:'١٨',label:'الآية الثامنة عشرة',words:['فِرْعَوْنَ','وَثَمُودَ']},
+    {num:'١٩',label:'الآية التاسعة عشرة',words:['بَلِ','الَّذِينَ','كَفَرُوا','فِي','تَكْذِيبٍ']},
+    {num:'٢٠',label:'الآية العشرون',    words:['وَاللَّهُ','مِن','وَرَائِهِم','مُّحِيطٌ']},
+    {num:'٢١',label:'الآية الحادية والعشرون',words:['بَلْ','هُوَ','قُرْآنٌ','مَّجِيدٌ']},
+    {num:'٢٢',label:'الآية الثانية والعشرون',words:['فِي','لَوْحٍ','مَّحْفُوظٍ']},
+  ]
+};
+
+
+JUZAMMA_SURAHS['al-inshiqaq'] = {
+  num:84, ar:'الانشقاق', en:'Al-Inshiqaq', ayahs_count:25,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['إِذَا','السَّمَاءُ','انشَقَّتْ']},
+    {num:'٢', label:'الآية الثانية',   words:['وَأَذِنَتْ','لِرَبِّهَا','وَحُقَّتْ']},
+    {num:'٣', label:'الآية الثالثة',   words:['وَإِذَا','الْأَرْضُ','مُدَّتْ']},
+    {num:'٤', label:'الآية الرابعة',   words:['وَأَلْقَتْ','مَا','فِيهَا','وَتَخَلَّتْ']},
+    {num:'٥', label:'الآية الخامسة',   words:['وَأَذِنَتْ','لِرَبِّهَا','وَحُقَّتْ']},
+    {num:'٦', label:'الآية السادسة',   words:['يَا','أَيُّهَا','الْإِنسَانُ','إِنَّكَ','كَادِحٌ','إِلَىٰ','رَبِّكَ','كَدْحًا','فَمُلَاقِيهِ']},
+    {num:'٧', label:'الآية السابعة',   words:['فَأَمَّا','مَنْ','أُوتِيَ','كِتَابَهُ','بِيَمِينِهِ']},
+    {num:'٨', label:'الآية الثامنة',   words:['فَسَوْفَ','يُحَاسَبُ','حِسَابًا','يَسِيرًا']},
+    {num:'٩', label:'الآية التاسعة',   words:['وَيَنقَلِبُ','إِلَىٰ','أَهْلِهِ','مَسْرُورًا']},
+    {num:'١٠',label:'الآية العاشرة',   words:['وَأَمَّا','مَنْ','أُوتِيَ','كِتَابَهُ','وَرَاءَ','ظَهْرِهِ']},
+    {num:'١١',label:'الآية الحادية عشرة',words:['فَسَوْفَ','يَدْعُو','ثُبُورًا']},
+    {num:'١٢',label:'الآية الثانية عشرة',words:['وَيَصْلَىٰ','سَعِيرًا']},
+    {num:'١٣',label:'الآية الثالثة عشرة',words:['إِنَّهُ','كَانَ','فِي','أَهْلِهِ','مَسْرُورًا']},
+    {num:'١٤',label:'الآية الرابعة عشرة',words:['إِنَّهُ','ظَنَّ','أَن','لَّن','يَحُورَ']},
+    {num:'١٥',label:'الآية الخامسة عشرة',words:['بَلَىٰ','إِنَّ','رَبَّهُ','كَانَ','بِهِ','بَصِيرًا']},
+    {num:'١٦',label:'الآية السادسة عشرة',words:['فَلَا','أُقْسِمُ','بِالشَّفَقِ']},
+    {num:'١٧',label:'الآية السابعة عشرة',words:['وَاللَّيْلِ','وَمَا','وَسَقَ']},
+    {num:'١٨',label:'الآية الثامنة عشرة',words:['وَالْقَمَرِ','إِذَا','اتَّسَقَ']},
+    {num:'١٩',label:'الآية التاسعة عشرة',words:['لَتَرْكَبُنَّ','طَبَقًا','عَن','طَبَقٍ']},
+    {num:'٢٠',label:'الآية العشرون',    words:['فَمَا','لَهُمْ','لَا','يُؤْمِنُونَ']},
+    {num:'٢١',label:'الآية الحادية والعشرون',words:['وَإِذَا','قُرِئَ','عَلَيْهِمُ','الْقُرْآنُ','لَا','يَسْجُدُونَ']},
+    {num:'٢٢',label:'الآية الثانية والعشرون',words:['بَلِ','الَّذِينَ','كَفَرُوا','يُكَذِّبُونَ']},
+    {num:'٢٣',label:'الآية الثالثة والعشرون',words:['وَاللَّهُ','أَعْلَمُ','بِمَا','يُوعُونَ']},
+    {num:'٢٤',label:'الآية الرابعة والعشرون',words:['فَبَشِّرْهُم','بِعَذَابٍ','أَلِيمٍ']},
+    {num:'٢٥',label:'الآية الخامسة والعشرون',words:['إِلَّا','الَّذِينَ','آمَنُوا','وَعَمِلُوا','الصَّالِحَاتِ','لَهُمْ','أَجْرٌ','غَيْرُ','مَمْنُونٍ']},
+  ]
+};
+
+JUZAMMA_SURAHS['al-mutaffifin'] = {
+  num:83, ar:'المطففين', en:'Al-Mutaffifin', ayahs_count:36,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['وَيْلٌ','لِّلْمُطَفِّفِينَ']},
+    {num:'٢', label:'الآية الثانية',   words:['الَّذِينَ','إِذَا','اكْتَالُوا','عَلَى','النَّاسِ','يَسْتَوْفُونَ']},
+    {num:'٣', label:'الآية الثالثة',   words:['وَإِذَا','كَالُوهُمْ','أَو','وَّزَنُوهُمْ','يُخْسِرُونَ']},
+    {num:'٤', label:'الآية الرابعة',   words:['أَلَا','يَظُنُّ','أُولَٰئِكَ','أَنَّهُم','مَّبْعُوثُونَ']},
+    {num:'٥', label:'الآية الخامسة',   words:['لِيَوْمٍ','عَظِيمٍ']},
+    {num:'٦', label:'الآية السادسة',   words:['يَوْمَ','يَقُومُ','النَّاسُ','لِرَبِّ','الْعَالَمِينَ']},
+    {num:'٧', label:'الآية السابعة',   words:['كَلَّا','إِنَّ','كِتَابَ','الْفُجَّارِ','لَفِي','سِجِّينٍ']},
+    {num:'٨', label:'الآية الثامنة',   words:['وَمَا','أَدْرَاكَ','مَا','سِجِّينٌ']},
+    {num:'٩', label:'الآية التاسعة',   words:['كِتَابٌ','مَّرْقُومٌ']},
+    {num:'١٠',label:'الآية العاشرة',   words:['وَيْلٌ','يَوْمَئِذٍ','لِّلْمُكَذِّبِينَ']},
+    {num:'١١',label:'الآية الحادية عشرة',words:['الَّذِينَ','يُكَذِّبُونَ','بِيَوْمِ','الدِّينِ']},
+    {num:'١٢',label:'الآية الثانية عشرة',words:['وَمَا','يُكَذِّبُ','بِهِ','إِلَّا','كُلُّ','مُعْتَدٍ','أَثِيمٍ']},
+    {num:'١٣',label:'الآية الثالثة عشرة',words:['إِذَا','تُتْلَىٰ','عَلَيْهِ','آيَاتُنَا','قَالَ','أَسَاطِيرُ','الْأَوَّلِينَ']},
+    {num:'١٤',label:'الآية الرابعة عشرة',words:['كَلَّا','بَلْ','رَانَ','عَلَىٰ','قُلُوبِهِم','مَّا','كَانُوا','يَكْسِبُونَ']},
+    {num:'١٥',label:'الآية الخامسة عشرة',words:['كَلَّا','إِنَّهُمْ','عَن','رَّبِّهِمْ','يَوْمَئِذٍ','لَّمَحْجُوبُونَ']},
+    {num:'١٦',label:'الآية السادسة عشرة',words:['ثُمَّ','إِنَّهُمْ','لَصَالُو','الْجَحِيمِ']},
+    {num:'١٧',label:'الآية السابعة عشرة',words:['ثُمَّ','يُقَالُ','هَٰذَا','الَّذِي','كُنتُم','بِهِ','تُكَذِّبُونَ']},
+    {num:'١٨',label:'الآية الثامنة عشرة',words:['كَلَّا','إِنَّ','كِتَابَ','الْأَبْرَارِ','لَفِي','عِلِّيِّينَ']},
+    {num:'١٩',label:'الآية التاسعة عشرة',words:['وَمَا','أَدْرَاكَ','مَا','عِلِّيُّونَ']},
+    {num:'٢٠',label:'الآية العشرون',    words:['كِتَابٌ','مَّرْقُومٌ']},
+    {num:'٢١',label:'الآية الحادية والعشرون',words:['يَشْهَدُهُ','الْمُقَرَّبُونَ']},
+    {num:'٢٢',label:'الآية الثانية والعشرون',words:['إِنَّ','الْأَبْرَارَ','لَفِي','نَعِيمٍ']},
+    {num:'٢٣',label:'الآية الثالثة والعشرون',words:['عَلَى','الْأَرَائِكِ','يَنظُرُونَ']},
+    {num:'٢٤',label:'الآية الرابعة والعشرون',words:['تَعْرِفُ','فِي','وُجُوهِهِمْ','نَضْرَةَ','النَّعِيمِ']},
+    {num:'٢٥',label:'الآية الخامسة والعشرون',words:['يُسْقَوْنَ','مِن','رَّحِيقٍ','مَّخْتُومٍ']},
+    {num:'٢٦',label:'الآية السادسة والعشرون',words:['خِتَامُهُ','مِسْكٌ','وَفِي','ذَٰلِكَ','فَلْيَتَنَافَسِ','الْمُتَنَافِسُونَ']},
+    {num:'٢٧',label:'الآية السابعة والعشرون',words:['وَمِزَاجُهُ','مِن','تَسْنِيمٍ']},
+    {num:'٢٨',label:'الآية الثامنة والعشرون',words:['عَيْنًا','يَشْرَبُ','بِهَا','الْمُقَرَّبُونَ']},
+    {num:'٢٩',label:'الآية التاسعة والعشرون',words:['إِنَّ','الَّذِينَ','أَجْرَمُوا','كَانُوا','مِنَ','الَّذِينَ','آمَنُوا','يَضْحَكُونَ']},
+    {num:'٣٠',label:'الآية الثلاثون',    words:['وَإِذَا','مَرُّوا','بِهِمْ','يَتَغَامَزُونَ']},
+    {num:'٣١',label:'الآية الحادية والثلاثون',words:['وَإِذَا','انقَلَبُوا','إِلَىٰ','أَهْلِهِمُ','انقَلَبُوا','فَكِهِينَ']},
+    {num:'٣٢',label:'الآية الثانية والثلاثون',words:['وَإِذَا','رَأَوْهُمْ','قَالُوا','إِنَّ','هَٰؤُلَاءِ','لَضَالُّونَ']},
+    {num:'٣٣',label:'الآية الثالثة والثلاثون',words:['وَمَا','أُرْسِلُوا','عَلَيْهِمْ','حَافِظِينَ']},
+    {num:'٣٤',label:'الآية الرابعة والثلاثون',words:['فَالْيَوْمَ','الَّذِينَ','آمَنُوا','مِنَ','الْكُفَّارِ','يَضْحَكُونَ']},
+    {num:'٣٥',label:'الآية الخامسة والثلاثون',words:['عَلَى','الْأَرَائِكِ','يَنظُرُونَ']},
+    {num:'٣٦',label:'الآية السادسة والثلاثون',words:['هَلْ','ثُوِّبَ','الْكُفَّارُ','مَا','كَانُوا','يَفْعَلُونَ']},
+  ]
+};
+
+
+JUZAMMA_SURAHS['al-infitar'] = {
+  num:82, ar:'الانفطار', en:'Al-Infitar', ayahs_count:19,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['إِذَا','السَّمَاءُ','انفَطَرَتْ']},
+    {num:'٢', label:'الآية الثانية',   words:['وَإِذَا','الْكَوَاكِبُ','انتَثَرَتْ']},
+    {num:'٣', label:'الآية الثالثة',   words:['وَإِذَا','الْبِحَارُ','فُجِّرَتْ']},
+    {num:'٤', label:'الآية الرابعة',   words:['وَإِذَا','الْقُبُورُ','بُعْثِرَتْ']},
+    {num:'٥', label:'الآية الخامسة',   words:['عَلِمَتْ','نَفْسٌ','مَّا','قَدَّمَتْ','وَأَخَّرَتْ']},
+    {num:'٦', label:'الآية السادسة',   words:['يَا','أَيُّهَا','الْإِنسَانُ','مَا','غَرَّكَ','بِرَبِّكَ','الْكَرِيمِ']},
+    {num:'٧', label:'الآية السابعة',   words:['الَّذِي','خَلَقَكَ','فَسَوَّاكَ','فَعَدَلَكَ']},
+    {num:'٨', label:'الآية الثامنة',   words:['فِي','أَيِّ','صُورَةٍ','مَّا','شَاءَ','رَكَّبَكَ']},
+    {num:'٩', label:'الآية التاسعة',   words:['كَلَّا','بَلْ','تُكَذِّبُونَ','بِالدِّينِ']},
+    {num:'١٠',label:'الآية العاشرة',   words:['وَإِنَّ','عَلَيْكُمْ','لَحَافِظِينَ']},
+    {num:'١١',label:'الآية الحادية عشرة',words:['كِرَامًا','كَاتِبِينَ']},
+    {num:'١٢',label:'الآية الثانية عشرة',words:['يَعْلَمُونَ','مَا','تَفْعَلُونَ']},
+    {num:'١٣',label:'الآية الثالثة عشرة',words:['إِنَّ','الْأَبْرَارَ','لَفِي','نَعِيمٍ']},
+    {num:'١٤',label:'الآية الرابعة عشرة',words:['وَإِنَّ','الْفُجَّارَ','لَفِي','جَحِيمٍ']},
+    {num:'١٥',label:'الآية الخامسة عشرة',words:['يَصْلَوْنَهَا','يَوْمَ','الدِّينِ']},
+    {num:'١٦',label:'الآية السادسة عشرة',words:['وَمَا','هُمْ','عَنْهَا','بِغَائِبِينَ']},
+    {num:'١٧',label:'الآية السابعة عشرة',words:['وَمَا','أَدْرَاكَ','مَا','يَوْمُ','الدِّينِ']},
+    {num:'١٨',label:'الآية الثامنة عشرة',words:['ثُمَّ','مَا','أَدْرَاكَ','مَا','يَوْمُ','الدِّينِ']},
+    {num:'١٩',label:'الآية التاسعة عشرة',words:['يَوْمَ','لَا','تَمْلِكُ','نَفْسٌ','لِّنَفْسٍ','شَيْئًا','وَالْأَمْرُ','يَوْمَئِذٍ','لِّلَّهِ']},
+  ]
+};
+
+JUZAMMA_SURAHS['at-takwir'] = {
+  num:81, ar:'التكوير', en:'At-Takwir', ayahs_count:29,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['إِذَا','الشَّمْسُ','كُوِّرَتْ']},
+    {num:'٢', label:'الآية الثانية',   words:['وَإِذَا','النُّجُومُ','انكَدَرَتْ']},
+    {num:'٣', label:'الآية الثالثة',   words:['وَإِذَا','الْجِبَالُ','سُيِّرَتْ']},
+    {num:'٤', label:'الآية الرابعة',   words:['وَإِذَا','الْعِشَارُ','عُطِّلَتْ']},
+    {num:'٥', label:'الآية الخامسة',   words:['وَإِذَا','الْوُحُوشُ','حُشِرَتْ']},
+    {num:'٦', label:'الآية السادسة',   words:['وَإِذَا','الْبِحَارُ','سُجِّرَتْ']},
+    {num:'٧', label:'الآية السابعة',   words:['وَإِذَا','النُّفُوسُ','زُوِّجَتْ']},
+    {num:'٨', label:'الآية الثامنة',   words:['وَإِذَا','الْمَوْءُودَةُ','سُئِلَتْ']},
+    {num:'٩', label:'الآية التاسعة',   words:['بِأَيِّ','ذَنبٍ','قُتِلَتْ']},
+    {num:'١٠',label:'الآية العاشرة',   words:['وَإِذَا','الصُّحُفُ','نُشِرَتْ']},
+    {num:'١١',label:'الآية الحادية عشرة',words:['وَإِذَا','السَّمَاءُ','كُشِطَتْ']},
+    {num:'١٢',label:'الآية الثانية عشرة',words:['وَإِذَا','الْجَحِيمُ','سُعِّرَتْ']},
+    {num:'١٣',label:'الآية الثالثة عشرة',words:['وَإِذَا','الْجَنَّةُ','أُزْلِفَتْ']},
+    {num:'١٤',label:'الآية الرابعة عشرة',words:['عَلِمَتْ','نَفْسٌ','مَّا','أَحْضَرَتْ']},
+    {num:'١٥',label:'الآية الخامسة عشرة',words:['فَلَا','أُقْسِمُ','بِالْخُنَّسِ']},
+    {num:'١٦',label:'الآية السادسة عشرة',words:['الْجَوَارِ','الْكُنَّسِ']},
+    {num:'١٧',label:'الآية السابعة عشرة',words:['وَاللَّيْلِ','إِذَا','عَسْعَسَ']},
+    {num:'١٨',label:'الآية الثامنة عشرة',words:['وَالصُّبْحِ','إِذَا','تَنَفَّسَ']},
+    {num:'١٩',label:'الآية التاسعة عشرة',words:['إِنَّهُ','لَقَوْلُ','رَسُولٍ','كَرِيمٍ']},
+    {num:'٢٠',label:'الآية العشرون',    words:['ذِي','قُوَّةٍ','عِندَ','ذِي','الْعَرْشِ','مَكِينٍ']},
+    {num:'٢١',label:'الآية الحادية والعشرون',words:['مُّطَاعٍ','ثَمَّ','أَمِينٍ']},
+    {num:'٢٢',label:'الآية الثانية والعشرون',words:['وَمَا','صَاحِبُكُم','بِمَجْنُونٍ']},
+    {num:'٢٣',label:'الآية الثالثة والعشرون',words:['وَلَقَدْ','رَآهُ','بِالْأُفُقِ','الْمُبِينِ']},
+    {num:'٢٤',label:'الآية الرابعة والعشرون',words:['وَمَا','هُوَ','عَلَى','الْغَيْبِ','بِضَنِينٍ']},
+    {num:'٢٥',label:'الآية الخامسة والعشرون',words:['وَمَا','هُوَ','بِقَوْلِ','شَيْطَانٍ','رَّجِيمٍ']},
+    {num:'٢٦',label:'الآية السادسة والعشرون',words:['فَأَيْنَ','تَذْهَبُونَ']},
+    {num:'٢٧',label:'الآية السابعة والعشرون',words:['إِنْ','هُوَ','إِلَّا','ذِكْرٌ','لِّلْعَالَمِينَ']},
+    {num:'٢٨',label:'الآية الثامنة والعشرون',words:['لِمَن','شَاءَ','مِنكُمْ','أَن','يَسْتَقِيمَ']},
+    {num:'٢٩',label:'الآية التاسعة والعشرون',words:['وَمَا','تَشَاءُونَ','إِلَّا','أَن','يَشَاءَ','اللَّهُ','رَبُّ','الْعَالَمِينَ']},
+  ]
+};
+
+JUZAMMA_SURAHS['abasa'] = {
+  num:80, ar:'عبس', en:'Abasa', ayahs_count:42,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['عَبَسَ','وَتَوَلَّىٰ']},
+    {num:'٢', label:'الآية الثانية',   words:['أَن','جَاءَهُ','الْأَعْمَىٰ']},
+    {num:'٣', label:'الآية الثالثة',   words:['وَمَا','يُدْرِيكَ','لَعَلَّهُ','يَزَّكَّىٰ']},
+    {num:'٤', label:'الآية الرابعة',   words:['أَوْ','يَذَّكَّرُ','فَتَنفَعَهُ','الذِّكْرَىٰ']},
+    {num:'٥', label:'الآية الخامسة',   words:['أَمَّا','مَنِ','اسْتَغْنَىٰ']},
+    {num:'٦', label:'الآية السادسة',   words:['فَأَنتَ','لَهُ','تَصَدَّىٰ']},
+    {num:'٧', label:'الآية السابعة',   words:['وَمَا','عَلَيْكَ','أَلَّا','يَزَّكَّىٰ']},
+    {num:'٨', label:'الآية الثامنة',   words:['وَأَمَّا','مَن','جَاءَكَ','يَسْعَىٰ']},
+    {num:'٩', label:'الآية التاسعة',   words:['وَهُوَ','يَخْشَىٰ']},
+    {num:'١٠',label:'الآية العاشرة',   words:['فَأَنتَ','عَنْهُ','تَلَهَّىٰ']},
+    {num:'١١',label:'الآية الحادية عشرة',words:['كَلَّا','إِنَّهَا','تَذْكِرَةٌ']},
+    {num:'١٢',label:'الآية الثانية عشرة',words:['فَمَن','شَاءَ','ذَكَرَهُ']},
+    {num:'١٣',label:'الآية الثالثة عشرة',words:['فِي','صُحُفٍ','مُّكَرَّمَةٍ']},
+    {num:'١٤',label:'الآية الرابعة عشرة',words:['مَّرْفُوعَةٍ','مُّطَهَّرَةٍ']},
+    {num:'١٥',label:'الآية الخامسة عشرة',words:['بِأَيْدِي','سَفَرَةٍ']},
+    {num:'١٦',label:'الآية السادسة عشرة',words:['كِرَامٍ','بَرَرَةٍ']},
+    {num:'١٧',label:'الآية السابعة عشرة',words:['قُتِلَ','الْإِنسَانُ','مَا','أَكْفَرَهُ']},
+    {num:'١٨',label:'الآية الثامنة عشرة',words:['مِنْ','أَيِّ','شَيْءٍ','خَلَقَهُ']},
+    {num:'١٩',label:'الآية التاسعة عشرة',words:['مِن','نُّطْفَةٍ','خَلَقَهُ','فَقَدَّرَهُ']},
+    {num:'٢٠',label:'الآية العشرون',    words:['ثُمَّ','السَّبِيلَ','يَسَّرَهُ']},
+    {num:'٢١',label:'الآية الحادية والعشرون',words:['ثُمَّ','أَمَاتَهُ','فَأَقْبَرَهُ']},
+    {num:'٢٢',label:'الآية الثانية والعشرون',words:['ثُمَّ','إِذَا','شَاءَ','أَنشَرَهُ']},
+    {num:'٢٣',label:'الآية الثالثة والعشرون',words:['كَلَّا','لَمَّا','يَقْضِ','مَا','أَمَرَهُ']},
+    {num:'٢٤',label:'الآية الرابعة والعشرون',words:['فَلْيَنظُرِ','الْإِنسَانُ','إِلَىٰ','طَعَامِهِ']},
+    {num:'٢٥',label:'الآية الخامسة والعشرون',words:['أَنَّا','صَبَبْنَا','الْمَاءَ','صَبًّا']},
+    {num:'٢٦',label:'الآية السادسة والعشرون',words:['ثُمَّ','شَقَقْنَا','الْأَرْضَ','شَقًّا']},
+    {num:'٢٧',label:'الآية السابعة والعشرون',words:['فَأَنبَتْنَا','فِيهَا','حَبًّا']},
+    {num:'٢٨',label:'الآية الثامنة والعشرون',words:['وَعِنَبًا','وَقَضْبًا']},
+    {num:'٢٩',label:'الآية التاسعة والعشرون',words:['وَزَيْتُونًا','وَنَخْلًا']},
+    {num:'٣٠',label:'الآية الثلاثون',    words:['وَحَدَائِقَ','غُلْبًا']},
+    {num:'٣١',label:'الآية الحادية والثلاثون',words:['وَفَاكِهَةً','وَأَبًّا']},
+    {num:'٣٢',label:'الآية الثانية والثلاثون',words:['مَّتَاعًا','لَّكُمْ','وَلِأَنْعَامِكُمْ']},
+    {num:'٣٣',label:'الآية الثالثة والثلاثون',words:['فَإِذَا','جَاءَتِ','الصَّاخَّةُ']},
+    {num:'٣٤',label:'الآية الرابعة والثلاثون',words:['يَوْمَ','يَفِرُّ','الْمَرْءُ','مِنْ','أَخِيهِ']},
+    {num:'٣٥',label:'الآية الخامسة والثلاثون',words:['وَأُمِّهِ','وَأَبِيهِ']},
+    {num:'٣٦',label:'الآية السادسة والثلاثون',words:['وَصَاحِبَتِهِ','وَبَنِيهِ']},
+    {num:'٣٧',label:'الآية السابعة والثلاثون',words:['لِكُلِّ','امْرِئٍ','مِّنْهُمْ','يَوْمَئِذٍ','شَأْنٌ','يُغْنِيهِ']},
+    {num:'٣٨',label:'الآية الثامنة والثلاثون',words:['وُجُوهٌ','يَوْمَئِذٍ','مُّسْفِرَةٌ']},
+    {num:'٣٩',label:'الآية التاسعة والثلاثون',words:['ضَاحِكَةٌ','مُّسْتَبْشِرَةٌ']},
+    {num:'٤٠',label:'الآية الأربعون',    words:['وَوُجُوهٌ','يَوْمَئِذٍ','عَلَيْهَا','غَبَرَةٌ']},
+    {num:'٤١',label:'الآية الحادية والأربعون',words:['تَرْهَقُهَا','قَتَرَةٌ']},
+    {num:'٤٢',label:'الآية الثانية والأربعون',words:['أُولَٰئِكَ','هُمُ','الْكَفَرَةُ','الْفَجَرَةُ']},
+  ]
+};
+
+JUZAMMA_SURAHS['an-naziat'] = {
+  num:79, ar:'النازعات', en:'An-Naziat', ayahs_count:46,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['وَالنَّازِعَاتِ','غَرْقًا']},
+    {num:'٢', label:'الآية الثانية',   words:['وَالنَّاشِطَاتِ','نَشْطًا']},
+    {num:'٣', label:'الآية الثالثة',   words:['وَالسَّابِحَاتِ','سَبْحًا']},
+    {num:'٤', label:'الآية الرابعة',   words:['فَالسَّابِقَاتِ','سَبْقًا']},
+    {num:'٥', label:'الآية الخامسة',   words:['فَالْمُدَبِّرَاتِ','أَمْرًا']},
+    {num:'٦', label:'الآية السادسة',   words:['يَوْمَ','تَرْجُفُ','الرَّاجِفَةُ']},
+    {num:'٧', label:'الآية السابعة',   words:['تَتْبَعُهَا','الرَّادِفَةُ']},
+    {num:'٨', label:'الآية الثامنة',   words:['قُلُوبٌ','يَوْمَئِذٍ','وَاجِفَةٌ']},
+    {num:'٩', label:'الآية التاسعة',   words:['أَبْصَارُهَا','خَاشِعَةٌ']},
+    {num:'١٠',label:'الآية العاشرة',   words:['يَقُولُونَ','أَإِنَّا','لَمَرْدُودُونَ','فِي','الْحَافِرَةِ']},
+    {num:'١١',label:'الآية الحادية عشرة',words:['أَإِذَا','كُنَّا','عِظَامًا','نَّخِرَةً']},
+    {num:'١٢',label:'الآية الثانية عشرة',words:['قَالُوا','تِلْكَ','إِذًا','كَرَّةٌ','خَاسِرَةٌ']},
+    {num:'١٣',label:'الآية الثالثة عشرة',words:['فَإِنَّمَا','هِيَ','زَجْرَةٌ','وَاحِدَةٌ']},
+    {num:'١٤',label:'الآية الرابعة عشرة',words:['فَإِذَا','هُم','بِالسَّاهِرَةِ']},
+    {num:'١٥',label:'الآية الخامسة عشرة',words:['هَلْ','أَتَاكَ','حَدِيثُ','مُوسَىٰ']},
+    {num:'١٦',label:'الآية السادسة عشرة',words:['إِذْ','نَادَاهُ','رَبُّهُ','بِالْوَادِ','الْمُقَدَّسِ','طُوًى']},
+    {num:'١٧',label:'الآية السابعة عشرة',words:['اذْهَبْ','إِلَىٰ','فِرْعَوْنَ','إِنَّهُ','طَغَىٰ']},
+    {num:'١٨',label:'الآية الثامنة عشرة',words:['فَقُلْ','هَل','لَّكَ','إِلَىٰ','أَن','تَزَكَّىٰ']},
+    {num:'١٩',label:'الآية التاسعة عشرة',words:['وَأَهْدِيَكَ','إِلَىٰ','رَبِّكَ','فَتَخْشَىٰ']},
+    {num:'٢٠',label:'الآية العشرون',    words:['فَأَرَاهُ','الْآيَةَ','الْكُبْرَىٰ']},
+    {num:'٢١',label:'الآية الحادية والعشرون',words:['فَكَذَّبَ','وَعَصَىٰ']},
+    {num:'٢٢',label:'الآية الثانية والعشرون',words:['ثُمَّ','أَدْبَرَ','يَسْعَىٰ']},
+    {num:'٢٣',label:'الآية الثالثة والعشرون',words:['فَحَشَرَ','فَنَادَىٰ']},
+    {num:'٢٤',label:'الآية الرابعة والعشرون',words:['فَقَالَ','أَنَا','رَبُّكُمُ','الْأَعْلَىٰ']},
+    {num:'٢٥',label:'الآية الخامسة والعشرون',words:['فَأَخَذَهُ','اللَّهُ','نَكَالَ','الْآخِرَةِ','وَالْأُولَىٰ']},
+    {num:'٢٦',label:'الآية السادسة والعشرون',words:['إِنَّ','فِي','ذَٰلِكَ','لَعِبْرَةً','لِّمَن','يَخْشَىٰ']},
+    {num:'٢٧',label:'الآية السابعة والعشرون',words:['أَأَنتُمْ','أَشَدُّ','خَلْقًا','أَمِ','السَّمَاءُ','بَنَاهَا']},
+    {num:'٢٨',label:'الآية الثامنة والعشرون',words:['رَفَعَ','سَمْكَهَا','فَسَوَّاهَا']},
+    {num:'٢٩',label:'الآية التاسعة والعشرون',words:['وَأَغْطَشَ','لَيْلَهَا','وَأَخْرَجَ','ضُحَاهَا']},
+    {num:'٣٠',label:'الآية الثلاثون',    words:['وَالْأَرْضَ','بَعْدَ','ذَٰلِكَ','دَحَاهَا']},
+    {num:'٣١',label:'الآية الحادية والثلاثون',words:['أَخْرَجَ','مِنْهَا','مَاءَهَا','وَمَرْعَاهَا']},
+    {num:'٣٢',label:'الآية الثانية والثلاثون',words:['وَالْجِبَالَ','أَرْسَاهَا']},
+    {num:'٣٣',label:'الآية الثالثة والثلاثون',words:['مَتَاعًا','لَّكُمْ','وَلِأَنْعَامِكُمْ']},
+    {num:'٣٤',label:'الآية الرابعة والثلاثون',words:['فَإِذَا','جَاءَتِ','الطَّامَّةُ','الْكُبْرَىٰ']},
+    {num:'٣٥',label:'الآية الخامسة والثلاثون',words:['يَوْمَ','يَتَذَكَّرُ','الْإِنسَانُ','مَا','سَعَىٰ']},
+    {num:'٣٦',label:'الآية السادسة والثلاثون',words:['وَبُرِّزَتِ','الْجَحِيمُ','لِمَن','يَرَىٰ']},
+    {num:'٣٧',label:'الآية السابعة والثلاثون',words:['فَأَمَّا','مَن','طَغَىٰ']},
+    {num:'٣٨',label:'الآية الثامنة والثلاثون',words:['وَآثَرَ','الْحَيَاةَ','الدُّنْيَا']},
+    {num:'٣٩',label:'الآية التاسعة والثلاثون',words:['فَإِنَّ','الْجَحِيمَ','هِيَ','الْمَأْوَىٰ']},
+    {num:'٤٠',label:'الآية الأربعون',    words:['وَأَمَّا','مَنْ','خَافَ','مَقَامَ','رَبِّهِ','وَنَهَى','النَّفْسَ','عَنِ','الْهَوَىٰ']},
+    {num:'٤١',label:'الآية الحادية والأربعون',words:['فَإِنَّ','الْجَنَّةَ','هِيَ','الْمَأْوَىٰ']},
+    {num:'٤٢',label:'الآية الثانية والأربعون',words:['يَسْأَلُونَكَ','عَنِ','السَّاعَةِ','أَيَّانَ','مُرْسَاهَا']},
+    {num:'٤٣',label:'الآية الثالثة والأربعون',words:['فِيمَ','أَنتَ','مِن','ذِكْرَاهَا']},
+    {num:'٤٤',label:'الآية الرابعة والأربعون',words:['إِلَىٰ','رَبِّكَ','مُنتَهَاهَا']},
+    {num:'٤٥',label:'الآية الخامسة والأربعون',words:['إِنَّمَا','أَنتَ','مُنذِرُ','مَن','يَخْشَاهَا']},
+    {num:'٤٦',label:'الآية السادسة والأربعون',words:['كَأَنَّهُمْ','يَوْمَ','يَرَوْنَهَا','لَمْ','يَلْبَثُوا','إِلَّا','عَشِيَّةً','أَوْ','ضُحَاهَا']},
+  ]
+};
+
+JUZAMMA_SURAHS['an-naba'] = {
+  num:78, ar:'النبأ', en:'An-Naba', ayahs_count:40,
+  ayahs:[
+    {num:'١', label:'الآية الأولى',    words:['عَمَّ','يَتَسَاءَلُونَ']},
+    {num:'٢', label:'الآية الثانية',   words:['عَنِ','النَّبَإِ','الْعَظِيمِ']},
+    {num:'٣', label:'الآية الثالثة',   words:['الَّذِي','هُمْ','فِيهِ','مُخْتَلِفُونَ']},
+    {num:'٤', label:'الآية الرابعة',   words:['كَلَّا','سَيَعْلَمُونَ']},
+    {num:'٥', label:'الآية الخامسة',   words:['ثُمَّ','كَلَّا','سَيَعْلَمُونَ']},
+    {num:'٦', label:'الآية السادسة',   words:['أَلَمْ','نَجْعَلِ','الْأَرْضَ','مِهَادًا']},
+    {num:'٧', label:'الآية السابعة',   words:['وَالْجِبَالَ','أَوْتَادًا']},
+    {num:'٨', label:'الآية الثامنة',   words:['وَخَلَقْنَاكُمْ','أَزْوَاجًا']},
+    {num:'٩', label:'الآية التاسعة',   words:['وَجَعَلْنَا','نَوْمَكُمْ','سُبَاتًا']},
+    {num:'١٠',label:'الآية العاشرة',   words:['وَجَعَلْنَا','اللَّيْلَ','لِبَاسًا']},
+    {num:'١١',label:'الآية الحادية عشرة',words:['وَجَعَلْنَا','النَّهَارَ','مَعَاشًا']},
+    {num:'١٢',label:'الآية الثانية عشرة',words:['وَبَنَيْنَا','فَوْقَكُمْ','سَبْعًا','شِدَادًا']},
+    {num:'١٣',label:'الآية الثالثة عشرة',words:['وَجَعَلْنَا','سِرَاجًا','وَهَّاجًا']},
+    {num:'١٤',label:'الآية الرابعة عشرة',words:['وَأَنزَلْنَا','مِنَ','الْمُعْصِرَاتِ','مَاءً','ثَجَّاجًا']},
+    {num:'١٥',label:'الآية الخامسة عشرة',words:['لِّنُخْرِجَ','بِهِ','حَبًّا','وَنَبَاتًا']},
+    {num:'١٦',label:'الآية السادسة عشرة',words:['وَجَنَّاتٍ','أَلْفَافًا']},
+    {num:'١٧',label:'الآية السابعة عشرة',words:['إِنَّ','يَوْمَ','الْفَصْلِ','كَانَ','مِيقَاتًا']},
+    {num:'١٨',label:'الآية الثامنة عشرة',words:['يَوْمَ','يُنفَخُ','فِي','الصُّورِ','فَتَأْتُونَ','أَفْوَاجًا']},
+    {num:'١٩',label:'الآية التاسعة عشرة',words:['وَفُتِحَتِ','السَّمَاءُ','فَكَانَتْ','أَبْوَابًا']},
+    {num:'٢٠',label:'الآية العشرون',    words:['وَسُيِّرَتِ','الْجِبَالُ','فَكَانَتْ','سَرَابًا']},
+    {num:'٢١',label:'الآية الحادية والعشرون',words:['إِنَّ','جَهَنَّمَ','كَانَتْ','مِرْصَادًا']},
+    {num:'٢٢',label:'الآية الثانية والعشرون',words:['لِّلطَّاغِينَ','مَآبًا']},
+    {num:'٢٣',label:'الآية الثالثة والعشرون',words:['لَّابِثِينَ','فِيهَا','أَحْقَابًا']},
+    {num:'٢٤',label:'الآية الرابعة والعشرون',words:['لَّا','يَذُوقُونَ','فِيهَا','بَرْدًا','وَلَا','شَرَابًا']},
+    {num:'٢٥',label:'الآية الخامسة والعشرون',words:['إِلَّا','حَمِيمًا','وَغَسَّاقًا']},
+    {num:'٢٦',label:'الآية السادسة والعشرون',words:['جَزَاءً','وِفَاقًا']},
+    {num:'٢٧',label:'الآية السابعة والعشرون',words:['إِنَّهُمْ','كَانُوا','لَا','يَرْجُونَ','حِسَابًا']},
+    {num:'٢٨',label:'الآية الثامنة والعشرون',words:['وَكَذَّبُوا','بِآيَاتِنَا','كِذَّابًا']},
+    {num:'٢٩',label:'الآية التاسعة والعشرون',words:['وَكُلَّ','شَيْءٍ','أَحْصَيْنَاهُ','كِتَابًا']},
+    {num:'٣٠',label:'الآية الثلاثون',    words:['فَذُوقُوا','فَلَن','نَّزِيدَكُمْ','إِلَّا','عَذَابًا']},
+    {num:'٣١',label:'الآية الحادية والثلاثون',words:['إِنَّ','لِلْمُتَّقِينَ','مَفَازًا']},
+    {num:'٣٢',label:'الآية الثانية والثلاثون',words:['حَدَائِقَ','وَأَعْنَابًا']},
+    {num:'٣٣',label:'الآية الثالثة والثلاثون',words:['وَكَوَاعِبَ','أَتْرَابًا']},
+    {num:'٣٤',label:'الآية الرابعة والثلاثون',words:['وَكَأْسًا','دِهَاقًا']},
+    {num:'٣٥',label:'الآية الخامسة والثلاثون',words:['لَّا','يَسْمَعُونَ','فِيهَا','لَغْوًا','وَلَا','كِذَّابًا']},
+    {num:'٣٦',label:'الآية السادسة والثلاثون',words:['جَزَاءً','مِّن','رَّبِّكَ','عَطَاءً','حِسَابًا']},
+    {num:'٣٧',label:'الآية السابعة والثلاثون',words:['رَّبِّ','السَّمَاوَاتِ','وَالْأَرْضِ','وَمَا','بَيْنَهُمَا','الرَّحْمَٰنِ','لَا','يَمْلِكُونَ','مِنْهُ','خِطَابًا']},
+    {num:'٣٨',label:'الآية الثامنة والثلاثون',words:['يَوْمَ','يَقُومُ','الرُّوحُ','وَالْمَلَائِكَةُ','صَفًّا','لَّا','يَتَكَلَّمُونَ','إِلَّا','مَنْ','أَذِنَ','لَهُ','الرَّحْمَٰنُ','وَقَالَ','صَوَابًا']},
+    {num:'٣٩',label:'الآية التاسعة والثلاثون',words:['ذَٰلِكَ','الْيَوْمُ','الْحَقُّ','فَمَن','شَاءَ','اتَّخَذَ','إِلَىٰ','رَبِّهِ','مَآبًا']},
+    {num:'٤٠',label:'الآية الأربعون',    words:['إِنَّا','أَنذَرْنَاكُمْ','عَذَابًا','قَرِيبًا','يَوْمَ','يَنظُرُ','الْمَرْءُ','مَا','قَدَّمَتْ','يَدَاهُ','وَيَقُولُ','الْكَافِرُ','يَا','لَيْتَنِي','كُنتُ','تُرَابًا']},
+  ]
+};
+
+
+// ══ INIT ══
+const SURAH = JUZAMMA_SURAHS[SURAH_KEY];
+if(!SURAH){ document.body.innerHTML='<div style="text-align:center;padding:100px;font-size:24px;color:#D4AF37;font-family:Cairo,sans-serif">السورة غير موجودة 🔍</div>'; }
+else { init(); }
+
+function init(){
+  document.title = 'سورة ' + SURAH.ar + ' | Martl 3D';
+  document.getElementById('nav-title').textContent = '📖 سورة ' + SURAH.ar;
+  document.getElementById('surah-name').textContent = 'سورة ' + SURAH.ar;
+  document.getElementById('surah-meta').textContent = 'مكية • ' + toAr(SURAH.ayahs_count) + ' آية • جزء عمّ';
+  document.getElementById('complete-msg').textContent = 'أظهرت كل كلمات سورة ' + SURAH.ar + ' — بارك الله فيك';
+  buildRecall();
+}
+
+function toAr(n){return String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);}
+
+const totalWords = ()=>SURAH.ayahs.reduce((s,a)=>s+a.words.length,0);
+let hiddenMap={};
+
+function setMode(mode){
+  ['complete','order','gaps','recall'].forEach(m=>document.getElementById('mode-'+m).style.display=m===mode?'block':'none');
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['complete','order','gaps','recall'][i]===mode));
+  if(mode==='complete') buildComplete();
+  if(mode==='order')    buildOrder();
+  if(mode==='gaps')     buildGaps();
+  if(mode==='recall')   buildRecall();
+}
+
+function buildComplete(){
+  document.getElementById('complete-text').innerHTML=SURAH.ayahs.map(a=>
+    `<div class="ayah-row">${a.words.join(' ')} <span class="ayah-num-inline">${a.num}</span></div>`
+  ).join('');
+}
+
+function buildRecall(){
+  hiddenMap={};
+  SURAH.ayahs.forEach((a,ai)=>a.words.forEach((_,wi)=>{hiddenMap[`${ai}-${wi}`]=true;}));
+  const wrap=document.getElementById('recall-wrap'); wrap.innerHTML='';
+  SURAH.ayahs.forEach((ayah,ai)=>{
+    const card=document.createElement('div'); card.className='recall-ayah-card';
+    card.innerHTML=`<div class="recall-ayah-header"><div class="recall-num-badge">${ayah.num}</div><div class="recall-ayah-label">${ayah.label}</div></div><div class="recall-words" id="words-${ai}"></div><div class="recall-controls"><button class="ctrl-btn cb-show" onclick="showAyah(${ai})">👁️ اظهر</button><button class="ctrl-btn cb-hide" onclick="hideAyah(${ai})">🙈 اخفي</button></div>`;
+    wrap.appendChild(card); renderWords(ai);
+  });
+  updateProgress();
+}
+
+function renderWords(ai){
+  const c=document.getElementById(`words-${ai}`); if(!c)return; c.innerHTML='';
+  SURAH.ayahs[ai].words.forEach((w,wi)=>{
+    const k=`${ai}-${wi}`;
+    const t=document.createElement('div');
+    t.className='word-tile'+(hiddenMap[k]?' hidden':'');
+    t.textContent=w;
+    t.onclick=()=>{hiddenMap[k]=!hiddenMap[k];t.classList.toggle('hidden',hiddenMap[k]);if(!hiddenMap[k]){t.classList.add('pop');setTimeout(()=>t.classList.remove('pop'),400);}updateProgress();};
+    c.appendChild(t);
+  });
+}
+
+function showAyah(ai){SURAH.ayahs[ai].words.forEach((_,wi)=>{hiddenMap[`${ai}-${wi}`]=false;});renderWords(ai);updateProgress();}
+function hideAyah(ai){SURAH.ayahs[ai].words.forEach((_,wi)=>{hiddenMap[`${ai}-${wi}`]=true;});renderWords(ai);updateProgress();}
+function showAll(){Object.keys(hiddenMap).forEach(k=>hiddenMap[k]=false);SURAH.ayahs.forEach((_,ai)=>renderWords(ai));updateProgress();}
+function hideAll(){Object.keys(hiddenMap).forEach(k=>hiddenMap[k]=true);SURAH.ayahs.forEach((_,ai)=>renderWords(ai));updateProgress();}
+
+function updateProgress(){
+  const shown=Object.values(hiddenMap).filter(v=>!v).length, total=totalWords();
+  document.getElementById('rp-text').textContent=`${toAr(shown)} / ${toAr(total)} كلمة ظاهرة`;
+  document.getElementById('rp-fill').style.width=(shown/total*100)+'%';
+  document.getElementById('complete-badge').classList.toggle('show',shown===total);
+}
+
+function buildGaps(){
+  const wrap=document.getElementById('gaps-wrap'); wrap.innerHTML='';
+  SURAH.ayahs.forEach((ayah,ai)=>{
+    const hideIdx=ayah.words.map(()=>Math.random()>.5).map((h,i)=>h?i:-1).filter(i=>i>=0);
+    const div=document.createElement('div'); div.className='gaps-ayah';
+    div.innerHTML=`<div class="gaps-ayah-num">${ayah.label}</div><div class="gaps-text" id="gap-${ai}"></div>`;
+    wrap.appendChild(div);
+    const cont=document.getElementById(`gap-${ai}`);
+    ayah.words.forEach((w,wi)=>{
+      if(hideIdx.includes(wi)){
+        const inp=document.createElement('input');
+        inp.style.cssText=`font-family:'Amiri Quran','Amiri',serif;font-size:clamp(20px,3vw,28px);width:${Math.max(80,w.length*20)}px;text-align:center;background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.3);border-radius:10px;color:var(--gold);padding:5px 8px;outline:none;direction:rtl;line-height:1.8`;
+        inp.dataset.correct=w;
+        inp.addEventListener('input',()=>{if(inp.value.trim()===w){inp.style.background='rgba(0,200,83,.15)';inp.style.borderColor='rgba(0,200,83,.5)';inp.style.color='var(--green)';inp.disabled=true;}});
+        cont.appendChild(inp);
+      } else {
+        const span=document.createElement('span');
+        span.style.cssText=`font-family:'Amiri Quran','Amiri',serif;font-size:clamp(20px,3vw,28px);color:var(--white);line-height:1.8;padding:4px 5px`;
+        span.textContent=w; cont.appendChild(span);
+      }
+    });
+  });
+}
+
+function buildOrder(){
+  const wrap=document.getElementById('order-wrap'); wrap.innerHTML='';
+  SURAH.ayahs.forEach((ayah,ai)=>{
+    const shuffled=[...ayah.words].sort(()=>Math.random()-.5);
+    const div=document.createElement('div'); div.className='order-ayah';
+    div.innerHTML=`<div class="order-ayah-num">${ayah.label}</div><div class="order-words" id="src-${ai}">${shuffled.map(w=>`<div class="drag-word" draggable="true" data-word="${w}">${w}</div>`).join('')}</div><div style="font-size:12px;color:rgba(255,255,255,.25);font-weight:600;margin:8px 0 4px">رتّب هنا:</div><div class="order-drop-zone" id="dst-${ai}"><span class="drop-placeholder">اسحب الكلمات</span></div><button class="check-order-btn" onclick="checkOrder(${ai})">✔ تحقق</button>`;
+    wrap.appendChild(div); addDrag(ai);
+  });
+}
+
+function addDrag(ai){
+  const src=document.getElementById(`src-${ai}`),dst=document.getElementById(`dst-${ai}`);
+  [src,dst].forEach(z=>{
+    z.addEventListener('dragover',e=>{e.preventDefault();z.classList.add('drag-over');});
+    z.addEventListener('dragleave',()=>z.classList.remove('drag-over'));
+    z.addEventListener('drop',e=>{e.preventDefault();z.classList.remove('drag-over');const w=e.dataTransfer.getData('text/plain');const el=document.querySelector(`.drag-word[data-word="${w}"]`);if(el){const ph=z.querySelector('.drop-placeholder');if(ph)ph.remove();z.appendChild(el);}});
+  });
+  src.querySelectorAll('.drag-word').forEach(el=>{
+    el.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',el.dataset.word);el.classList.add('dragging');});
+    el.addEventListener('dragend',()=>el.classList.remove('dragging'));
+  });
+}
+
+function checkOrder(ai){
+  const dst=document.getElementById(`dst-${ai}`);
+  const placed=[...dst.querySelectorAll('.drag-word')].map(e=>e.dataset.word);
+  const correct=SURAH.ayahs[ai].words;
+  if(placed.length!==correct.length){alert('رتّب كل الكلمات أولاً!');return;}
+  let ok=true;
+  [...dst.querySelectorAll('.drag-word')].forEach((el,i)=>{el.classList.add(el.dataset.word===correct[i]?'correct':'wrong');if(el.dataset.word!==correct[i])ok=false;});
+  if(ok)setTimeout(()=>alert('ما شاء الله! الترتيب صحيح ✅'),200);
+}
+
+// Stars
+(function(){
+  const c=document.getElementById('stars');
+  for(let i=0;i<55;i++){
+    const s=document.createElement('div');s.className='star';
+    const sz=Math.random()*2.5+0.5;
+    s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;animation-duration:${1.5+Math.random()*3}s;animation-delay:${Math.random()*3}s`;
+    c.appendChild(s);
+  }
+})();
+</script>
+</body>
+</html>

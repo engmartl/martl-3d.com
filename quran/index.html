@@ -1,70 +1,81 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Martl 3D | Quran</title>
-<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<title>القرآن الكريم | Martl 3D</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
-  :root{--gold:#D4AF37;--gold2:#F5E27A;--green:#00C853;--dark:#04080f;--dark2:#070f1a;--border:rgba(212,175,55,0.2);--white:#fff}
+  :root{--gold:#D4AF37;--green:#00C853;--dark:#04080f;--border:rgba(212,175,55,0.2);--white:#fff}
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
-  body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--dark);color:var(--white);min-height:100vh;overflow-x:hidden}
-  body.ar{font-family:'Cairo',sans-serif;direction:rtl}
-  .en{display:inline}.arc{display:none}
-  body.ar .en{display:none}body.ar .arc{display:inline}
-
-  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(0,100,50,0.12) 0%,transparent 60%);pointer-events:none;z-index:0}
+  body{font-family:'Cairo',sans-serif;background:var(--dark);color:var(--white);min-height:100vh;overflow-x:hidden;direction:rtl}
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,80,40,0.12) 0%,transparent 60%);pointer-events:none;z-index:0}
   #stars-bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
   .star{position:absolute;background:white;border-radius:50%;animation:twinkle ease-in-out infinite alternate}
   @keyframes twinkle{from{opacity:.04}to{opacity:.5}}
 
-  nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:14px 6%;background:rgba(4,8,15,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-  .logo{font-family:'Cairo',sans-serif;font-size:22px;font-weight:900;background:linear-gradient(90deg,#FF4E8E,#FFD700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none}
-  .nav-right{display:flex;align-items:center;gap:14px}
+  nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:14px 6%;background:rgba(4,8,15,0.93);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+  .logo{font-family:'Cairo',sans-serif;font-size:20px;font-weight:900;background:linear-gradient(90deg,#FF4E8E,#FFD700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none}
   .back-link{color:rgba(255,255,255,.5);text-decoration:none;font-size:14px;font-weight:700;transition:color .2s}
   .back-link:hover{color:var(--gold)}
-  #lang-toggle{display:flex;align-items:center;background:rgba(255,255,255,.08);border:1px solid var(--border);border-radius:50px;overflow:hidden;cursor:pointer}
-  .lang-opt{padding:7px 14px;font-size:12px;font-weight:700;color:rgba(255,255,255,.4);user-select:none;transition:all .2s}
-  .lang-opt.active{background:linear-gradient(135deg,#00C853,#00897B);color:white;border-radius:50px}
 
-  main{position:relative;z-index:1;padding:100px 6% 80px;max-width:900px;margin:0 auto}
+  main{position:relative;z-index:1;padding:90px 5% 60px;max-width:920px;margin:0 auto}
 
-  /* Hero */
-  .hero{text-align:center;margin-bottom:60px}
-  .hero-icon{font-size:64px;display:block;margin-bottom:14px;filter:drop-shadow(0 4px 20px rgba(212,175,55,.4));animation:float 3s ease-in-out infinite alternate}
+  /* HERO */
+  .hero{text-align:center;margin-bottom:36px}
+  .hero-icon{font-size:60px;display:block;margin-bottom:12px;filter:drop-shadow(0 4px 20px rgba(212,175,55,.4));animation:float 3s ease-in-out infinite alternate}
   @keyframes float{from{transform:translateY(0)}to{transform:translateY(-12px)}}
-  .breadcrumb{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,.35);font-weight:600;margin-bottom:18px}
-  .breadcrumb a{color:rgba(255,255,255,.35);text-decoration:none;transition:color .2s}
-  .breadcrumb a:hover{color:var(--gold)}
-  h1{font-family:'Amiri',serif;font-size:clamp(38px,6vw,64px);color:var(--gold);margin-bottom:12px;text-shadow:0 2px 20px rgba(212,175,55,.25)}
-  .hero-sub{font-size:16px;color:rgba(255,255,255,.5);font-weight:600;line-height:1.7}
+  .hero-title{font-family:'Amiri',serif;font-size:clamp(38px,6vw,64px);color:var(--gold);margin-bottom:8px;text-shadow:0 2px 20px rgba(212,175,55,.25)}
+  .hero-sub{font-size:15px;color:rgba(255,255,255,.45);font-weight:600;line-height:1.7}
 
-  /* Section label */
-  .sec-label{font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:22px;display:flex;align-items:center;gap:10px}
+  /* SEARCH */
+  .search-wrap{position:relative;max-width:580px;margin:0 auto 36px}
+  .search-input{width:100%;padding:15px 52px 15px 22px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:50px;color:var(--white);font-family:'Cairo',sans-serif;font-size:16px;font-weight:600;outline:none;transition:all .2s}
+  .search-input:focus{border-color:rgba(212,175,55,.5);background:rgba(255,255,255,.09)}
+  .search-input::placeholder{color:rgba(255,255,255,.28)}
+  .search-icon{position:absolute;left:18px;top:50%;transform:translateY(-50%);font-size:20px;pointer-events:none}
+
+  /* SEARCH RESULTS POPUP */
+  #search-results{display:none;position:absolute;top:calc(100% + 8px);left:0;right:0;background:#0d1520;border:1px solid var(--border);border-radius:20px;overflow:hidden;z-index:100;box-shadow:0 16px 48px rgba(0,0,0,.6);max-height:380px;overflow-y:auto}
+  .sr-item{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;text-decoration:none;color:inherit;transition:background .2s;border-bottom:1px solid rgba(255,255,255,.04)}
+  .sr-item:last-child{border-bottom:none}
+  .sr-item:hover{background:rgba(212,175,55,.08)}
+  .sr-left{display:flex;align-items:center;gap:12px}
+  .sr-num{width:34px;height:34px;border-radius:50%;background:rgba(212,175,55,.1);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Amiri',serif;font-size:13px;color:var(--gold);flex-shrink:0}
+  .sr-name-ar{font-family:'Amiri',serif;font-size:20px;color:var(--white)}
+  .sr-name-en{font-size:12px;color:rgba(255,255,255,.35);font-weight:600}
+  .sr-right{display:flex;align-items:center;gap:8px}
+  .sr-juz{font-size:11px;font-weight:700;padding:3px 10px;border-radius:50px;background:rgba(212,175,55,.08);border:1px solid var(--border);color:rgba(212,175,55,.7)}
+  .sr-available{font-size:11px;font-weight:700;padding:3px 10px;border-radius:50px;background:rgba(0,200,83,.1);border:1px solid rgba(0,200,83,.3);color:#00C853}
+  .sr-locked{font-size:11px;font-weight:700;padding:3px 10px;border-radius:50px;background:rgba(255,255,255,.05);color:rgba(255,255,255,.3)}
+  .no-sr{padding:28px;text-align:center;color:rgba(255,255,255,.3);font-size:14px;font-weight:600}
+
+  /* SECTION LABEL */
+  .sec-label{font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:10px}
   .sec-label::after{content:'';flex:1;height:1px;background:var(--border)}
 
-  /* Surah cards */
-  .surahs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;margin-bottom:48px}
+  /* JUZ CARDS */
+  .juz-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:48px}
 
-  .surah-card{border-radius:22px;overflow:hidden;border:1px solid var(--border);text-decoration:none;color:inherit;display:block;background:rgba(255,255,255,.03);transition:transform .3s,box-shadow .3s,border-color .3s;position:relative}
-  .surah-card:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(0,0,0,.5);border-color:rgba(212,175,55,.4)}
-  .surah-card.locked{cursor:default;opacity:.6}
-  .surah-card.locked:hover{transform:none;box-shadow:none}
+  .juz-card{border-radius:22px;overflow:hidden;border:1px solid var(--border);text-decoration:none;color:inherit;display:block;background:rgba(255,255,255,.03);transition:transform .3s,box-shadow .3s,border-color .3s}
+  .juz-card:hover{transform:translateY(-6px);box-shadow:0 20px 56px rgba(0,0,0,.5);border-color:rgba(212,175,55,.38)}
 
-  .surah-cover{height:120px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:linear-gradient(135deg,#040c08,#071a0f)}
-  .surah-cover-glow{position:absolute;width:150px;height:150px;border-radius:50%;filter:blur(40px);opacity:0.25;background:var(--green)}
-  .surah-num{position:absolute;top:12px;right:14px;width:32px;height:32px;border-radius:50%;background:rgba(212,175,55,.15);border:1px solid rgba(212,175,55,.3);display:flex;align-items:center;justify-content:center;font-family:'Amiri',serif;font-size:15px;color:var(--gold)}
-  .surah-arabic{font-family:'Amiri',serif;font-size:32px;color:var(--gold2);position:relative;z-index:2;text-shadow:0 2px 10px rgba(212,175,55,.3)}
-  .surah-info{padding:16px 18px}
-  .surah-title{font-family:'Amiri',serif;font-size:20px;color:var(--gold);margin-bottom:4px}
-  .surah-title-en{font-size:13px;color:rgba(255,255,255,.4);font-weight:600;margin-bottom:10px}
-  .surah-meta{display:flex;gap:8px;flex-wrap:wrap}
-  .meta-tag{font-size:11px;font-weight:700;padding:3px 10px;border-radius:50px;background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.2);color:rgba(212,175,55,.8)}
-  .play-tag{background:linear-gradient(135deg,var(--green),#00897B);color:white;border:none;margin-top:10px;display:inline-flex;align-items:center;gap:5px;padding:8px 18px;border-radius:50px;font-size:13px;font-weight:700}
-  .lock-tag{background:rgba(255,255,255,.06);color:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.1);margin-top:10px;display:inline-flex;align-items:center;gap:5px;padding:8px 18px;border-radius:50px;font-size:13px;font-weight:700}
+  .juz-cover{height:110px;display:flex;align-items:center;gap:16px;padding:0 22px;position:relative;overflow:hidden}
+  .juz-glow{position:absolute;width:140px;height:140px;border-radius:50%;filter:blur(50px);opacity:.22;right:20px;top:50%;transform:translateY(-50%)}
+  .juz-icon{font-size:44px;position:relative;z-index:2;filter:drop-shadow(0 2px 10px rgba(0,0,0,.4))}
+  .juz-text{position:relative;z-index:2}
+  .juz-name{font-family:'Amiri',serif;font-size:26px;margin-bottom:4px}
+  .juz-range{font-size:12px;color:rgba(255,255,255,.4);font-weight:600}
 
-  footer{position:relative;z-index:1;background:rgba(4,8,15,.8);border-top:1px solid var(--border);padding:28px 6%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+  .juz-info{padding:14px 18px 16px;border-top:1px solid rgba(255,255,255,.05);display:flex;align-items:center;justify-content:space-between}
+  .juz-stats{display:flex;gap:8px;flex-wrap:wrap}
+  .juz-pill{font-size:11px;font-weight:700;padding:3px 10px;border-radius:50px;background:rgba(212,175,55,.07);border:1px solid var(--border);color:rgba(212,175,55,.7)}
+  .avail-pill{background:rgba(0,200,83,.1);border-color:rgba(0,200,83,.3);color:#00C853}
+  .juz-arrow{font-family:'Amiri',serif;font-size:22px;color:rgba(212,175,55,.4)}
+  .soon-badge{font-size:11px;font-weight:700;color:rgba(255,255,255,.25)}
+
+  footer{position:relative;z-index:1;background:rgba(4,8,15,.8);border-top:1px solid var(--border);padding:24px 6%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-top:20px}
   .footer-logo{font-family:'Cairo',sans-serif;font-size:18px;font-weight:900;background:linear-gradient(90deg,#FF4E8E,#FFD700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none}
   .footer-copy{font-size:12px;color:rgba(255,255,255,.2);font-weight:600}
 </style>
@@ -73,121 +84,104 @@
 <div id="stars-bg"></div>
 
 <nav>
-  <a class="logo" href="../index.html">Martl 3D 🎮</a>
-  <div class="nav-right">
-    <a class="back-link" href="../index.html">← <span class="en">All Subjects</span><span class="arc">كل المواد</span></a>
-    <div id="lang-toggle" onclick="toggleLang()">
-      <div class="lang-opt active" id="opt-en">EN</div>
-      <div class="lang-opt" id="opt-ar">عر</div>
-    </div>
-  </div>
+  <a class="back-link" href="../index.html">← كل المواد</a>
+  <div style="font-family:'Cairo',sans-serif;font-size:15px;font-weight:700;color:rgba(255,255,255,.7)">📖 القرآن الكريم</div>
+  <a class="logo" href="../index.html">Martl 3D</a>
 </nav>
 
 <main>
   <div class="hero">
-    <div class="breadcrumb">
-      <a href="../index.html">Martl 3D</a> › <span><span class="en">Holy Quran</span><span class="arc">القرآن الكريم</span></span>
-    </div>
     <span class="hero-icon">📖</span>
-    <h1><span class="en">Holy Quran</span><span class="arc">القرآن الكريم</span></h1>
-    <p class="hero-sub"><span class="en">Interactive memorization games — word by word, ayah by ayah</span><span class="arc">ألعاب حفظ تفاعلية — كلمة كلمة، آية آية</span></p>
+    <div class="hero-title">القرآن الكريم</div>
+    <p class="hero-sub">ألعاب حفظ تفاعلية — كلمة كلمة، آية آية، سورة سورة</p>
   </div>
 
-  <div class="sec-label">📖 <span class="en">Surahs</span><span class="arc">السور</span></div>
-
-  <!-- Juz Amma -->
-  <div style="width:100%;max-width:900px;margin-bottom:22px">
-    <a href="juz-amma.html" style="display:flex;align-items:center;justify-content:space-between;padding:20px 28px;background:linear-gradient(135deg,rgba(212,175,55,.08),rgba(212,175,55,.03));border:1px solid var(--border);border-radius:22px;text-decoration:none;color:inherit;transition:transform .3s,box-shadow .3s,border-color .3s" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 16px 48px rgba(0,0,0,.4)';this.style.borderColor='rgba(212,175,55,.4)'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='rgba(212,175,55,0.2)'">
-      <div style="display:flex;align-items:center;gap:16px">
-        <div style="font-size:44px;filter:drop-shadow(0 2px 10px rgba(212,175,55,.4))">🌙</div>
-        <div>
-          <div style="font-family:'Amiri',serif;font-size:28px;color:var(--gold);margin-bottom:4px">جزء عمّ</div>
-          <div style="font-size:13px;color:rgba(255,255,255,.4);font-weight:600">الجزء الثلاثون • ٣٧ سورة • من النبأ إلى الناس</div>
-        </div>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <span style="background:rgba(0,200,83,.15);border:1px solid rgba(0,200,83,.3);color:#00C853;font-size:12px;font-weight:700;padding:4px 12px;border-radius:50px">١ متاحة</span>
-        <span style="font-family:'Amiri',serif;font-size:24px;color:rgba(212,175,55,.5)">←</span>
-      </div>
-    </a>
+  <!-- SEARCH -->
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input class="search-input" type="text" id="search-input" placeholder="ابحث عن أي سورة في القرآن..." oninput="searchSurah(this.value)" onblur="setTimeout(()=>hideResults(),200)">
+    <div id="search-results"></div>
   </div>
 
-  <div class="surahs-grid">
+  <!-- AJZAA -->
+  <div class="sec-label">📚 الأجزاء</div>
+  <div class="juz-grid">
 
-    <!-- Al-Fatiha ✅ -->
-    <a class="surah-card" href="al-fatiha.html">
-      <div class="surah-cover">
-        <div class="surah-cover-glow"></div>
-        <div class="surah-num">١</div>
-        <div class="surah-arabic">الفاتحة</div>
-      </div>
-      <div class="surah-info">
-        <div class="surah-title">سورة الفاتحة</div>
-        <div class="surah-title-en"><span class="en">Al-Fatiha • The Opening</span><span class="arc">الفاتحة • أم الكتاب</span></div>
-        <div class="surah-meta">
-          <span class="meta-tag"><span class="en">7 Ayahs</span><span class="arc">٧ آيات</span></span>
-          <span class="meta-tag"><span class="en">Meccan</span><span class="arc">مكية</span></span>
-          <span class="meta-tag">✅ <span class="en">Available</span><span class="arc">متاحة</span></span>
+    <!-- جزء عمّ ✅ -->
+    <a class="juz-card" href="juz-amma.html">
+      <div class="juz-cover" style="background:linear-gradient(135deg,#04100a,#071a10)">
+        <div class="juz-glow" style="background:#00C853"></div>
+        <div class="juz-icon">🌙</div>
+        <div class="juz-text">
+          <div class="juz-name" style="color:#A5D6A7">جزء عمّ</div>
+          <div class="juz-range">من سورة النبأ إلى سورة الناس</div>
         </div>
-        <div class="play-tag">▶ <span class="en">Start Memorizing</span><span class="arc">ابدأ الحفظ</span></div>
+      </div>
+      <div class="juz-info">
+        <div class="juz-stats">
+          <span class="juz-pill">الجزء ٣٠</span>
+          <span class="juz-pill">٣٧ سورة</span>
+          <span class="juz-pill avail-pill">٣ متاحة ✅</span>
+        </div>
+        <div class="juz-arrow">←</div>
       </div>
     </a>
 
-    <!-- Al-Ikhlas ✅ -->
-    <a class="surah-card" href="al-ikhlas.html">
-      <div class="surah-cover" style="background:linear-gradient(135deg,#050c14,#0a1e36)">
-        <div class="surah-cover-glow" style="background:#2196F3"></div>
-        <div class="surah-num">١١٢</div>
-        <div class="surah-arabic" style="color:#90CAF9">الإخلاص</div>
-      </div>
-      <div class="surah-info">
-        <div class="surah-title" style="color:#90CAF9">سورة الإخلاص</div>
-        <div class="surah-title-en"><span class="en">Al-Ikhlas • Sincerity</span><span class="arc">الإخلاص • التوحيد</span></div>
-        <div class="surah-meta">
-          <span class="meta-tag"><span class="en">4 Ayahs</span><span class="arc">٤ آيات</span></span>
-          <span class="meta-tag"><span class="en">Meccan</span><span class="arc">مكية</span></span>
-          <span class="meta-tag">✅ <span class="en">Available</span><span class="arc">متاحة</span></span>
+    <!-- جزء تبارك 🔒 -->
+    <div class="juz-card" style="opacity:.5;cursor:default">
+      <div class="juz-cover" style="background:linear-gradient(135deg,#080414,#100828)">
+        <div class="juz-glow" style="background:#9C27B0"></div>
+        <div class="juz-icon">⭐</div>
+        <div class="juz-text">
+          <div class="juz-name" style="color:#CE93D8">جزء تبارك</div>
+          <div class="juz-range">من سورة الملك إلى سورة المرسلات</div>
         </div>
-        <div class="play-tag">▶ <span class="en">Start Memorizing</span><span class="arc">ابدأ الحفظ</span></div>
       </div>
-    </a>
-
-    <!-- Al-Maarij ✅ -->
-    <a class="surah-card" href="al-maarij.html">
-      <div class="surah-cover" style="background:linear-gradient(135deg,#0a0505,#241010)">
-        <div class="surah-cover-glow" style="background:#FF6B35"></div>
-        <div class="surah-num">٧٠</div>
-        <div class="surah-arabic" style="color:#FFAB76">المعارج</div>
-      </div>
-      <div class="surah-info">
-        <div class="surah-title" style="color:#FFAB76">سورة المعارج</div>
-        <div class="surah-title-en"><span class="en">Al-Maarij • The Ascending Stairways</span><span class="arc">المعارج • ذو المعارج</span></div>
-        <div class="surah-meta">
-          <span class="meta-tag"><span class="en">44 Ayahs</span><span class="arc">٤٤ آية</span></span>
-          <span class="meta-tag"><span class="en">Meccan</span><span class="arc">مكية</span></span>
-          <span class="meta-tag">✅ <span class="en">Available</span><span class="arc">متاحة</span></span>
+      <div class="juz-info">
+        <div class="juz-stats">
+          <span class="juz-pill">الجزء ٢٩</span>
+          <span class="juz-pill">١١ سورة</span>
         </div>
-        <div class="play-tag" style="background:linear-gradient(135deg,#FF6B35,#FF4E8E)">▶ <span class="en">Start Memorizing</span><span class="arc">ابدأ الحفظ</span></div>
-      </div>
-    </a>
-
-    <!-- Al-Falaq 🔒 -->
-    <div class="surah-card locked">
-      <div class="surah-cover" style="background:linear-gradient(135deg,#0c0814,#1a0f28)">
-        <div class="surah-cover-glow" style="background:#9C27B0"></div>
-        <div class="surah-num">١١٣</div>
-        <div class="surah-arabic" style="color:#CE93D8">الفلق</div>
-      </div>
-      <div class="surah-info">
-        <div class="surah-title" style="color:#CE93D8">سورة الفلق</div>
-        <div class="surah-title-en"><span class="en">Al-Falaq • The Daybreak</span><span class="arc">الفلق • قل أعوذ برب الفلق</span></div>
-        <div class="surah-meta">
-          <span class="meta-tag"><span class="en">5 Ayahs</span><span class="arc">٥ آيات</span></span>
-          <span class="meta-tag"><span class="en">Meccan</span><span class="arc">مكية</span></span>
-        </div>
-        <div class="lock-tag">🔒 <span class="en">Coming Soon</span><span class="arc">قريباً</span></div>
+        <div class="soon-badge">🔒 قريباً</div>
       </div>
     </div>
+
+    <!-- جزء قد سمع 🔒 -->
+    <div class="juz-card" style="opacity:.5;cursor:default">
+      <div class="juz-cover" style="background:linear-gradient(135deg,#040c18,#081828)">
+        <div class="juz-glow" style="background:#2196F3"></div>
+        <div class="juz-icon">💫</div>
+        <div class="juz-text">
+          <div class="juz-name" style="color:#90CAF9">جزء قد سمع</div>
+          <div class="juz-range">من سورة المجادلة إلى سورة التحريم</div>
+        </div>
+      </div>
+      <div class="juz-info">
+        <div class="juz-stats">
+          <span class="juz-pill">الجزء ٢٨</span>
+          <span class="juz-pill">٩ سور</span>
+        </div>
+        <div class="soon-badge">🔒 قريباً</div>
+      </div>
+    </div>
+
+    <!-- سور مميزة -->
+    <a class="juz-card" href="al-fatiha.html">
+      <div class="juz-cover" style="background:linear-gradient(135deg,#080a04,#141a08)">
+        <div class="juz-glow" style="background:#FFD700"></div>
+        <div class="juz-icon">🌟</div>
+        <div class="juz-text">
+          <div class="juz-name" style="color:#FFD700">سور مميزة</div>
+          <div class="juz-range">الفاتحة والمعارج والإخلاص</div>
+        </div>
+      </div>
+      <div class="juz-info">
+        <div class="juz-stats">
+          <span class="juz-pill avail-pill">٣ سور ✅</span>
+        </div>
+        <div class="juz-arrow">←</div>
+      </div>
+    </a>
 
   </div>
 </main>
@@ -198,25 +192,177 @@
 </footer>
 
 <script>
+// ══════════════════════════════
+// ALL SURAHS DATABASE (بيانات كل السور للبحث)
+// ══════════════════════════════
+const ALL_SURAHS = [
+  {num:1,  ar:'الفاتحة',   en:'Al-Fatiha',    ayahs:7,  juz:'١',    available:true,  file:'al-fatiha.html'},
+  {num:2,  ar:'البقرة',    en:'Al-Baqarah',   ayahs:286,juz:'١-٣',  available:false},
+  {num:3,  ar:'آل عمران',  en:'Al-Imran',     ayahs:200,juz:'٣-٤',  available:false},
+  {num:4,  ar:'النساء',    en:'An-Nisa',      ayahs:176,juz:'٤-٦',  available:false},
+  {num:5,  ar:'المائدة',   en:'Al-Maidah',    ayahs:120,juz:'٦-٧',  available:false},
+  {num:6,  ar:'الأنعام',   en:'Al-Anam',      ayahs:165,juz:'٧-٨',  available:false},
+  {num:7,  ar:'الأعراف',   en:'Al-Araf',      ayahs:206,juz:'٨-٩',  available:false},
+  {num:8,  ar:'الأنفال',   en:'Al-Anfal',     ayahs:75, juz:'٩-١٠', available:false},
+  {num:9,  ar:'التوبة',    en:'At-Tawbah',    ayahs:129,juz:'١٠-١١',available:false},
+  {num:10, ar:'يونس',      en:'Yunus',        ayahs:109,juz:'١١',   available:false},
+  {num:11, ar:'هود',       en:'Hud',          ayahs:123,juz:'١١-١٢',available:false},
+  {num:12, ar:'يوسف',      en:'Yusuf',        ayahs:111,juz:'١٢-١٣',available:false},
+  {num:13, ar:'الرعد',     en:'Ar-Rad',       ayahs:43, juz:'١٣',   available:false},
+  {num:14, ar:'إبراهيم',   en:'Ibrahim',      ayahs:52, juz:'١٣',   available:false},
+  {num:15, ar:'الحجر',     en:'Al-Hijr',      ayahs:99, juz:'١٤',   available:false},
+  {num:16, ar:'النحل',     en:'An-Nahl',      ayahs:128,juz:'١٤',   available:false},
+  {num:17, ar:'الإسراء',   en:'Al-Isra',      ayahs:111,juz:'١٥',   available:false},
+  {num:18, ar:'الكهف',     en:'Al-Kahf',      ayahs:110,juz:'١٥-١٦',available:false},
+  {num:19, ar:'مريم',      en:'Maryam',       ayahs:98, juz:'١٦',   available:false},
+  {num:20, ar:'طه',        en:'Ta-Ha',        ayahs:135,juz:'١٦',   available:false},
+  {num:21, ar:'الأنبياء',  en:'Al-Anbiya',    ayahs:112,juz:'١٧',   available:false},
+  {num:22, ar:'الحج',      en:'Al-Hajj',      ayahs:78, juz:'١٧',   available:false},
+  {num:23, ar:'المؤمنون',  en:'Al-Muminun',   ayahs:118,juz:'١٨',   available:false},
+  {num:24, ar:'النور',     en:'An-Nur',       ayahs:64, juz:'١٨',   available:false},
+  {num:25, ar:'الفرقان',   en:'Al-Furqan',    ayahs:77, juz:'١٨-١٩',available:false},
+  {num:26, ar:'الشعراء',   en:'Ash-Shuara',   ayahs:227,juz:'١٩',   available:false},
+  {num:27, ar:'النمل',     en:'An-Naml',      ayahs:93, juz:'١٩-٢٠',available:false},
+  {num:28, ar:'القصص',     en:'Al-Qasas',     ayahs:88, juz:'٢٠',   available:false},
+  {num:29, ar:'العنكبوت',  en:'Al-Ankabut',   ayahs:69, juz:'٢٠-٢١',available:false},
+  {num:30, ar:'الروم',     en:'Ar-Rum',       ayahs:60, juz:'٢١',   available:false},
+  {num:31, ar:'لقمان',     en:'Luqman',       ayahs:34, juz:'٢١',   available:false},
+  {num:32, ar:'السجدة',    en:'As-Sajdah',    ayahs:30, juz:'٢١',   available:false},
+  {num:33, ar:'الأحزاب',   en:'Al-Ahzab',     ayahs:73, juz:'٢١-٢٢',available:false},
+  {num:34, ar:'سبأ',       en:'Saba',         ayahs:54, juz:'٢٢',   available:false},
+  {num:35, ar:'فاطر',      en:'Fatir',        ayahs:45, juz:'٢٢',   available:false},
+  {num:36, ar:'يس',        en:'Ya-Sin',       ayahs:83, juz:'٢٢-٢٣',available:false},
+  {num:37, ar:'الصافات',   en:'As-Saffat',    ayahs:182,juz:'٢٣',   available:false},
+  {num:38, ar:'ص',         en:'Sad',          ayahs:88, juz:'٢٣',   available:false},
+  {num:39, ar:'الزمر',     en:'Az-Zumar',     ayahs:75, juz:'٢٣-٢٤',available:false},
+  {num:40, ar:'غافر',      en:'Ghafir',       ayahs:85, juz:'٢٤',   available:false},
+  {num:41, ar:'فصلت',      en:'Fussilat',     ayahs:54, juz:'٢٤-٢٥',available:false},
+  {num:42, ar:'الشورى',    en:'Ash-Shura',    ayahs:53, juz:'٢٥',   available:false},
+  {num:43, ar:'الزخرف',    en:'Az-Zukhruf',   ayahs:89, juz:'٢٥',   available:false},
+  {num:44, ar:'الدخان',    en:'Ad-Dukhan',    ayahs:59, juz:'٢٥',   available:false},
+  {num:45, ar:'الجاثية',   en:'Al-Jathiyah',  ayahs:37, juz:'٢٥',   available:false},
+  {num:46, ar:'الأحقاف',   en:'Al-Ahqaf',     ayahs:35, juz:'٢٦',   available:false},
+  {num:47, ar:'محمد',      en:'Muhammad',     ayahs:38, juz:'٢٦',   available:false},
+  {num:48, ar:'الفتح',     en:'Al-Fath',      ayahs:29, juz:'٢٦',   available:false},
+  {num:49, ar:'الحجرات',   en:'Al-Hujurat',   ayahs:18, juz:'٢٦',   available:false},
+  {num:50, ar:'ق',         en:'Qaf',          ayahs:45, juz:'٢٦',   available:false},
+  {num:51, ar:'الذاريات',  en:'Adh-Dhariyat', ayahs:60, juz:'٢٦-٢٧',available:false},
+  {num:52, ar:'الطور',     en:'At-Tur',       ayahs:49, juz:'٢٧',   available:false},
+  {num:53, ar:'النجم',     en:'An-Najm',      ayahs:62, juz:'٢٧',   available:false},
+  {num:54, ar:'القمر',     en:'Al-Qamar',     ayahs:55, juz:'٢٧',   available:false},
+  {num:55, ar:'الرحمن',    en:'Ar-Rahman',    ayahs:78, juz:'٢٧',   available:false},
+  {num:56, ar:'الواقعة',   en:'Al-Waqiah',    ayahs:96, juz:'٢٧',   available:false},
+  {num:57, ar:'الحديد',    en:'Al-Hadid',     ayahs:29, juz:'٢٧',   available:false},
+  {num:58, ar:'المجادلة',  en:'Al-Mujadila',  ayahs:22, juz:'٢٨',   available:false},
+  {num:59, ar:'الحشر',     en:'Al-Hashr',     ayahs:24, juz:'٢٨',   available:false},
+  {num:60, ar:'الممتحنة',  en:'Al-Mumtahanah',ayahs:13, juz:'٢٨',   available:false},
+  {num:61, ar:'الصف',      en:'As-Saf',       ayahs:14, juz:'٢٨',   available:false},
+  {num:62, ar:'الجمعة',    en:'Al-Jumuah',    ayahs:11, juz:'٢٨',   available:false},
+  {num:63, ar:'المنافقون', en:'Al-Munafiqun', ayahs:11, juz:'٢٨',   available:false},
+  {num:64, ar:'التغابن',   en:'At-Taghabun',  ayahs:18, juz:'٢٨',   available:false},
+  {num:65, ar:'الطلاق',    en:'At-Talaq',     ayahs:12, juz:'٢٨',   available:false},
+  {num:66, ar:'التحريم',   en:'At-Tahrim',    ayahs:12, juz:'٢٨',   available:false},
+  {num:67, ar:'الملك',     en:'Al-Mulk',      ayahs:30, juz:'٢٩',   available:false},
+  {num:68, ar:'القلم',     en:'Al-Qalam',     ayahs:52, juz:'٢٩',   available:false},
+  {num:69, ar:'الحاقة',    en:'Al-Haqqah',    ayahs:52, juz:'٢٩',   available:false},
+  {num:70, ar:'المعارج',   en:'Al-Maarij',    ayahs:44, juz:'٢٩',   available:true,  file:'al-maarij.html'},
+  {num:71, ar:'نوح',       en:'Nuh',          ayahs:28, juz:'٢٩',   available:false},
+  {num:72, ar:'الجن',      en:'Al-Jinn',      ayahs:28, juz:'٢٩',   available:false},
+  {num:73, ar:'المزمل',    en:'Al-Muzzammil', ayahs:20, juz:'٢٩',   available:false},
+  {num:74, ar:'المدثر',    en:'Al-Muddaththir',ayahs:56,juz:'٢٩',   available:false},
+  {num:75, ar:'القيامة',   en:'Al-Qiyamah',   ayahs:40, juz:'٢٩',   available:false},
+  {num:76, ar:'الإنسان',   en:'Al-Insan',     ayahs:31, juz:'٢٩',   available:false},
+  {num:77, ar:'المرسلات',  en:'Al-Mursalat',  ayahs:50, juz:'٢٩',   available:false},
+  {num:78, ar:'النبأ',     en:'An-Naba',      ayahs:40, juz:'٣٠',   available:false},
+  {num:79, ar:'النازعات',  en:'An-Naziat',    ayahs:46, juz:'٣٠',   available:false},
+  {num:80, ar:'عبس',       en:'Abasa',        ayahs:42, juz:'٣٠',   available:false},
+  {num:81, ar:'التكوير',   en:'At-Takwir',    ayahs:29, juz:'٣٠',   available:false},
+  {num:82, ar:'الانفطار',  en:'Al-Infitar',   ayahs:19, juz:'٣٠',   available:false},
+  {num:83, ar:'المطففين',  en:'Al-Mutaffifin',ayahs:36, juz:'٣٠',   available:false},
+  {num:84, ar:'الانشقاق',  en:'Al-Inshiqaq',  ayahs:25, juz:'٣٠',   available:false},
+  {num:85, ar:'البروج',    en:'Al-Buruj',     ayahs:22, juz:'٣٠',   available:false},
+  {num:86, ar:'الطارق',    en:'At-Tariq',     ayahs:17, juz:'٣٠',   available:false},
+  {num:87, ar:'الأعلى',    en:'Al-Ala',       ayahs:19, juz:'٣٠',   available:false},
+  {num:88, ar:'الغاشية',   en:'Al-Ghashiyah', ayahs:26, juz:'٣٠',   available:false},
+  {num:89, ar:'الفجر',     en:'Al-Fajr',      ayahs:30, juz:'٣٠',   available:false},
+  {num:90, ar:'البلد',     en:'Al-Balad',     ayahs:20, juz:'٣٠',   available:false},
+  {num:91, ar:'الشمس',     en:'Ash-Shams',    ayahs:15, juz:'٣٠',   available:false},
+  {num:92, ar:'الليل',     en:'Al-Layl',      ayahs:21, juz:'٣٠',   available:false},
+  {num:93, ar:'الضحى',     en:'Ad-Duha',      ayahs:11, juz:'٣٠',   available:false},
+  {num:94, ar:'الشرح',     en:'Ash-Sharh',    ayahs:8,  juz:'٣٠',   available:false},
+  {num:95, ar:'التين',     en:'At-Tin',       ayahs:8,  juz:'٣٠',   available:false},
+  {num:96, ar:'العلق',     en:'Al-Alaq',      ayahs:19, juz:'٣٠',   available:false},
+  {num:97, ar:'القدر',     en:'Al-Qadr',      ayahs:5,  juz:'٣٠',   available:false},
+  {num:98, ar:'البينة',    en:'Al-Bayyinah',  ayahs:8,  juz:'٣٠',   available:false},
+  {num:99, ar:'الزلزلة',   en:'Az-Zalzalah',  ayahs:8,  juz:'٣٠',   available:false},
+  {num:100,ar:'العاديات',  en:'Al-Adiyat',    ayahs:11, juz:'٣٠',   available:false},
+  {num:101,ar:'القارعة',   en:'Al-Qariah',    ayahs:11, juz:'٣٠',   available:false},
+  {num:102,ar:'التكاثر',   en:'At-Takathur',  ayahs:8,  juz:'٣٠',   available:false},
+  {num:103,ar:'العصر',     en:'Al-Asr',       ayahs:3,  juz:'٣٠',   available:false},
+  {num:104,ar:'الهمزة',    en:'Al-Humazah',   ayahs:9,  juz:'٣٠',   available:false},
+  {num:105,ar:'الفيل',     en:'Al-Fil',       ayahs:5,  juz:'٣٠',   available:false},
+  {num:106,ar:'قريش',      en:'Quraysh',      ayahs:4,  juz:'٣٠',   available:false},
+  {num:107,ar:'الماعون',   en:'Al-Maun',      ayahs:7,  juz:'٣٠',   available:false},
+  {num:108,ar:'الكوثر',    en:'Al-Kawthar',   ayahs:3,  juz:'٣٠',   available:false},
+  {num:109,ar:'الكافرون',  en:'Al-Kafirun',   ayahs:6,  juz:'٣٠',   available:false},
+  {num:110,ar:'النصر',     en:'An-Nasr',      ayahs:3,  juz:'٣٠',   available:false},
+  {num:111,ar:'المسد',     en:'Al-Masad',     ayahs:5,  juz:'٣٠',   available:false},
+  {num:112,ar:'الإخلاص',   en:'Al-Ikhlas',    ayahs:4,  juz:'٣٠',   available:true,  file:'al-ikhlas.html'},
+  {num:113,ar:'الفلق',     en:'Al-Falaq',     ayahs:5,  juz:'٣٠',   available:false},
+  {num:114,ar:'الناس',     en:'An-Nas',       ayahs:6,  juz:'٣٠',   available:false},
+];
+
+function toAr(n){return String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);}
+
+function searchSurah(q){
+  const wrap=document.getElementById('search-results');
+  const term=q.trim().toLowerCase();
+  if(!term){wrap.style.display='none';return;}
+  const results=ALL_SURAHS.filter(s=>s.ar.includes(term)||s.en.toLowerCase().includes(term)).slice(0,8);
+  if(results.length===0){
+    wrap.innerHTML=`<div class="no-sr">لم يتم العثور على سورة 🔍</div>`;
+  } else {
+    wrap.innerHTML=results.map(s=>{
+      const tag=s.available
+        ?`<span class="sr-available">✅ متاحة</span>`
+        :`<span class="sr-locked">🔒 قريباً</span>`;
+      const href=s.available?`href="${s.file}"`:'';
+      return `<a class="sr-item" ${href} style="${!s.available?'cursor:default':''}">
+        <div class="sr-left">
+          <div class="sr-num">${toAr(s.num)}</div>
+          <div>
+            <div class="sr-name-ar">${s.ar}</div>
+            <div class="sr-name-en">${s.en} • ${toAr(s.ayahs)} آية</div>
+          </div>
+        </div>
+        <div class="sr-right">
+          <span class="sr-juz">ج${s.juz}</span>
+          ${tag}
+        </div>
+      </a>`;
+    }).join('');
+  }
+  wrap.style.display='block';
+}
+
+function hideResults(){
+  document.getElementById('search-results').style.display='none';
+}
+
+document.getElementById('search-input').addEventListener('focus',function(){
+  if(this.value.trim()) searchSurah(this.value);
+});
+
 // Stars
 (function(){
   const c=document.getElementById('stars-bg');
-  for(let i=0;i<50;i++){
+  for(let i=0;i<55;i++){
     const s=document.createElement('div');s.className='star';
-    const sz=Math.random()*2+0.5;
+    const sz=Math.random()*2.5+0.5;
     s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;animation-duration:${1.5+Math.random()*3}s;animation-delay:${Math.random()*3}s`;
     c.appendChild(s);
   }
 })();
-
-function toggleLang(){
-  const b=document.body,isAr=b.classList.contains('ar');
-  b.classList.toggle('ar',!isAr);
-  document.documentElement.lang=isAr?'en':'ar';
-  document.documentElement.dir=isAr?'ltr':'rtl';
-  document.getElementById('opt-en').classList.toggle('active',isAr);
-  document.getElementById('opt-ar').classList.toggle('active',!isAr);
-}
 </script>
 </body>
 </html>

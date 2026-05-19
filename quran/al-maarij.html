@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>سورة المعارج | Martl 3D</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{--gold:#D4AF37;--gold2:#F5E27A;--green:#00C853;--dark:#04080f;--dark2:#070f1a;--border:rgba(212,175,55,0.2);--white:#fff}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Cairo',sans-serif;background:var(--dark);color:var(--white);min-height:100vh;overflow-x:hidden;direction:rtl}
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,80,40,0.12) 0%,transparent 60%);pointer-events:none;z-index:0}
+  #stars{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+  .star{position:absolute;background:white;border-radius:50%;animation:twinkle ease-in-out infinite alternate}
+  @keyframes twinkle{from{opacity:.04}to{opacity:.55}}
+  nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:13px 5%;background:rgba(4,8,15,0.93);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+  .logo{font-family:'Cairo',sans-serif;font-size:20px;font-weight:900;background:linear-gradient(90deg,#FF4E8E,#FFD700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none}
+  .back-link{color:rgba(255,255,255,.5);text-decoration:none;font-size:14px;font-weight:700;transition:color .2s}
+  .back-link:hover{color:var(--gold)}
+  main{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:85px 4% 50px}
+  .surah-header{text-align:center;margin-bottom:24px;max-width:660px;width:100%}
+  .surah-icon{font-size:52px;display:block;margin-bottom:10px;filter:drop-shadow(0 2px 12px rgba(212,175,55,.4));animation:float 3s ease-in-out infinite alternate}
+  @keyframes float{from{transform:translateY(0)}to{transform:translateY(-10px)}}
+  .surah-name{font-family:'Amiri',serif;font-size:40px;color:var(--gold);margin-bottom:4px}
+  .surah-meta{font-size:13px;color:rgba(255,255,255,.4);font-weight:600;margin-bottom:14px}
+  .basmalah{font-family:'Amiri Quran','Amiri',serif;font-size:24px;color:rgba(212,175,55,.7);padding:10px 28px;background:rgba(212,175,55,.06);border:1px solid var(--border);border-radius:50px;display:inline-block}
+  .mode-tabs{display:flex;gap:6px;margin-bottom:28px;background:rgba(255,255,255,.05);padding:5px;border-radius:18px;border:1px solid var(--border);max-width:540px;width:100%}
+  .tab{flex:1;padding:10px 8px;border-radius:13px;border:none;cursor:pointer;font-family:'Cairo',sans-serif;font-size:13px;font-weight:700;color:rgba(255,255,255,.45);background:transparent;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:5px}
+  .tab.active{background:linear-gradient(135deg,var(--gold),#8a6500);color:#fff;box-shadow:0 3px 12px rgba(212,175,55,.3)}
+  .tab:hover:not(.active){color:rgba(255,255,255,.75);background:rgba(255,255,255,.06)}
+  .content-area{width:100%;max-width:720px}
+
+  /* COMPLETE */
+  .ayah-full{font-family:'Amiri Quran','Amiri',serif;font-size:clamp(22px,3.5vw,32px);line-height:2.6;text-align:center;color:var(--white);background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:24px;padding:28px 24px;direction:rtl}
+  .ayah-row{padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+  .ayah-row:last-child{border-bottom:none}
+  .ayah-num-inline{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:rgba(212,175,55,.15);border:1px solid rgba(212,175,55,.3);font-size:12px;color:var(--gold);font-family:'Cairo',sans-serif;font-weight:700;margin-left:8px;vertical-align:middle}
+
+  /* RECALL */
+  .global-ctrl{display:flex;gap:10px;justify-content:center;margin-bottom:18px;flex-wrap:wrap}
+  .gcb{font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;padding:11px 26px;border-radius:50px;border:none;cursor:pointer;transition:transform .2s}
+  .gcb:hover{transform:translateY(-2px)}
+  .gcb-show{background:linear-gradient(135deg,var(--green),#00897B);color:white;box-shadow:0 4px 16px rgba(0,200,83,.25)}
+  .gcb-hide{background:rgba(255,255,255,.08);color:rgba(255,255,255,.65);border:1px solid rgba(255,255,255,.12)}
+  .recall-progress{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:18px;font-size:13px;color:rgba(255,255,255,.4);font-weight:700}
+  .rp-bar{flex:1;max-width:220px;height:5px;background:rgba(255,255,255,.07);border-radius:5px;overflow:hidden}
+  .rp-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--gold));border-radius:5px;transition:width .4s ease}
+  .recall-ayah-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:24px;overflow:hidden;margin-bottom:16px}
+  .recall-ayah-header{display:flex;align-items:center;justify-content:center;gap:10px;padding:13px 20px;background:rgba(212,175,55,.07);border-bottom:1px solid var(--border)}
+  .recall-num-badge{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#8a6500);display:flex;align-items:center;justify-content:center;font-family:'Amiri',serif;font-size:14px;color:#fff;font-weight:700;box-shadow:0 2px 8px rgba(212,175,55,.3);flex-shrink:0}
+  .recall-ayah-label{font-size:13px;color:rgba(255,255,255,.5);font-weight:700}
+  .recall-words{padding:22px 18px 14px;display:flex;flex-wrap:wrap;justify-content:center;gap:10px 6px;direction:rtl;min-height:80px}
+  .word-tile{font-family:'Amiri Quran','Amiri',serif;font-size:clamp(22px,3.5vw,32px);color:var(--white);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:8px 16px;cursor:pointer;transition:all .25s;line-height:1.8;position:relative;user-select:none}
+  .word-tile:hover{background:rgba(212,175,55,.15);border-color:rgba(212,175,55,.4);transform:translateY(-2px)}
+  .word-tile.hidden{color:transparent!important;background:rgba(212,175,55,.1);border-color:rgba(212,175,55,.25);min-width:52px}
+  .word-tile.hidden::after{content:'؟';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:16px;color:rgba(212,175,55,.55);font-family:'Cairo',sans-serif}
+  .word-tile.pop{animation:wordPop .3s ease}
+  @keyframes wordPop{0%{transform:scale(0.8)}60%{transform:scale(1.1)}100%{transform:scale(1)}}
+  .recall-controls{padding:10px 18px 16px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+  .ctrl-btn{font-family:'Cairo',sans-serif;font-size:13px;font-weight:700;padding:9px 20px;border-radius:50px;border:none;cursor:pointer;transition:transform .2s;display:inline-flex;align-items:center;gap:5px}
+  .ctrl-btn:hover{transform:translateY(-2px)}
+  .cb-show{background:linear-gradient(135deg,var(--green),#00897B);color:white;box-shadow:0 3px 10px rgba(0,200,83,.2)}
+  .cb-hide{background:rgba(255,255,255,.08);color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.1)}
+  .complete-badge{display:none;text-align:center;padding:18px;background:rgba(0,200,83,.1);border:1px solid rgba(0,200,83,.3);border-radius:18px;margin-top:14px}
+  .complete-badge.show{display:block}
+  .complete-badge .cb-title{font-family:'Amiri',serif;font-size:26px;color:var(--green);margin-bottom:4px}
+  .complete-badge p{font-size:13px;color:rgba(255,255,255,.5);font-weight:600}
+
+  /* GAPS */
+  .gaps-ayah{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:22px;padding:24px;text-align:center;margin-bottom:16px}
+  .gaps-ayah-num{font-family:'Amiri',serif;font-size:13px;color:var(--gold);margin-bottom:12px}
+  .gaps-text{font-family:'Amiri Quran','Amiri',serif;font-size:clamp(22px,3.5vw,30px);line-height:2.4;direction:rtl;display:flex;flex-wrap:wrap;justify-content:center;gap:6px 4px;align-items:center}
+
+  /* ORDER */
+  .order-ayah{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:22px;padding:22px;margin-bottom:16px;text-align:center}
+  .order-ayah-num{font-family:'Amiri',serif;font-size:13px;color:var(--gold);margin-bottom:12px}
+  .order-words{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;direction:rtl;margin-bottom:8px}
+  .drag-word{font-family:'Amiri Quran','Amiri',serif;font-size:clamp(20px,3vw,28px);padding:7px 14px;border-radius:12px;background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.25);color:var(--white);cursor:grab;user-select:none;transition:all .2s;line-height:1.8}
+  .drag-word:hover{background:rgba(212,175,55,.2);transform:translateY(-2px)}
+  .drag-word.dragging{opacity:.4;cursor:grabbing}
+  .drag-word.correct{background:rgba(0,200,83,.15);border-color:rgba(0,200,83,.4);color:var(--green);cursor:default}
+  .drag-word.wrong{background:rgba(255,78,142,.12);border-color:rgba(255,78,142,.4);animation:shake .3s ease}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+  .order-drop-zone{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;min-height:56px;padding:10px;border:2px dashed rgba(212,175,55,.2);border-radius:14px;margin-top:10px;transition:border-color .2s}
+  .order-drop-zone.drag-over{border-color:rgba(212,175,55,.6);background:rgba(212,175,55,.05)}
+  .drop-placeholder{font-size:13px;color:rgba(255,255,255,.2);font-weight:600;align-self:center}
+  .check-order-btn{margin-top:12px;font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;padding:10px 26px;border-radius:50px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold),#8a6500);color:white;box-shadow:0 4px 14px rgba(212,175,55,.3);transition:transform .2s}
+  .check-order-btn:hover{transform:translateY(-2px)}
+
+  footer{position:relative;z-index:1;background:rgba(4,8,15,.8);border-top:1px solid var(--border);padding:22px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:40px}
+  .footer-logo{font-family:'Cairo',sans-serif;font-size:18px;font-weight:900;background:linear-gradient(90deg,#FF4E8E,#FFD700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none}
+  .footer-copy{font-size:12px;color:rgba(255,255,255,.2);font-weight:600}
+</style>
+</head>
+<body>
+<div id="stars"></div>
+
+<nav>
+  <a class="back-link" href="index.html">← القرآن الكريم</a>
+  <div style="font-family:'Cairo',sans-serif;font-size:15px;font-weight:700;color:rgba(255,255,255,.7)">📖 سورة المعارج</div>
+  <a class="logo" href="../index.html">Martl 3D</a>
+</nav>
+
+<main>
+  <div class="surah-header">
+    <span class="surah-icon">🕌</span>
+    <div class="surah-name">سورة المعارج</div>
+    <div class="surah-meta">مكية • ٤٤ آية • الجزء التاسع والعشرون</div>
+    <div class="basmalah">﴿ بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ﴾</div>
+  </div>
+
+  <div class="mode-tabs">
+    <button class="tab" onclick="setMode('complete')">👁️ كاملة</button>
+    <button class="tab" onclick="setMode('order')">🔀 ترتيب</button>
+    <button class="tab" onclick="setMode('gaps')">✏️ فراغات</button>
+    <button class="tab active" onclick="setMode('recall')">📚 مقاطع</button>
+  </div>
+
+  <div class="content-area">
+
+    <!-- COMPLETE -->
+    <div id="mode-complete" style="display:none">
+      <div class="ayah-full" dir="rtl" id="complete-text"></div>
+    </div>
+
+    <!-- ORDER -->
+    <div id="mode-order" style="display:none">
+      <div id="order-wrap"></div>
+    </div>
+
+    <!-- GAPS -->
+    <div id="mode-gaps" style="display:none">
+      <div id="gaps-wrap"></div>
+    </div>
+
+    <!-- RECALL -->
+    <div id="mode-recall">
+      <div class="global-ctrl">
+        <button class="gcb gcb-show" onclick="showAll()">👁️ اظهر الكل</button>
+        <button class="gcb gcb-hide" onclick="hideAll()">🙈 اخفي الكل</button>
+      </div>
+      <div class="recall-progress">
+        <span id="rp-text">٠ كلمة ظاهرة</span>
+        <div class="rp-bar"><div class="rp-fill" id="rp-fill" style="width:0%"></div></div>
+      </div>
+      <div id="recall-wrap"></div>
+      <div class="complete-badge" id="complete-badge">
+        <div class="cb-title">ما شاء الله! 🌙</div>
+        <p>أظهرت كل كلمات سورة المعارج — بارك الله فيك</p>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <a class="footer-logo" href="../index.html">Martl 3D 🎮</a>
+  <div class="footer-copy">© 2025 Martl 3D</div>
+</footer>
+
+<script>
+const SURAH = [
+  {num:'١', label:'الآية الأولى',    words:['سَأَلَ','سَائِلٌ','بِعَذَابٍ','وَاقِعٍ']},
+  {num:'٢', label:'الآية الثانية',   words:['لِّلْكَافِرِينَ','لَيْسَ','لَهُ','دَافِعٌ']},
+  {num:'٣', label:'الآية الثالثة',   words:['مِّنَ','اللَّهِ','ذِي','الْمَعَارِجِ']},
+  {num:'٤', label:'الآية الرابعة',   words:['تَعْرُجُ','الْمَلَائِكَةُ','وَالرُّوحُ','إِلَيْهِ','فِي','يَوْمٍ','كَانَ','مِقْدَارُهُ','خَمْسِينَ','أَلْفَ','سَنَةٍ']},
+  {num:'٥', label:'الآية الخامسة',   words:['فَاصْبِرْ','صَبْرًا','جَمِيلًا']},
+  {num:'٦', label:'الآية السادسة',   words:['إِنَّهُمْ','يَرَوْنَهُ','بَعِيدًا']},
+  {num:'٧', label:'الآية السابعة',   words:['وَنَرَاهُ','قَرِيبًا']},
+  {num:'٨', label:'الآية الثامنة',   words:['يَوْمَ','تَكُونُ','السَّمَاءُ','كَالْمُهْلِ']},
+  {num:'٩', label:'الآية التاسعة',   words:['وَتَكُونُ','الْجِبَالُ','كَالْعِهْنِ']},
+  {num:'١٠',label:'الآية العاشرة',   words:['وَلَا','يَسْأَلُ','حَمِيمٌ','حَمِيمًا']},
+  {num:'١١',label:'الآية الحادية عشرة',words:['يُبَصَّرُونَهُمْ','يَوَدُّ','الْمُجْرِمُ','لَوْ','يَفْتَدِي','مِنْ','عَذَابِ','يَوْمِئِذٍ','بِبَنِيهِ']},
+  {num:'١٢',label:'الآية الثانية عشرة',words:['وَصَاحِبَتِهِ','وَأَخِيهِ']},
+  {num:'١٣',label:'الآية الثالثة عشرة',words:['وَفَصِيلَتِهِ','الَّتِي','تُؤْوِيهِ']},
+  {num:'١٤',label:'الآية الرابعة عشرة',words:['وَمَن','فِي','الْأَرْضِ','جَمِيعًا','ثُمَّ','يُنجِيهِ']},
+  {num:'١٥',label:'الآية الخامسة عشرة',words:['كَلَّا','إِنَّهَا','لَظَىٰ']},
+  {num:'١٦',label:'الآية السادسة عشرة',words:['نَزَّاعَةً','لِّلشَّوَىٰ']},
+  {num:'١٧',label:'الآية السابعة عشرة',words:['تَدْعُو','مَنْ','أَدْبَرَ','وَتَوَلَّىٰ']},
+  {num:'١٨',label:'الآية الثامنة عشرة',words:['وَجَمَعَ','فَأَوْعَىٰ']},
+  {num:'١٩',label:'الآية التاسعة عشرة',words:['إِنَّ','الْإِنسَانَ','خُلِقَ','هَلُوعًا']},
+  {num:'٢٠',label:'الآية العشرون',     words:['إِذَا','مَسَّهُ','الشَّرُّ','جَزُوعًا']},
+  {num:'٢١',label:'الآية الحادية والعشرون',words:['وَإِذَا','مَسَّهُ','الْخَيْرُ','مَنُوعًا']},
+  {num:'٢٢',label:'الآية الثانية والعشرون',words:['إِلَّا','الْمُصَلِّينَ']},
+  {num:'٢٣',label:'الآية الثالثة والعشرون',words:['الَّذِينَ','هُمْ','عَلَىٰ','صَلَاتِهِمْ','دَائِمُونَ']},
+  {num:'٢٤',label:'الآية الرابعة والعشرون',words:['وَالَّذِينَ','فِي','أَمْوَالِهِمْ','حَقٌّ','مَّعْلُومٌ']},
+  {num:'٢٥',label:'الآية الخامسة والعشرون',words:['لِّلسَّائِلِ','وَالْمَحْرُومِ']},
+  {num:'٢٦',label:'الآية السادسة والعشرون',words:['وَالَّذِينَ','يُصَدِّقُونَ','بِيَوْمِ','الدِّينِ']},
+  {num:'٢٧',label:'الآية السابعة والعشرون',words:['وَالَّذِينَ','هُم','مِّنْ','عَذَابِ','رَبِّهِم','مُّشْفِقُونَ']},
+  {num:'٢٨',label:'الآية الثامنة والعشرون',words:['إِنَّ','عَذَابَ','رَبِّهِمْ','غَيْرُ','مَأْمُونٍ']},
+  {num:'٢٩',label:'الآية التاسعة والعشرون',words:['وَالَّذِينَ','هُمْ','لِفُرُوجِهِمْ','حَافِظُونَ']},
+  {num:'٣٠',label:'الآية الثلاثون',    words:['إِلَّا','عَلَىٰ','أَزْوَاجِهِمْ','أَوْ','مَا','مَلَكَتْ','أَيْمَانُهُمْ','فَإِنَّهُمْ','غَيْرُ','مَلُومِينَ']},
+  {num:'٣١',label:'الآية الحادية والثلاثون',words:['فَمَنِ','ابْتَغَىٰ','وَرَاءَ','ذَٰلِكَ','فَأُولَٰئِكَ','هُمُ','الْعَادُونَ']},
+  {num:'٣٢',label:'الآية الثانية والثلاثون',words:['وَالَّذِينَ','هُمْ','لِأَمَانَاتِهِمْ','وَعَهْدِهِمْ','رَاعُونَ']},
+  {num:'٣٣',label:'الآية الثالثة والثلاثون',words:['وَالَّذِينَ','هُم','بِشَهَادَاتِهِمْ','قَائِمُونَ']},
+  {num:'٣٤',label:'الآية الرابعة والثلاثون',words:['وَالَّذِينَ','هُمْ','عَلَىٰ','صَلَاتِهِمْ','يُحَافِظُونَ']},
+  {num:'٣٥',label:'الآية الخامسة والثلاثون',words:['أُولَٰئِكَ','فِي','جَنَّاتٍ','مُّكْرَمُونَ']},
+  {num:'٣٦',label:'الآية السادسة والثلاثون',words:['فَمَالِ','الَّذِينَ','كَفَرُوا','قِبَلَكَ','مُهْطِعِينَ']},
+  {num:'٣٧',label:'الآية السابعة والثلاثون',words:['عَنِ','الْيَمِينِ','وَعَنِ','الشِّمَالِ','عِزِينَ']},
+  {num:'٣٨',label:'الآية الثامنة والثلاثون',words:['أَيَطْمَعُ','كُلُّ','امْرِئٍ','مِّنْهُمْ','أَن','يُدْخَلَ','جَنَّةَ','نَعِيمٍ']},
+  {num:'٣٩',label:'الآية التاسعة والثلاثون',words:['كَلَّا','إِنَّا','خَلَقْنَاهُم','مِّمَّا','يَعْلَمُونَ']},
+  {num:'٤٠',label:'الآية الأربعون',    words:['فَلَا','أُقْسِمُ','بِرَبِّ','الْمَشَارِقِ','وَالْمَغَارِبِ','إِنَّا','لَقَادِرُونَ']},
+  {num:'٤١',label:'الآية الحادية والأربعون',words:['عَلَىٰ','أَن','نُّبَدِّلَ','خَيْرًا','مِّنْهُمْ','وَمَا','نَحْنُ','بِمَسْبُوقِينَ']},
+  {num:'٤٢',label:'الآية الثانية والأربعون',words:['فَذَرْهُمْ','يَخُوضُوا','وَيَلْعَبُوا','حَتَّىٰ','يُلَاقُوا','يَوْمَهُمُ','الَّذِي','يُوعَدُونَ']},
+  {num:'٤٣',label:'الآية الثالثة والأربعون',words:['يَوْمَ','يَخْرُجُونَ','مِنَ','الْأَجْدَاثِ','سِرَاعًا','كَأَنَّهُمْ','إِلَىٰ','نُصُبٍ','يُوفِضُونَ']},
+  {num:'٤٤',label:'الآية الرابعة والأربعون',words:['خَاشِعَةً','أَبْصَارُهُمْ','تَرْهَقُهُمْ','ذِلَّةٌ','ذَٰلِكَ','الْيَوْمُ','الَّذِي','كَانُوا','يُوعَدُونَ']},
+];
+
+const totalWords = SURAH.reduce((s,a)=>s+a.words.length,0);
+let hiddenMap = {};
+
+// Stars
+(function(){
+  const c=document.getElementById('stars');
+  for(let i=0;i<55;i++){
+    const s=document.createElement('div');s.className='star';
+    const sz=Math.random()*2.5+0.5;
+    s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;animation-duration:${1.5+Math.random()*3}s;animation-delay:${Math.random()*3}s`;
+    c.appendChild(s);
+  }
+})();
+
+function setMode(mode){
+  ['complete','order','gaps','recall'].forEach(m=>{
+    document.getElementById('mode-'+m).style.display=m===mode?'block':'none';
+  });
+  document.querySelectorAll('.tab').forEach((t,i)=>{
+    t.classList.toggle('active',['complete','order','gaps','recall'][i]===mode);
+  });
+  if(mode==='complete') buildComplete();
+  if(mode==='order')    buildOrder();
+  if(mode==='gaps')     buildGaps();
+  if(mode==='recall')   buildRecall();
+}
+
+// COMPLETE
+function buildComplete(){
+  const div=document.getElementById('complete-text');
+  div.innerHTML=SURAH.map(a=>`<div class="ayah-row">${a.words.join(' ')} <span class="ayah-num-inline">${a.num}</span></div>`).join('');
+}
+
+// RECALL
+function buildRecall(){
+  hiddenMap={};
+  SURAH.forEach((a,ai)=>a.words.forEach((_,wi)=>{hiddenMap[`${ai}-${wi}`]=true;}));
+  renderRecall();
+}
+function renderRecall(){
+  const wrap=document.getElementById('recall-wrap');
+  wrap.innerHTML='';
+  SURAH.forEach((ayah,ai)=>{
+    const card=document.createElement('div');card.className='recall-ayah-card';
+    card.innerHTML=`<div class="recall-ayah-header"><div class="recall-num-badge">${ayah.num}</div><div class="recall-ayah-label">${ayah.label}</div></div><div class="recall-words" id="words-${ai}"></div><div class="recall-controls"><button class="ctrl-btn cb-show" onclick="showAyah(${ai})">👁️ اظهر</button><button class="ctrl-btn cb-hide" onclick="hideAyah(${ai})">🙈 اخفي</button></div>`;
+    wrap.appendChild(card);
+    renderWords(ai);
+  });
+  updateProgress();
+}
+function renderWords(ai){
+  const c=document.getElementById(`words-${ai}`);if(!c)return;
+  c.innerHTML='';
+  SURAH[ai].words.forEach((w,wi)=>{
+    const k=`${ai}-${wi}`;
+    const t=document.createElement('div');
+    t.className='word-tile'+(hiddenMap[k]?' hidden':'');
+    t.textContent=w;
+    t.onclick=()=>{hiddenMap[k]=!hiddenMap[k];t.classList.toggle('hidden',hiddenMap[k]);if(!hiddenMap[k]){t.classList.add('pop');setTimeout(()=>t.classList.remove('pop'),400);}updateProgress();};
+    c.appendChild(t);
+  });
+}
+function showAyah(ai){SURAH[ai].words.forEach((_,wi)=>{hiddenMap[`${ai}-${wi}`]=false;});renderWords(ai);updateProgress();}
+function hideAyah(ai){SURAH[ai].words.forEach((_,wi)=>{hiddenMap[`${ai}-${wi}`]=true;});renderWords(ai);updateProgress();}
+function showAll(){Object.keys(hiddenMap).forEach(k=>hiddenMap[k]=false);SURAH.forEach((_,ai)=>renderWords(ai));updateProgress();}
+function hideAll(){Object.keys(hiddenMap).forEach(k=>hiddenMap[k]=true);SURAH.forEach((_,ai)=>renderWords(ai));updateProgress();}
+function updateProgress(){
+  const shown=Object.values(hiddenMap).filter(v=>!v).length;
+  document.getElementById('rp-text').textContent=`${shown} / ${totalWords} كلمة ظاهرة`;
+  document.getElementById('rp-fill').style.width=(shown/totalWords*100)+'%';
+  document.getElementById('complete-badge').classList.toggle('show',shown===totalWords);
+}
+
+// GAPS
+function buildGaps(){
+  const wrap=document.getElementById('gaps-wrap');wrap.innerHTML='';
+  SURAH.forEach((ayah,ai)=>{
+    const hideIdx=ayah.words.map(()=>Math.random()>.5).map((h,i)=>h?i:-1).filter(i=>i>=0);
+    const div=document.createElement('div');div.className='gaps-ayah';
+    div.innerHTML=`<div class="gaps-ayah-num">${ayah.label}</div><div class="gaps-text" id="gap-${ai}"></div>`;
+    wrap.appendChild(div);
+    const cont=document.getElementById(`gap-${ai}`);
+    ayah.words.forEach((w,wi)=>{
+      if(hideIdx.includes(wi)){
+        const inp=document.createElement('input');
+        inp.style.cssText=`font-family:'Amiri Quran','Amiri',serif;font-size:clamp(20px,3vw,28px);width:${Math.max(80,w.length*20)}px;text-align:center;background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.3);border-radius:10px;color:var(--gold);padding:5px 8px;outline:none;direction:rtl;line-height:1.8`;
+        inp.dataset.correct=w;
+        inp.addEventListener('input',()=>{if(inp.value.trim()===w){inp.style.background='rgba(0,200,83,.15)';inp.style.borderColor='rgba(0,200,83,.5)';inp.style.color='var(--green)';inp.disabled=true;}});
+        cont.appendChild(inp);
+      } else {
+        const span=document.createElement('span');
+        span.style.cssText=`font-family:'Amiri Quran','Amiri',serif;font-size:clamp(20px,3vw,28px);color:var(--white);line-height:1.8;padding:4px 5px`;
+        span.textContent=w;cont.appendChild(span);
+      }
+    });
+  });
+}
+
+// ORDER
+function buildOrder(){
+  const wrap=document.getElementById('order-wrap');wrap.innerHTML='';
+  SURAH.forEach((ayah,ai)=>{
+    const shuffled=[...ayah.words].sort(()=>Math.random()-.5);
+    const div=document.createElement('div');div.className='order-ayah';
+    div.innerHTML=`<div class="order-ayah-num">${ayah.label}</div><div class="order-words" id="src-${ai}">${shuffled.map(w=>`<div class="drag-word" draggable="true" data-word="${w}">${w}</div>`).join('')}</div><div style="font-size:12px;color:rgba(255,255,255,.25);font-weight:600;margin:8px 0 4px">رتّب هنا:</div><div class="order-drop-zone" id="dst-${ai}"><span class="drop-placeholder">اسحب الكلمات</span></div><button class="check-order-btn" onclick="checkOrder(${ai})">✔ تحقق</button>`;
+    wrap.appendChild(div);addDrag(ai);
+  });
+}
+function addDrag(ai){
+  const src=document.getElementById(`src-${ai}`),dst=document.getElementById(`dst-${ai}`);
+  [src,dst].forEach(z=>{
+    z.addEventListener('dragover',e=>{e.preventDefault();z.classList.add('drag-over');});
+    z.addEventListener('dragleave',()=>z.classList.remove('drag-over'));
+    z.addEventListener('drop',e=>{e.preventDefault();z.classList.remove('drag-over');const w=e.dataTransfer.getData('text/plain');const el=document.querySelector(`.drag-word[data-word="${w}"]`);if(el){const ph=z.querySelector('.drop-placeholder');if(ph)ph.remove();z.appendChild(el);}});
+  });
+  src.querySelectorAll('.drag-word').forEach(el=>{
+    el.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',el.dataset.word);el.classList.add('dragging');});
+    el.addEventListener('dragend',()=>el.classList.remove('dragging'));
+  });
+}
+function checkOrder(ai){
+  const dst=document.getElementById(`dst-${ai}`);
+  const placed=[...dst.querySelectorAll('.drag-word')].map(e=>e.dataset.word);
+  const correct=SURAH[ai].words;
+  if(placed.length!==correct.length){alert('رتّب كل الكلمات أولاً!');return;}
+  let ok=true;
+  [...dst.querySelectorAll('.drag-word')].forEach((el,i)=>{el.classList.add(el.dataset.word===correct[i]?'correct':'wrong');if(el.dataset.word!==correct[i])ok=false;});
+  if(ok)setTimeout(()=>alert('ما شاء الله! الترتيب صحيح ✅'),200);
+}
+
+// Init
+buildRecall();
+</script>
+</body>
+</html>

@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>سورة الإخلاص | Martl 3D</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold:#D4AF37;--gold2:#F5E27A;--blue:#2196F3;--green:#00C853;--pink:#FF4E8E;
+    --dark:#04080f;--dark2:#070f1a;--dark3:#0a1520;--border:rgba(212,175,55,0.2);--white:#fff;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Cairo',sans-serif;background:var(--dark);color:var(--white);min-height:100vh;overflow-x:hidden;direction:rtl}
+
+  /* BG */
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,100,50,0.12) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 50% 100%,rgba(212,175,55,0.07) 0%,transparent 60%);pointer-events:none;z-index:0}
+  #stars{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+  .star{position:absolute;background:white;border-radius:50%;animation:twinkle ease-in-out infinite alternate}
+  @keyframes twinkle{from{opacity:.04}to{opacity:.55}}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:13px 5%;background:rgba(4,8,15,0.93);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+  .logo{font-family:'Cairo',sans-serif;font-size:20px;font-weight:900;background:linear-gradient(90deg,#FF4E8E,#FFD700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none}
+  .back-link{color:rgba(255,255,255,.5);text-decoration:none;font-size:14px;font-weight:700;transition:color .2s;display:flex;align-items:center;gap:6px}
+  .back-link:hover{color:var(--gold)}
+
+  /* MAIN */
+  main{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:85px 4% 50px}
+
+  /* SURAH HEADER */
+  .surah-header{text-align:center;margin-bottom:24px;max-width:640px;width:100%}
+  .surah-icon{font-size:52px;display:block;margin-bottom:10px;filter:drop-shadow(0 2px 12px rgba(212,175,55,.4));animation:float 3s ease-in-out infinite alternate}
+  @keyframes float{from{transform:translateY(0)}to{transform:translateY(-10px)}}
+  .surah-name{font-family:'Amiri',serif;font-size:40px;color:var(--gold);margin-bottom:4px}
+  .surah-meta{font-size:13px;color:rgba(255,255,255,.4);font-weight:600;margin-bottom:14px}
+  .basmalah{font-family:'Amiri Quran','Amiri',serif;font-size:26px;color:rgba(212,175,55,.7);padding:10px 28px;background:rgba(212,175,55,.06);border:1px solid var(--border);border-radius:50px;display:inline-block}
+
+  /* MODE TABS */
+  .mode-tabs{display:flex;gap:6px;margin-bottom:28px;background:rgba(255,255,255,.05);padding:5px;border-radius:18px;border:1px solid var(--border);max-width:500px;width:100%}
+  .tab{flex:1;padding:10px 8px;border-radius:13px;border:none;cursor:pointer;font-family:'Cairo',sans-serif;font-size:13px;font-weight:700;color:rgba(255,255,255,.45);background:transparent;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:5px}
+  .tab.active{background:linear-gradient(135deg,var(--gold),#8a6500);color:#fff;box-shadow:0 3px 12px rgba(212,175,55,.3)}
+  .tab:hover:not(.active){color:rgba(255,255,255,.75);background:rgba(255,255,255,.06)}
+
+  /* CONTENT AREA */
+  .content-area{width:100%;max-width:700px}
+
+  /* ── MODE: COMPLETE ── */
+  #mode-complete .ayah-full{
+    font-family:'Amiri Quran','Amiri',serif;
+    font-size:clamp(26px,4vw,36px);
+    line-height:2.4;
+    text-align:center;
+    color:var(--white);
+    background:rgba(255,255,255,.03);
+    border:1px solid var(--border);
+    border-radius:24px;
+    padding:32px 28px;
+    direction:rtl;
+  }
+  #mode-complete .ayah-num{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:34px;height:34px;border-radius:50%;
+    background:rgba(212,175,55,.15);border:1px solid rgba(212,175,55,.35);
+    font-size:14px;color:var(--gold);font-family:'Cairo',sans-serif;font-weight:700;
+    margin-right:8px;vertical-align:middle;
+  }
+
+  /* ── MODE: ORDER ── */
+  #mode-order .order-wrap{display:flex;flex-direction:column;gap:20px}
+  .order-ayah{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:22px;padding:24px;text-align:center}
+  .order-ayah-num{font-family:'Amiri',serif;font-size:14px;color:var(--gold);margin-bottom:12px}
+  .order-words{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;direction:rtl}
+  .drag-word{
+    font-family:'Amiri Quran','Amiri',serif;font-size:clamp(22px,3.5vw,30px);
+    padding:8px 16px;border-radius:12px;
+    background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.25);
+    color:var(--white);cursor:grab;user-select:none;
+    transition:all .2s;line-height:1.8;
+  }
+  .drag-word:hover{background:rgba(212,175,55,.2);transform:translateY(-2px)}
+  .drag-word.dragging{opacity:.4;cursor:grabbing}
+  .drag-word.correct{background:rgba(0,200,83,.15);border-color:rgba(0,200,83,.4);color:var(--green);cursor:default}
+  .drag-word.wrong{background:rgba(255,78,142,.12);border-color:rgba(255,78,142,.4);animation:shake .3s ease}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+  .order-drop-zone{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;min-height:60px;padding:12px;border:2px dashed rgba(212,175,55,.2);border-radius:14px;margin-top:12px;transition:border-color .2s}
+  .order-drop-zone.drag-over{border-color:rgba(212,175,55,.6);background:rgba(212,175,55,.05)}
+  .drop-placeholder{font-size:13px;color:rgba(255,255,255,.2);font-weight:600;align-self:center}
+  .check-order-btn{margin-top:14px;font-family:'Cairo',sans-serif;font-size:15px;font-weight:700;padding:11px 28px;border-radius:50px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold),#8a6500);color:white;box-shadow:0 4px 14px rgba(212,175,55,.3);transition:transform .2s}
+  .check-order-btn:hover{transform:translateY(-2px)}
+
+  /* ── MODE: GAPS ── */
+  #mode-gaps .gaps-wrap{display:flex;flex-direction:column;gap:20px}
+  .gaps-ayah{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:22px;padding:28px;text-align:center}
+  .gaps-ayah-num{font-family:'Amiri',serif;font-size:14px;color:var(--gold);margin-bottom:14px}
+  .gaps-text{font-family:'Amiri Quran','Amiri',serif;font-size:clamp(24px,4vw,34px);line-height:2.4;direction:rtl;display:flex;flex-wrap:wrap;justify-content:center;gap:8px 4px;align-items:center}
+
+  /* ── MODE: RECALL (word by word hide/show) ── */
+  #mode-recall .recall-wrap{display:flex;flex-direction:column;gap:24px}
+  .recall-ayah-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:26px;overflow:hidden}
+  .recall-ayah-header{display:flex;align-items:center;justify-content:center;gap:10px;padding:14px 22px;background:rgba(212,175,55,.07);border-bottom:1px solid var(--border)}
+  .recall-num-badge{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#8a6500);display:flex;align-items:center;justify-content:center;font-family:'Amiri',serif;font-size:15px;color:#fff;font-weight:700;box-shadow:0 2px 8px rgba(212,175,55,.3)}
+  .recall-ayah-label{font-size:14px;color:rgba(255,255,255,.5);font-weight:700}
+  .recall-words{padding:28px 22px 18px;display:flex;flex-wrap:wrap;justify-content:center;gap:10px 6px;direction:rtl;min-height:100px}
+
+  .word-tile{
+    font-family:'Amiri Quran','Amiri',serif;
+    font-size:clamp(24px,3.8vw,34px);
+    color:var(--white);
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:14px;
+    padding:10px 18px;
+    cursor:pointer;
+    transition:all .25s;
+    line-height:1.8;
+    position:relative;
+    user-select:none;
+  }
+  .word-tile:hover{background:rgba(212,175,55,.15);border-color:rgba(212,175,55,.4);transform:translateY(-2px)}
+  .word-tile.hidden{
+    color:transparent!important;
+    background:rgba(212,175,55,.1);
+    border-color:rgba(212,175,55,.25);
+    min-width:56px;
+  }
+  .word-tile.hidden::after{content:'؟';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:18px;color:rgba(212,175,55,.55);font-family:'Cairo',sans-serif}
+  .word-tile.pop{animation:wordPop .3s ease}
+  @keyframes wordPop{0%{transform:scale(0.8)}60%{transform:scale(1.1)}100%{transform:scale(1)}}
+
+  .recall-controls{padding:14px 22px 20px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .ctrl-btn{font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;padding:10px 22px;border-radius:50px;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s;display:inline-flex;align-items:center;gap:6px}
+  .ctrl-btn:hover{transform:translateY(-2px)}
+  .cb-show{background:linear-gradient(135deg,var(--green),#00897B);color:white;box-shadow:0 3px 12px rgba(0,200,83,.25)}
+  .cb-hide{background:rgba(255,255,255,.08);color:rgba(255,255,255,.65);border:1px solid rgba(255,255,255,.12)}
+
+  /* Global show/hide all */
+  .global-ctrl{display:flex;gap:10px;justify-content:center;margin-bottom:20px;flex-wrap:wrap}
+  .gcb{font-family:'Cairo',sans-serif;font-size:15px;font-weight:700;padding:12px 28px;border-radius:50px;border:none;cursor:pointer;transition:transform .2s}
+  .gcb:hover{transform:translateY(-2px)}
+  .gcb-show{background:linear-gradient(135deg,var(--green),#00897B);color:white;box-shadow:0 4px 16px rgba(0,200,83,.25)}
+  .gcb-hide{background:rgba(255,255,255,.08);color:rgba(255,255,255,.65);border:1px solid rgba(255,255,255,.12)}
+
+  /* Progress */
+  .recall-progress{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:16px;font-size:13px;color:rgba(255,255,255,.4);font-weight:700}
+  .rp-bar{flex:1;max-width:200px;height:5px;background:rgba(255,255,255,.07);border-radius:5px;overflow:hidden}
+  .rp-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--gold));border-radius:5px;transition:width .4s ease}
+
+  /* Complete badge */
+  .complete-badge{display:none;text-align:center;padding:20px;background:rgba(0,200,83,.1);border:1px solid rgba(0,200,83,.3);border-radius:18px;margin-top:16px}
+  .complete-badge.show{display:block}
+  .complete-badge .cb-title{font-family:'Amiri',serif;font-size:28px;color:var(--green);margin-bottom:6px}
+  .complete-badge p{font-size:14px;color:rgba(255,255,255,.5);font-weight:600}
+
+  footer{position:relative;z-index:1;background:rgba(4,8,15,.8);border-top:1px solid var(--border);padding:24px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:40px}
+  .footer-logo{font-family:'Cairo',sans-serif;font-size:18px;font-weight:900;background:linear-gradient(90deg,#FF4E8E,#FFD700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none}
+  .footer-copy{font-size:12px;color:rgba(255,255,255,.2);font-weight:600}
+</style>
+</head>
+<body>
+<div id="stars"></div>
+
+<nav>
+  <a class="back-link" href="index.html">← القرآن الكريم</a>
+  <div style="font-family:'Cairo',sans-serif;font-size:16px;font-weight:700;color:rgba(255,255,255,.7)">📖 سورة الإخلاص</div>
+  <a class="logo" href="../index.html">Martl 3D</a>
+</nav>
+
+<main>
+  <!-- Header -->
+  <div class="surah-header">
+    <span class="surah-icon">🕌</span>
+    <div class="surah-name">سورة الإخلاص</div>
+    <div class="surah-meta">مكية • ٤ آيات • الجزء الثلاثون</div>
+    <div class="basmalah">﴿ بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ﴾</div>
+  </div>
+
+  <!-- Mode Tabs -->
+  <div class="mode-tabs">
+    <button class="tab" onclick="setMode('complete')">👁️ كاملة</button>
+    <button class="tab" onclick="setMode('order')">🔀 ترتيب</button>
+    <button class="tab" onclick="setMode('gaps')">✏️ فراغات</button>
+    <button class="tab active" onclick="setMode('recall')">📚 مقاطع</button>
+  </div>
+
+  <!-- Content -->
+  <div class="content-area">
+
+    <!-- COMPLETE MODE -->
+    <div id="mode-complete" style="display:none">
+      <div class="ayah-full" dir="rtl">
+        <span class="ayah-num">١</span>قُلْ هُوَ اللَّهُ أَحَدٌ ﴿١﴾<br>
+        <span class="ayah-num">٢</span>اللَّهُ الصَّمَدُ ﴿٢﴾<br>
+        <span class="ayah-num">٣</span>لَمْ يَلِدْ وَلَمْ يُولَدْ ﴿٣﴾<br>
+        <span class="ayah-num">٤</span>وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ ﴿٤﴾
+      </div>
+    </div>
+
+    <!-- ORDER MODE -->
+    <div id="mode-order" style="display:none">
+      <div class="order-wrap" id="order-wrap"></div>
+    </div>
+
+    <!-- GAPS MODE -->
+    <div id="mode-gaps" style="display:none">
+      <div class="gaps-wrap" id="gaps-wrap"></div>
+    </div>
+
+    <!-- RECALL MODE -->
+    <div id="mode-recall">
+      <div class="global-ctrl">
+        <button class="gcb gcb-show" onclick="showAll()">👁️ اظهر الكل</button>
+        <button class="gcb gcb-hide" onclick="hideAll()">🙈 اخفي الكل</button>
+      </div>
+      <div class="recall-progress">
+        <span id="rp-text">٠ / ١٢ كلمة ظاهرة</span>
+        <div class="rp-bar"><div class="rp-fill" id="rp-fill" style="width:0%"></div></div>
+      </div>
+      <div class="recall-wrap" id="recall-wrap"></div>
+      <div class="complete-badge" id="complete-badge">
+        <div class="cb-title">ما شاء الله! 🌙</div>
+        <p>أظهرت كل كلمات سورة الإخلاص — بارك الله فيك</p>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <a class="footer-logo" href="../index.html">Martl 3D 🎮</a>
+  <div class="footer-copy">© 2025 Martl 3D</div>
+</footer>
+
+<script>
+// ══════════════════════════════════════
+// DATA
+// ══════════════════════════════════════
+const SURAH = [
+  { num:'١', label:'الآية الأولى',  words:['قُلْ','هُوَ','اللَّهُ','أَحَدٌ'] },
+  { num:'٢', label:'الآية الثانية', words:['اللَّهُ','الصَّمَدُ'] },
+  { num:'٣', label:'الآية الثالثة', words:['لَمْ','يَلِدْ','وَلَمْ','يُولَدْ'] },
+  { num:'٤', label:'الآية الرابعة', words:['وَلَمْ','يَكُن','لَّهُ','كُفُوًا','أَحَدٌ'] },
+];
+
+const totalWords = SURAH.reduce((s,a)=>s+a.words.length,0);
+let hiddenMap = {}; // key: "ayah-word" → true/false
+
+// ══════════════════════════════════════
+// STARS
+// ══════════════════════════════════════
+(function(){
+  const c=document.getElementById('stars');
+  for(let i=0;i<55;i++){
+    const s=document.createElement('div');s.className='star';
+    const sz=Math.random()*2.5+0.5;
+    s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;animation-duration:${1.5+Math.random()*3}s;animation-delay:${Math.random()*3}s`;
+    c.appendChild(s);
+  }
+})();
+
+// ══════════════════════════════════════
+// MODE SWITCHING
+// ══════════════════════════════════════
+function setMode(mode){
+  ['complete','order','gaps','recall'].forEach(m=>{
+    document.getElementById('mode-'+m).style.display = m===mode ? 'block' : 'none';
+  });
+  document.querySelectorAll('.tab').forEach((t,i)=>{
+    const modes=['complete','order','gaps','recall'];
+    t.classList.toggle('active', modes[i]===mode);
+  });
+  if(mode==='order') buildOrder();
+  if(mode==='gaps')  buildGaps();
+  if(mode==='recall') buildRecall();
+}
+
+// ══════════════════════════════════════
+// RECALL MODE
+// ══════════════════════════════════════
+function buildRecall(){
+  // Init all hidden
+  hiddenMap = {};
+  SURAH.forEach((ayah,ai)=>{
+    ayah.words.forEach((_,wi)=>{ hiddenMap[`${ai}-${wi}`]=true; });
+  });
+  renderRecall();
+}
+
+function renderRecall(){
+  const wrap = document.getElementById('recall-wrap');
+  wrap.innerHTML='';
+  SURAH.forEach((ayah,ai)=>{
+    const card = document.createElement('div');
+    card.className='recall-ayah-card';
+    // Header
+    card.innerHTML=`
+      <div class="recall-ayah-header">
+        <div class="recall-num-badge">${ayah.num}</div>
+        <div class="recall-ayah-label">${ayah.label}</div>
+      </div>
+      <div class="recall-words" id="words-${ai}"></div>
+      <div class="recall-controls">
+        <button class="ctrl-btn cb-show" onclick="showAyah(${ai})">👁️ اظهر الآية</button>
+        <button class="ctrl-btn cb-hide" onclick="hideAyah(${ai})">🙈 اخفي الآية</button>
+      </div>`;
+    wrap.appendChild(card);
+    renderWords(ai);
+  });
+  updateProgress();
+}
+
+function renderWords(ai){
+  const container = document.getElementById(`words-${ai}`);
+  if(!container) return;
+  container.innerHTML='';
+  SURAH[ai].words.forEach((w,wi)=>{
+    const key=`${ai}-${wi}`;
+    const tile=document.createElement('div');
+    tile.className='word-tile'+(hiddenMap[key]?' hidden':'');
+    tile.textContent=w;
+    tile.onclick=()=>toggleWord(ai,wi,tile);
+    container.appendChild(tile);
+  });
+}
+
+function toggleWord(ai,wi,tile){
+  const key=`${ai}-${wi}`;
+  hiddenMap[key]=!hiddenMap[key];
+  tile.classList.toggle('hidden',hiddenMap[key]);
+  if(!hiddenMap[key]){
+    tile.classList.add('pop');
+    setTimeout(()=>tile.classList.remove('pop'),400);
+  }
+  updateProgress();
+}
+
+function showAyah(ai){
+  SURAH[ai].words.forEach((_,wi)=>{ hiddenMap[`${ai}-${wi}`]=false; });
+  renderWords(ai); updateProgress();
+}
+function hideAyah(ai){
+  SURAH[ai].words.forEach((_,wi)=>{ hiddenMap[`${ai}-${wi}`]=true; });
+  renderWords(ai); updateProgress();
+}
+function showAll(){
+  Object.keys(hiddenMap).forEach(k=>hiddenMap[k]=false);
+  SURAH.forEach((_,ai)=>renderWords(ai)); updateProgress();
+}
+function hideAll(){
+  Object.keys(hiddenMap).forEach(k=>hiddenMap[k]=true);
+  SURAH.forEach((_,ai)=>renderWords(ai)); updateProgress();
+}
+
+function updateProgress(){
+  const shown = Object.values(hiddenMap).filter(v=>!v).length;
+  const arabicNums = {'0':'٠','1':'١','2':'٢','3':'٣','4':'٤','5':'٥','6':'٦','7':'٧','8':'٨','9':'٩','10':'١٠','11':'١١','12':'١٢','13':'١٣','14':'١٤','15':'١٥'};
+  const shownAr = arabicNums[shown]||shown;
+  const totalAr = arabicNums[totalWords]||totalWords;
+  document.getElementById('rp-text').textContent=`${shownAr} / ${totalAr} كلمة ظاهرة`;
+  document.getElementById('rp-fill').style.width=(shown/totalWords*100)+'%';
+  const badge=document.getElementById('complete-badge');
+  badge.classList.toggle('show', shown===totalWords);
+}
+
+// ══════════════════════════════════════
+// ORDER MODE
+// ══════════════════════════════════════
+function buildOrder(){
+  const wrap=document.getElementById('order-wrap');
+  wrap.innerHTML='';
+  SURAH.forEach((ayah,ai)=>{
+    const shuffled=[...ayah.words].sort(()=>Math.random()-.5);
+    const div=document.createElement('div');div.className='order-ayah';
+    div.innerHTML=`<div class="order-ayah-num">الآية ${ayah.label.replace('الآية ','')}</div>
+      <div class="order-words" id="src-${ai}">${shuffled.map(w=>`<div class="drag-word" draggable="true" data-word="${w}">${w}</div>`).join('')}</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.3);font-weight:600;margin:10px 0 6px">رتّب الكلمات هنا:</div>
+      <div class="order-drop-zone" id="dst-${ai}"><span class="drop-placeholder">اسحب الكلمات هنا</span></div>
+      <button class="check-order-btn" onclick="checkOrder(${ai})">✔ تحقق</button>`;
+    wrap.appendChild(div);
+    addDragListeners(ai);
+  });
+}
+
+function addDragListeners(ai){
+  const src=document.getElementById(`src-${ai}`);
+  const dst=document.getElementById(`dst-${ai}`);
+  [src,dst].forEach(zone=>{
+    zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag-over')});
+    zone.addEventListener('dragleave',()=>zone.classList.remove('drag-over'));
+    zone.addEventListener('drop',e=>{
+      e.preventDefault();zone.classList.remove('drag-over');
+      const word=e.dataTransfer.getData('text/plain');
+      const el=document.querySelector(`.drag-word[data-word="${word}"]`);
+      if(el){
+        const ph=zone.querySelector('.drop-placeholder');
+        if(ph)ph.remove();
+        zone.appendChild(el);
+      }
+    });
+  });
+  src.querySelectorAll('.drag-word').forEach(el=>{
+    el.addEventListener('dragstart',e=>{
+      e.dataTransfer.setData('text/plain',el.dataset.word);
+      el.classList.add('dragging');
+    });
+    el.addEventListener('dragend',()=>el.classList.remove('dragging'));
+  });
+}
+
+function checkOrder(ai){
+  const dst=document.getElementById(`dst-${ai}`);
+  const placed=[...dst.querySelectorAll('.drag-word')].map(e=>e.dataset.word);
+  const correct=SURAH[ai].words;
+  if(placed.length!==correct.length){alert('رتّب كل الكلمات أولاً!');return;}
+  let allOk=true;
+  [...dst.querySelectorAll('.drag-word')].forEach((el,i)=>{
+    if(el.dataset.word===correct[i]){el.classList.add('correct');}
+    else{el.classList.add('wrong');allOk=false;}
+  });
+  if(allOk){
+    setTimeout(()=>alert('ما شاء الله! الترتيب صحيح ✅'),200);
+  }
+}
+
+// ══════════════════════════════════════
+// GAPS MODE
+// ══════════════════════════════════════
+function buildGaps(){
+  const wrap=document.getElementById('gaps-wrap');
+  wrap.innerHTML='';
+  SURAH.forEach((ayah,ai)=>{
+    // Hide every other word randomly
+    const hideIdx=ayah.words.map((_,i)=>Math.random()>.45).map((hide,i)=>hide?i:-1).filter(i=>i>=0);
+    const div=document.createElement('div');div.className='gaps-ayah';
+    div.innerHTML=`<div class="gaps-ayah-num">الآية ${ayah.label.replace('الآية ','')}</div>
+      <div class="gaps-text" id="gap-${ai}"></div>`;
+    wrap.appendChild(div);
+    const container=document.getElementById(`gap-${ai}`);
+    ayah.words.forEach((w,wi)=>{
+      if(hideIdx.includes(wi)){
+        const inp=document.createElement('input');
+        inp.style.cssText=`font-family:'Amiri Quran','Amiri',serif;font-size:clamp(22px,3.5vw,30px);width:${Math.max(80,w.length*22)}px;text-align:center;background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.3);border-radius:10px;color:var(--gold);padding:6px 10px;outline:none;direction:rtl;line-height:1.8`;
+        inp.dataset.correct=w;
+        inp.addEventListener('input',()=>{
+          if(inp.value.trim()===w){
+            inp.style.background='rgba(0,200,83,.15)';
+            inp.style.borderColor='rgba(0,200,83,.5)';
+            inp.style.color='var(--green)';
+            inp.disabled=true;
+          }
+        });
+        container.appendChild(inp);
+      } else {
+        const span=document.createElement('span');
+        span.style.cssText=`font-family:'Amiri Quran','Amiri',serif;font-size:clamp(24px,4vw,34px);color:var(--white);line-height:1.8;padding:4px 6px`;
+        span.textContent=w;
+        container.appendChild(span);
+      }
+    });
+  });
+}
+
+// ══════════════════════════════════════
+// INIT
+// ══════════════════════════════════════
+buildRecall();
+</script>
+</body>
+</html>
